@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataStructure\Edge.cs" />
+    <Compile Include="DataStructure\Graph.cs" />
     <Compile Include="DataStructure\Node.cs" />
     <Compile Include="DataStructure\Weight.cs" />
     <Compile Include="Program.cs" />

@@ -29,9 +29,9 @@ namespace GraphLibrary.DataStructure
     {
         private double FWeightValue;
 
-        public CostWeighted(double weightValue)
+        public CostWeighted(double _WeightValue)
         {
-            FWeightValue = weightValue;
+            FWeightValue = _WeightValue;
         }
 
         public bool HasWeightValue()
