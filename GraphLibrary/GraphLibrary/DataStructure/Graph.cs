@@ -13,7 +13,7 @@ namespace GraphLibrary.DataStructure
 
         List<Edge> GetEdgeIndices();
 
-        List<Tuple<INode, Edge>> GetNodeNeighboursAndEdges(INode _Node);
+        List<NodeEdge> GetNodeNeighboursAndEdges(INode _Node);
 
         void FillNeighbourInfoInNodes();
 
@@ -44,9 +44,9 @@ namespace GraphLibrary.DataStructure
             return FEdgeIndices;
         }
 
-        public List<Tuple<INode, Edge>> GetNodeNeighboursAndEdges(INode _Node)
+        public List<NodeEdge> GetNodeNeighboursAndEdges(INode _Node)
         {
-            return _Node.Neighours;
+            return _Node.Neighbours;
         }
 
         public void FillNeighbourInfoInNodes()

@@ -12,7 +12,7 @@ namespace GraphLibrary.DataStructure
         
         int Id { get; }
 
-        List<Tuple<INode, Edge>> Neighours { get; set; }
+        List<NodeEdge> Neighbours { get; }
 
         void AddEdge(Edge _Edge);
 
@@ -25,14 +25,29 @@ namespace GraphLibrary.DataStructure
 
         public int Id { get; }
 
-        public List<Tuple<INode, Edge>> Neighours { get; set; }
+
+        private bool FFilledNeighboursInfo = false;
+
+        private List<NodeEdge> FNeighbours;
+        public List<NodeEdge> Neighbours
+        {
+            get
+            {
+                if (!FFilledNeighboursInfo)
+                {
+                    FindNeighbours();
+                    FFilledNeighboursInfo = true;
+                }
+
+                return FNeighbours;
+            }
+        }
 
         public Node(int _Id)
         {
             Id = _Id;
             FEdges = new List<Edge>();
         }
-
         
 
         public void AddEdge(Edge _Edge)
@@ -46,16 +61,16 @@ namespace GraphLibrary.DataStructure
         /// </summary>
         public void FindNeighbours()
         {
-            Neighours = new List<Tuple<INode, Edge>>();
+            FNeighbours = new List<NodeEdge>();
 
             var hNeighbours = new List<INode>();
             foreach (var hEdge in FEdges)
             {
-                var hPossibleNeighbour = hEdge.GetPossibleEndpoint(this);
+                var hPossibleNeighbour = hEdge.GetOtherEndpoint(this);
                 if (hPossibleNeighbour != null)
                 {
-                    var hNewNeighourInfo = new Tuple<INode,Edge>(hPossibleNeighbour,hEdge);
-                    Neighours.Add(hNewNeighourInfo);
+                    var hNewNeighourInfo = new NodeEdge(hPossibleNeighbour,hEdge);
+                    FNeighbours.Add(hNewNeighourInfo);
                 }
             } 
 

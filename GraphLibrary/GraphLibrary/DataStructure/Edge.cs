@@ -8,38 +8,26 @@ namespace GraphLibrary.DataStructure
 {
     abstract class Edge
     {
-        private List<IWeight> FWeights;
+        private IWeight FWeight;
 
         public abstract INode GetOtherEndpoint(INode _Node);
 
         public abstract List<INode> GetPossibleEnpoints();
 
-        protected Edge(List<IWeight> _Weights)
+        protected Edge(IWeight _Weight)
         {
-            this.FWeights = new List<IWeight>();
-            FWeights = _Weights;
+            FWeight = _Weight;
         }
 
         
-
-        /// <summary>
-        /// Gibt an ob die Kante ein Gewicht hat
-        /// </summary>
-        /// <returns></returns>
         public bool IsWeighted()
         {
-            var hIsWeighted = false;
-            foreach (var hCurrentWeight in FWeights)
-            {
-                hIsWeighted = hCurrentWeight.HasWeightValue();
-            }
-
-            return hIsWeighted;
+            return FWeight.HasWeightValue();
         }
 
-        public List<IWeight> GetWeights()
+        public double GetWeightValue()
         {
-            return FWeights;
+            return FWeight.WeightValue();
         }
 
         
@@ -51,7 +39,7 @@ namespace GraphLibrary.DataStructure
         private INode FNodeA;
         private INode FNodeB;
 
-        public UndirectedEdge(INode _NodeA, INode _NodeB, List<IWeight> _Weights) : base(_Weights)
+        public UndirectedEdge(INode _NodeA, INode _NodeB, IWeight _Weight) : base(_Weight)
         {
             FNodeA = _NodeA;
             FNodeB = _NodeB;
@@ -89,7 +77,7 @@ namespace GraphLibrary.DataStructure
         private INode FStartNode;
         private INode FEndNode;
 
-        public DirectedEdge(INode _StartNode, INode _EndNode, List<IWeight> _Weights) : base(_Weights)
+        public DirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight) : base(_Weight)
         {
             FStartNode = _StartNode;
             FEndNode = _EndNode;

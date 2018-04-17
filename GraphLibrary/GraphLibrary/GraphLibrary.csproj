@@ -45,6 +45,7 @@
     <Compile Include="DataStructure\Edge.cs" />
     <Compile Include="DataStructure\Graph.cs" />
     <Compile Include="DataStructure\Node.cs" />
+    <Compile Include="DataStructure\NodeEdge.cs" />
     <Compile Include="DataStructure\Weight.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
