@@ -24,9 +24,10 @@ namespace GraphLibrary.Importer
             var hGraph = new Graph();
             
             // Initiales Anlegen der Knoten. Zeilennummer entspricht Knoten Index
-            for (int hNodeIdx = 1; hNodeIdx < hGraphMatrixFileContent.Length; hNodeIdx++)
+            for (int hMatrixRowIdx = 1; hMatrixRowIdx < hGraphMatrixFileContent.Length; hMatrixRowIdx++)
             {
-                hGraph.CreateNewNode(hNodeIdx);
+                var hNewNodeId = hMatrixRowIdx - 1;
+                hGraph.CreateNewNode(hNewNodeId);
             }
 
             var hGraphNodes = hGraph.GetNodeIndices();
@@ -39,9 +40,10 @@ namespace GraphLibrary.Importer
             // 1 \ ?
             // 1 2 \
             int hReadTillColumn = 0; 
-            for (int hNodeIdx = 1; hNodeIdx < hGraphMatrixFileContent.Length; hNodeIdx++)
+            for (int hMatrixRowIdx = 1; hMatrixRowIdx < hGraphMatrixFileContent.Length; hMatrixRowIdx++)
             {
-                var hCurrentNodeMatrixLine = hGraphMatrixFileContent[hNodeIdx];
+                var hCurrentNodeId = hMatrixRowIdx - 1;
+                var hCurrentNodeMatrixLine = hGraphMatrixFileContent[hMatrixRowIdx];
                 var hCurrentNodeConnectedNodes = hCurrentNodeMatrixLine.Split('\t');
                 
                 // Prüfen welche Knoten mit dem aktuellen verbunden sind
@@ -50,8 +52,8 @@ namespace GraphLibrary.Importer
                     var hNodeConnectionInfo = hCurrentNodeConnectedNodes[hMatrixColumnIdx];                    
                     if (hNodeConnectionInfo != "0")
                     {
-                        var hNewNeighbourNodeId = hMatrixColumnIdx + 1;
-                        hGraph.AddUndirectedEdge(hGraphNodes[hNodeIdx],hGraphNodes[hNewNeighbourNodeId]);
+                        var hNewNeighbourNodeId = hMatrixColumnIdx;
+                        hGraph.AddUndirectedEdge(hGraphNodes[hCurrentNodeId],hGraphNodes[hNewNeighbourNodeId]);
                     }
                 }
                 hReadTillColumn++; // Die nächste Zeile kann eine Spalte weiter gelesen werden
