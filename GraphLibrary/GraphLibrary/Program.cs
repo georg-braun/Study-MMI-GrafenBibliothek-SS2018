@@ -10,10 +10,13 @@ namespace GraphLibrary
 {
     class Program
     {
-        private const string cMatrixGraphPath = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph1.txt";
+        private const string cMatrixGraph1Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph1.txt";
+        private const string cAdjacentGraph1Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph2.txt";
+        
         static void Main(string[] args)
         {
-            MatrixGraphImporter.ImportUnweighted(cMatrixGraphPath);
+            //MatrixGraphImporter.ImportUnweighted(cMatrixGraphPath);
+            AdjacentListGraphImporter.ImportUnweighted(cAdjacentGraph1Path);
         }
     }
 }
