@@ -47,6 +47,8 @@
     <Compile Include="DataStructure\Node.cs" />
     <Compile Include="DataStructure\NodeEdge.cs" />
     <Compile Include="DataStructure\Weight.cs" />
+    <Compile Include="Importer\GraphImporter.cs" />
+    <Compile Include="Importer\MatrixImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
