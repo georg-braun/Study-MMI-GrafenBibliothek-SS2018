@@ -34,7 +34,7 @@ namespace GraphLibrary.Algorithm
         {
             var hGraphNodes = UsedGraph.GetNodeIndices();
             var hVisitedBfsNodes = new HashSet<int>();
-            var hUnvisitedGraphNodes = new LinkedList<int>();
+            var hUnvisitedGraphNodes = new LinkedList<int>(); // ToDo: Vielleicht besser HashSet. Remove O(1)
 
             FSubGraphs.Clear();
             var hSubGraphId = 0;
@@ -57,12 +57,13 @@ namespace GraphLibrary.Algorithm
                     hVisitedBfsNodes.Add(hCurrentNodeId);
                     hUnvisitedGraphNodes.Remove(hCurrentNodeId);
                     AddNodeIdToSubgraph(hSubGraphId, hCurrentNodeId);
-                    
+
                     var hNeighbourNodesIds = hGraphNodes[hCurrentNodeId].GetNeighbourIds();
                     
                     foreach (var hNeighbourNodesId in hNeighbourNodesIds)
                     {
-                        if (!hVisitedBfsNodes.Contains(hNeighbourNodesId))
+                        // Besuche nur weitere Knoten wenn diese noch nicht besucht wurden noch noch nicht in der Queue sind
+                        if (!hVisitedBfsNodes.Contains(hNeighbourNodesId) && (!hBfsQueue.Contains(hNeighbourNodesId)))
                         {
                             hBfsQueue.Enqueue(hNeighbourNodesId);
                         }
@@ -74,10 +75,15 @@ namespace GraphLibrary.Algorithm
 
         public void PrintInfosToConsole()
         {
-            Console.WriteLine("Breitensuche");
+            Console.WriteLine("--- Breitensuche ---");
             Console.WriteLine("Anzahl der Knoten: " + UsedGraph.GetNodeIndices().Count.ToString());
             Console.WriteLine("Anzahl der Kanten: " + UsedGraph.GetEdgeIndices().Count.ToString());
             Console.WriteLine("Anzahl der Teilgrafen: " + FSubGraphs.Keys.Count.ToString());
+            foreach (var hSubGraphList in FSubGraphs)
+            {
+                Console.WriteLine("\tTeilgraf " + hSubGraphList.Key.ToString() 
+                                + ": " + hSubGraphList.Value.Count);
+            } 
         }
     }
 }

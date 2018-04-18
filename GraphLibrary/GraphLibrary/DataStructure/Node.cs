@@ -12,7 +12,7 @@ namespace GraphLibrary.DataStructure
         
         int Id { get; }
 
-        List<NodeEdge> NeighbourNodes { get; }
+        List<NodeEdge> NeighboursConnection { get; }
 
         void AddEdge(Edge _Edge);
 
@@ -31,7 +31,7 @@ namespace GraphLibrary.DataStructure
         private bool FFilledNeighboursInfo = false;
 
         private List<NodeEdge> FNeighbours;
-        public List<NodeEdge> NeighbourNodes
+        public List<NodeEdge> NeighboursConnection
         {
             get
             {
@@ -82,7 +82,7 @@ namespace GraphLibrary.DataStructure
         {
             var hNeighbourIds = new List<int>();
 
-            foreach (var hNeighbour in NeighbourNodes)
+            foreach (var hNeighbour in NeighboursConnection)
             {
                 hNeighbourIds.Add(hNeighbour.Node.Id);
             }

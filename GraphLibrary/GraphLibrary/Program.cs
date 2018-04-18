@@ -22,11 +22,15 @@ namespace GraphLibrary
             
             Console.WriteLine("Importiere Graph: " + hFileName);
             
-            var hGraph = AdjacentListGraphImporter.ImportUnweighted(cAdjacentGraph4Path);
+            var hGraph = AdjacentListGraphImporter.ImportUnweighted(hFileName);
 
-            var hBreadthFirstSearch = new BreadthFirstSearch(hGraph);
+            IGraphAlgorithm hBreadthFirstSearch = new BreadthFirstSearch(hGraph);
             hBreadthFirstSearch.Execute();
             hBreadthFirstSearch.PrintInfosToConsole();
+
+            IGraphAlgorithm hDepthFirstSearch = new DepthFirstSearch(hGraph);
+            hDepthFirstSearch.Execute();
+            hDepthFirstSearch.PrintInfosToConsole();
 
             Console.ReadLine();
 

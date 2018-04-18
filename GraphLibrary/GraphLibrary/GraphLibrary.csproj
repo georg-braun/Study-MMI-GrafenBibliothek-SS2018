@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm\BreadthFirstSearch.cs" />
-    <Compile Include="Algorithm\DepthSearch.cs" />
+    <Compile Include="Algorithm\DepthFirstSearch.cs" />
     <Compile Include="Algorithm\IGraphAlgorithm.cs" />
     <Compile Include="DataStructure\Edge.cs" />
     <Compile Include="DataStructure\Graph.cs" />
