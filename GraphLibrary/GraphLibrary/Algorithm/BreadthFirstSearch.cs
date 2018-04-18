@@ -33,38 +33,38 @@ namespace GraphLibrary.Algorithm
         public void Execute()
         {
             var hGraphNodes = UsedGraph.GetNodeIndices();
-            var hVisitedBfsNodes = new HashSet<int>();
-            var hUnvisitedGraphNodes = new LinkedList<int>(); // ToDo: Vielleicht besser HashSet. Remove O(1)
-
+            var hVisitedBfsNodes = new Dictionary<int,bool>();
             FSubGraphs.Clear();
             var hSubGraphId = 0;
 
             foreach (var hNode in hGraphNodes)
             {
-                hUnvisitedGraphNodes.AddLast(hNode.Key);
+                hVisitedBfsNodes.Add(hNode.Key,false);
             }
 
-            while (hUnvisitedGraphNodes.Count > 0)
+            while (hVisitedBfsNodes.Values.Contains(false))
             {
                 
                 var hBfsQueue = new Queue<int>();
-                hBfsQueue.Enqueue(hUnvisitedGraphNodes.First.Value);
+                var hUnvisitedNodeId = FindUnvisitedNode(hVisitedBfsNodes);
+                hBfsQueue.Enqueue(hUnvisitedNodeId);
+                hVisitedBfsNodes[hUnvisitedNodeId] = true;
+                AddNodeIdToSubgraph(hSubGraphId, hUnvisitedNodeId);
 
                 while (hBfsQueue.Count > 0)
                 {
                     var hCurrentNodeId = hBfsQueue.Dequeue();
-
-                    hVisitedBfsNodes.Add(hCurrentNodeId);       // ToDo: Visited bei der NachbarKnoten Prüfung
-                    hUnvisitedGraphNodes.Remove(hCurrentNodeId);
-                    AddNodeIdToSubgraph(hSubGraphId, hCurrentNodeId);
+                    
 
                     var hNeighbourNodesIds = hGraphNodes[hCurrentNodeId].GetNeighbourIds();
                     
                     foreach (var hNeighbourNodesId in hNeighbourNodesIds)
                     {
-                        // Besuche nur weitere Knoten wenn diese noch nicht besucht wurden noch noch nicht in der Queue sind
-                        if (!hVisitedBfsNodes.Contains(hNeighbourNodesId) && (!hBfsQueue.Contains(hNeighbourNodesId)))
+                        // Besuche nur weitere Knoten wenn diese noch nicht besucht wurden
+                        if (!hVisitedBfsNodes[hNeighbourNodesId])
                         {
+                            hVisitedBfsNodes[hNeighbourNodesId] =true;
+                            AddNodeIdToSubgraph(hSubGraphId, hNeighbourNodesId);
                             hBfsQueue.Enqueue(hNeighbourNodesId);
                         }
                     }
@@ -72,6 +72,19 @@ namespace GraphLibrary.Algorithm
                 hSubGraphId++;
             }
         }
+
+        private int FindUnvisitedNode(Dictionary<int, bool> dict)
+        {
+            for (int i = 0; i < dict.Keys.Count; i++)
+            {
+                if (dict[i] == false)
+                {
+                    return i;
+                }
+            } //for (int i = 0; i < UPPER; i++)
+
+            return -1;
+        } 
 
         public void PrintInfosToConsole()
         {
