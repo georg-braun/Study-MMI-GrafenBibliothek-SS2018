@@ -92,7 +92,6 @@ namespace GraphLibrary.DataStructure
         public void AddUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight)
         {
             var hNewUndirectedEdge = new UndirectedEdge(_NodeOne, _NodeTwo, _Weight);
-            // Todo: Checken dass keine Duplikate entstehen?
             FEdgeIndices.Add(hNewUndirectedEdge);
             _NodeOne.AddEdge(hNewUndirectedEdge);
             _NodeTwo.AddEdge(hNewUndirectedEdge);

@@ -22,7 +22,7 @@ namespace GraphLibrary.Algorithm
 
         private void AddNodeIdToSubgraph(int _SubgraphId, int _NodeId)
         {
-            if (!FSubGraphs.ContainsKey(_SubgraphId))
+            if (!FSubGraphs.ContainsKey(_SubgraphId)) //ToDo
             {
                 FSubGraphs.Add(_SubgraphId,new List<int>());
             }
@@ -54,7 +54,7 @@ namespace GraphLibrary.Algorithm
                 {
                     var hCurrentNodeId = hBfsQueue.Dequeue();
 
-                    hVisitedBfsNodes.Add(hCurrentNodeId);
+                    hVisitedBfsNodes.Add(hCurrentNodeId);       // ToDo: Visited bei der NachbarKnoten Prüfung
                     hUnvisitedGraphNodes.Remove(hCurrentNodeId);
                     AddNodeIdToSubgraph(hSubGraphId, hCurrentNodeId);
 
