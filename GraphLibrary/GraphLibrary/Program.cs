@@ -17,11 +17,18 @@ namespace GraphLibrary
         private const string cAdjacentGraph4Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph4.txt";
         static void Main(string[] args)
         {
-            //MatrixGraphImporter.ImportUnweighted(cMatrixGraphPath);
-            var hGraph = AdjacentListGraphImporter.ImportUnweighted(cAdjacentGraph3Path);
+
+            var hFileName = cAdjacentGraph4Path;
+            
+            Console.WriteLine("Importiere Graph: " + hFileName);
+            
+            var hGraph = AdjacentListGraphImporter.ImportUnweighted(cAdjacentGraph4Path);
 
             var hBreadthFirstSearch = new BreadthFirstSearch(hGraph);
             hBreadthFirstSearch.Execute();
+            hBreadthFirstSearch.PrintInfosToConsole();
+
+            Console.ReadLine();
 
         }
     }

@@ -22,5 +22,10 @@ namespace GraphLibrary.Algorithm
         {
             throw new NotImplementedException();
         }
+
+        public void PrintInfosToConsole()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

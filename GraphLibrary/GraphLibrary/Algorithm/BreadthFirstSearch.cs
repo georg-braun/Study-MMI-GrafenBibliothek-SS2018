@@ -12,56 +12,72 @@ namespace GraphLibrary.Algorithm
     {
         public IGraph UsedGraph { get; }
 
+        private Dictionary<int, List<int>> FSubGraphs;
+
         public BreadthFirstSearch(IGraph _UsedGraph)
         {
             UsedGraph = _UsedGraph;
+            FSubGraphs = new Dictionary<int, List<int>>();
         }
 
-        private const int cNodeIsUnvisisted = -1;
+        private void AddNodeIdToSubgraph(int _SubgraphId, int _NodeId)
+        {
+            if (!FSubGraphs.ContainsKey(_SubgraphId))
+            {
+                FSubGraphs.Add(_SubgraphId,new List<int>());
+            }
+            FSubGraphs[_SubgraphId].Add(_NodeId);
+        }
+
+
         public void Execute()
         {
             var hGraphNodes = UsedGraph.GetNodeIndices();
+            var hVisitedBfsNodes = new HashSet<int>();
+            var hUnvisitedGraphNodes = new LinkedList<int>();
 
-            var hSubGraphs = new Dictionary<int,int>();   // Knoten -> Subgraph
-            LinkedList<int> hUnvisitedNodes = new LinkedList<int>();
+            FSubGraphs.Clear();
+            var hSubGraphId = 0;
+
             foreach (var hNode in hGraphNodes)
             {
-                hSubGraphs.Add(hNode.Key,cNodeIsUnvisisted);
-                hUnvisitedNodes.AddLast(hNode.Key);
+                hUnvisitedGraphNodes.AddLast(hNode.Key);
             }
 
-            var hVisitedNodes = new HashSet<int>(); // ToDo: Notwendig?
-            var hSubGraphId = 0;
-            // Mache solange bis alle Knoten mal besucht wurden
-            while (hUnvisitedNodes.Count > 0)
+            while (hUnvisitedGraphNodes.Count > 0)
             {
-                var hDepthSearchQueue = new Queue<int>();
-                hDepthSearchQueue.Enqueue(hUnvisitedNodes.First.Value);
+                
+                var hBfsQueue = new Queue<int>();
+                hBfsQueue.Enqueue(hUnvisitedGraphNodes.First.Value);
 
-                while (hDepthSearchQueue.Count > 0)
+                while (hBfsQueue.Count > 0)
                 {
-                    var hCurrentNodeId = hDepthSearchQueue.Dequeue();
-                    // Markiere den aktuellen Knoten als besucht
-                    hVisitedNodes.Add(hCurrentNodeId);
-                    hUnvisitedNodes.Remove(hCurrentNodeId);
-                    hSubGraphs[hCurrentNodeId] = hSubGraphId;
-                    // Finde die Nachbar Knoten heraus
+                    var hCurrentNodeId = hBfsQueue.Dequeue();
+
+                    hVisitedBfsNodes.Add(hCurrentNodeId);
+                    hUnvisitedGraphNodes.Remove(hCurrentNodeId);
+                    AddNodeIdToSubgraph(hSubGraphId, hCurrentNodeId);
+                    
                     var hNeighbourNodesIds = hGraphNodes[hCurrentNodeId].GetNeighbourIds();
-                    // Packe die Nachbarknoten in die Queue
+                    
                     foreach (var hNeighbourNodesId in hNeighbourNodesIds)
                     {
-                        // Prüfen ob Knoten schon besucht wurde
-                        if (!hVisitedNodes.Contains(hNeighbourNodesId))
+                        if (!hVisitedBfsNodes.Contains(hNeighbourNodesId))
                         {
-                            hDepthSearchQueue.Enqueue(hNeighbourNodesId);
+                            hBfsQueue.Enqueue(hNeighbourNodesId);
                         }
                     }
                 }
                 hSubGraphId++;
             }
-            // Alle Knoten wurden besucht
-            var distinctList = hSubGraphs.Values.Distinct().ToList();
         }
-        
+
+        public void PrintInfosToConsole()
+        {
+            Console.WriteLine("Breitensuche");
+            Console.WriteLine("Anzahl der Knoten: " + UsedGraph.GetNodeIndices().Count.ToString());
+            Console.WriteLine("Anzahl der Kanten: " + UsedGraph.GetEdgeIndices().Count.ToString());
+            Console.WriteLine("Anzahl der Teilgrafen: " + FSubGraphs.Keys.Count.ToString());
+        }
     }
 }

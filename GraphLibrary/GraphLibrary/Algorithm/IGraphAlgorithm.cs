@@ -16,5 +16,7 @@ namespace GraphLibrary.Algorithm
 
         void Execute();
 
+        void PrintInfosToConsole();
+
     }
 }
