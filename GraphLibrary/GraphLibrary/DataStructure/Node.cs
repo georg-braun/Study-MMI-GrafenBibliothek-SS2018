@@ -12,11 +12,13 @@ namespace GraphLibrary.DataStructure
         
         int Id { get; }
 
-        List<NodeEdge> Neighbours { get; }
+        List<NodeEdge> NeighbourNodes { get; }
 
         void AddEdge(Edge _Edge);
 
         void FindNeighbours();
+
+        List<int> GetNeighbourIds();
     }
 
     class Node : INode
@@ -29,7 +31,7 @@ namespace GraphLibrary.DataStructure
         private bool FFilledNeighboursInfo = false;
 
         private List<NodeEdge> FNeighbours;
-        public List<NodeEdge> Neighbours
+        public List<NodeEdge> NeighbourNodes
         {
             get
             {
@@ -74,6 +76,18 @@ namespace GraphLibrary.DataStructure
                 }
             } 
 
+        }
+
+        public List<int> GetNeighbourIds()
+        {
+            var hNeighbourIds = new List<int>();
+
+            foreach (var hNeighbour in NeighbourNodes)
+            {
+                hNeighbourIds.Add(hNeighbour.Node.Id);
+            }
+
+            return hNeighbourIds;
         }
     }
 }

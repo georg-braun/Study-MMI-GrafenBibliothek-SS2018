@@ -53,7 +53,7 @@ namespace GraphLibrary.DataStructure
 
         public List<NodeEdge> GetNodeNeighboursAndEdges(INode _Node)
         {
-            return _Node.Neighbours;
+            return _Node.NeighbourNodes;
         }
 
         public void FillNeighbourInfoInNodes()
@@ -80,6 +80,7 @@ namespace GraphLibrary.DataStructure
             var hNewDirectedEdge = new DirectedEdge(_StartNode, _EndNode, _Weight);
             // Todo: Checken dass keine Duplikate entstehen?
             FEdgeIndices.Add(hNewDirectedEdge);
+            _StartNode.AddEdge(hNewDirectedEdge);
             
         }
 
@@ -93,6 +94,8 @@ namespace GraphLibrary.DataStructure
             var hNewUndirectedEdge = new UndirectedEdge(_NodeOne, _NodeTwo, _Weight);
             // Todo: Checken dass keine Duplikate entstehen?
             FEdgeIndices.Add(hNewUndirectedEdge);
+            _NodeOne.AddEdge(hNewUndirectedEdge);
+            _NodeTwo.AddEdge(hNewUndirectedEdge);
 
             
         }

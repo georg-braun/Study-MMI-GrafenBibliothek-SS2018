@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphLibrary.Algorithm;
 using GraphLibrary.Importer;
 
 namespace GraphLibrary
@@ -11,12 +12,17 @@ namespace GraphLibrary
     class Program
     {
         private const string cMatrixGraph1Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph1.txt";
-        private const string cAdjacentGraph1Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph2.txt";
-        
+        private const string cAdjacentGraph2Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph2.txt";
+        private const string cAdjacentGraph3Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph3.txt";
+        private const string cAdjacentGraph4Path = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Graph4.txt";
         static void Main(string[] args)
         {
             //MatrixGraphImporter.ImportUnweighted(cMatrixGraphPath);
-            AdjacentListGraphImporter.ImportUnweighted(cAdjacentGraph1Path);
+            var hGraph = AdjacentListGraphImporter.ImportUnweighted(cAdjacentGraph3Path);
+
+            var hBreadthFirstSearch = new BreadthFirstSearch(hGraph);
+            hBreadthFirstSearch.Execute();
+
         }
     }
 }

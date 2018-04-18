@@ -31,13 +31,13 @@ namespace GraphLibrary.Importer
                 var hRow = hAdjacentListFileContent[hRowIndex];
                 var hEdgeInfo = hRow.Split('\t');
 
-                var hStartNodeId = Convert.ToInt32(hEdgeInfo[0]);
-                var hEndNodeId = Convert.ToInt32(hEdgeInfo[1]);
+                var hNodeAId = Convert.ToInt32(hEdgeInfo[0]);
+                var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
 
-                var hStartNode = hGraphNodes[hStartNodeId];
-                var hEndNode = hGraphNodes[hEndNodeId];
+                var hNodeA = hGraphNodes[hNodeAId];
+                var hNodeB = hGraphNodes[hNodeBId];
 
-                hGraph.AddDirectedEdge(hStartNode,hEndNode);
+                hGraph.AddUndirectedEdge(hNodeA,hNodeB);
             }
 
 
