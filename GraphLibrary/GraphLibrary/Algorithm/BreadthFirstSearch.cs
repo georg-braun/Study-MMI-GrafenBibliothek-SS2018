@@ -14,63 +14,73 @@ namespace GraphLibrary.Algorithm
 
         private Dictionary<int, List<int>> FSubGraphs;
 
+        private Dictionary<int, bool> FVisitedBfsNodes;
+
+        private Dictionary<int, INode> FGraphNodes;
+
+        int FSubGraphId = 0;
+
         public BreadthFirstSearch(IGraph _UsedGraph)
         {
             UsedGraph = _UsedGraph;
             FSubGraphs = new Dictionary<int, List<int>>();
+            FVisitedBfsNodes = new Dictionary<int, bool>();
         }
 
-        private void AddNodeIdToSubgraph(int _SubgraphId, int _NodeId)
+        private void AddNodeIdToSubgraph(int _NodeId)
         {
-            if (!FSubGraphs.ContainsKey(_SubgraphId)) //ToDo
-            {
-                FSubGraphs.Add(_SubgraphId,new List<int>());
-            }
-            FSubGraphs[_SubgraphId].Add(_NodeId);
+            FSubGraphs[FSubGraphId].Add(_NodeId);
         }
 
 
         public void Execute()
         {
-            var hGraphNodes = UsedGraph.GetNodeIndices();
-            var hVisitedBfsNodes = new Dictionary<int,bool>();
+            FGraphNodes = UsedGraph.GetNodeIndices();
+            FVisitedBfsNodes.Clear();
             FSubGraphs.Clear();
-            var hSubGraphId = 0;
+            FSubGraphId = 0;
 
-            foreach (var hNode in hGraphNodes)
+            foreach (var hNode in FGraphNodes)
             {
-                hVisitedBfsNodes.Add(hNode.Key,false);
+                FVisitedBfsNodes.Add(hNode.Key,false);
             }
 
-            while (hVisitedBfsNodes.Values.Contains(false))
+            while (FVisitedBfsNodes.Values.Contains(false))
             {
-                
-                var hBfsQueue = new Queue<int>();
-                var hUnvisitedNodeId = FindUnvisitedNode(hVisitedBfsNodes);
-                hBfsQueue.Enqueue(hUnvisitedNodeId);
-                hVisitedBfsNodes[hUnvisitedNodeId] = true;
-                AddNodeIdToSubgraph(hSubGraphId, hUnvisitedNodeId);
+                FSubGraphs.Add(FSubGraphId, new List<int>());
+                var hUnvisitedNode = FGraphNodes[FindUnvisitedNode(FVisitedBfsNodes)];
+                BreadthFirstSearchAlgorithm(hUnvisitedNode);
+                FSubGraphId++;
+            }
+        }
 
-                while (hBfsQueue.Count > 0)
+        private IGraph BreadthFirstSearchAlgorithm(INode _Node)
+        {
+            var hBfsQueue = new Queue<int>();
+            hBfsQueue.Enqueue(_Node.Id);
+            FVisitedBfsNodes[_Node.Id] = true;
+            AddNodeIdToSubgraph(_Node.Id);
+
+            while (hBfsQueue.Count > 0)
+            {
+                var hCurrentNodeId = hBfsQueue.Dequeue();
+
+
+                var hNeighbourNodesIds = FGraphNodes[hCurrentNodeId].GetNeighbourIds();
+
+                foreach (var hNeighbourNodesId in hNeighbourNodesIds)
                 {
-                    var hCurrentNodeId = hBfsQueue.Dequeue();
-                    
-
-                    var hNeighbourNodesIds = hGraphNodes[hCurrentNodeId].GetNeighbourIds();
-                    
-                    foreach (var hNeighbourNodesId in hNeighbourNodesIds)
+                    // Besuche nur weitere Knoten wenn diese noch nicht besucht wurden
+                    if (!FVisitedBfsNodes[hNeighbourNodesId])
                     {
-                        // Besuche nur weitere Knoten wenn diese noch nicht besucht wurden
-                        if (!hVisitedBfsNodes[hNeighbourNodesId])
-                        {
-                            hVisitedBfsNodes[hNeighbourNodesId] =true;
-                            AddNodeIdToSubgraph(hSubGraphId, hNeighbourNodesId);
-                            hBfsQueue.Enqueue(hNeighbourNodesId);
-                        }
+                        FVisitedBfsNodes[hNeighbourNodesId] = true;
+                        AddNodeIdToSubgraph(hNeighbourNodesId);
+                        hBfsQueue.Enqueue(hNeighbourNodesId);
                     }
                 }
-                hSubGraphId++;
             }
+
+            return null;
         }
 
         private int FindUnvisitedNode(Dictionary<int, bool> dict)
