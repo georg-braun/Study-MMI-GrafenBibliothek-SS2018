@@ -18,15 +18,15 @@ namespace GraphLibrary
         static void Main(string[] args)
         {
 
-            var hFileName = cAdjacentGraph4Path;
+            var hFileName = cAdjacentGraph3Path;
             
             Console.WriteLine("Importiere Graph: " + hFileName);
             
             var hGraph = AdjacentListGraphImporter.ImportUnweighted(hFileName);
 
-            IGraphAlgorithm hBreadthFirstSearch = new BreadthFirstSearch(hGraph);
-            hBreadthFirstSearch.Execute();
-            hBreadthFirstSearch.PrintInfosToConsole();
+            FindSubTreesWithBFS hFindSubTreesWithBFS = new FindSubTreesWithBFS(hGraph);
+            hFindSubTreesWithBFS.Execute();
+            hFindSubTreesWithBFS.PrintInfosToConsole();
 
             IGraphAlgorithm hDepthFirstSearch = new DepthFirstSearch(hGraph);
             hDepthFirstSearch.Execute();

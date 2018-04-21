@@ -48,7 +48,7 @@ namespace GraphLibrary.Importer
                     if (hNodeConnectionInfo != "0")
                     {
                         var hNewNeighbourNodeId = hMatrixColumnIdx;
-                        hGraph.AddUndirectedEdge(hGraphNodes[hCurrentNodeId],hGraphNodes[hNewNeighbourNodeId]);
+                        hGraph.CreateUndirectedEdge(hGraphNodes[hCurrentNodeId],hGraphNodes[hNewNeighbourNodeId]);
                     }
                 }
                 hReadTillColumn++; // Die nächste Zeile kann eine Spalte weiter gelesen werden

@@ -19,14 +19,17 @@ namespace GraphLibrary.DataStructure
 
         void CreateNewNode(int _Node);
 
-        void AddDirectedEdge(INode _StartNode, INode _EndNode);
+        void CreateDirectedEdge(INode _StartNode, INode _EndNode);
 
-        void AddDirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight);
+        void CreateDirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight);
 
-        void AddUndirectedEdge(INode _NodeOne, INode _NodeTwo);
+        void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo);
 
-        void AddUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight);
+        void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight);
 
+        void AddNode(INode _Node);
+
+        void AddEdge(Edge _Edge);
     } 
 
     class Graph : IGraph
@@ -70,12 +73,12 @@ namespace GraphLibrary.DataStructure
             FNodeIndices.Add(hNewNode.Id, hNewNode);
         }
 
-        public void AddDirectedEdge(INode _StartNode, INode _EndNode)
+        public void CreateDirectedEdge(INode _StartNode, INode _EndNode)
         {
-            AddDirectedEdge(_StartNode, _EndNode, new Unweighted());
+            CreateDirectedEdge(_StartNode, _EndNode, new Unweighted());
         }
 
-        public void AddDirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight)
+        public void CreateDirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight)
         {
             var hNewDirectedEdge = new DirectedEdge(_StartNode, _EndNode, _Weight);
             // Todo: Checken dass keine Duplikate entstehen?
@@ -84,12 +87,12 @@ namespace GraphLibrary.DataStructure
             
         }
 
-        public void AddUndirectedEdge(INode _NodeOne, INode _NodeTwo)
+        public void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo)
         {
-            AddUndirectedEdge(_NodeOne, _NodeTwo, new Unweighted());
+            CreateUndirectedEdge(_NodeOne, _NodeTwo, new Unweighted());
         }
 
-        public void AddUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight)
+        public void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight)
         {
             var hNewUndirectedEdge = new UndirectedEdge(_NodeOne, _NodeTwo, _Weight);
             FEdgeIndices.Add(hNewUndirectedEdge);
@@ -99,7 +102,14 @@ namespace GraphLibrary.DataStructure
             
         }
 
+        public void AddNode(INode _Node)
+        {
+            FNodeIndices.Add(_Node.Id, _Node);
+        }
 
-        
+        public void AddEdge(Edge _Edge)
+        {
+            FEdgeIndices.Add(_Edge);
+        }
     }
 }

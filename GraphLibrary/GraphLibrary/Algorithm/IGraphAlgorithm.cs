@@ -12,8 +12,6 @@ namespace GraphLibrary.Algorithm
 {
     interface IGraphAlgorithm
     {
-        IGraph UsedGraph { get; }
-
         void Execute();
 
         void PrintInfosToConsole();

@@ -37,7 +37,7 @@ namespace GraphLibrary.Importer
                 var hNodeA = hGraphNodes[hNodeAId];
                 var hNodeB = hGraphNodes[hNodeBId];
 
-                hGraph.AddUndirectedEdge(hNodeA,hNodeB);
+                hGraph.CreateUndirectedEdge(hNodeA,hNodeB);
             }
 
 
