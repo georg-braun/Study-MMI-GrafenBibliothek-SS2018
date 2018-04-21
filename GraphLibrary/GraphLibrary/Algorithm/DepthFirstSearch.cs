@@ -62,7 +62,7 @@ namespace GraphLibrary.Algorithm
             FVisitedBfsNodes.Add(_Node.Id);
             FUnvisitedGraphNodes.Remove(_Node.Id);
             AddNodeIdToSubgraph(_Node.Id);
-            var hNodeNeighboursConnection = _Node.NeighboursConnection;
+            var hNodeNeighboursConnection = _Node.NeighboursEdges;
             
             foreach (var hCurrentConnection in hNodeNeighboursConnection)
             {

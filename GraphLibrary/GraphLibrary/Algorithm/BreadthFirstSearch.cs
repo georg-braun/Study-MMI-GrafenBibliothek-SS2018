@@ -16,7 +16,7 @@ namespace GraphLibrary.Algorithm
 
         private Dictionary<int, bool> FVisitedBfsNodes;
 
-        private Dictionary<int, INode> FGraphNodes;
+        
 
         int FSubGraphId = 0;
 
@@ -35,12 +35,12 @@ namespace GraphLibrary.Algorithm
 
         public void Execute()
         {
-            FGraphNodes = UsedGraph.GetNodeIndices();
+            var hGraphNodes = UsedGraph.GetNodeIndices();
             FVisitedBfsNodes.Clear();
             FSubGraphs.Clear();
             FSubGraphId = 0;
 
-            foreach (var hNode in FGraphNodes)
+            foreach (var hNode in hGraphNodes)
             {
                 FVisitedBfsNodes.Add(hNode.Key,false);
             }
@@ -48,7 +48,7 @@ namespace GraphLibrary.Algorithm
             while (FVisitedBfsNodes.Values.Contains(false))
             {
                 FSubGraphs.Add(FSubGraphId, new List<int>());
-                var hUnvisitedNode = FGraphNodes[FindUnvisitedNode(FVisitedBfsNodes)];
+                var hUnvisitedNode = hGraphNodes[FindUnvisitedNode(FVisitedBfsNodes)];
                 BreadthFirstSearchAlgorithm(hUnvisitedNode);
                 FSubGraphId++;
             }
@@ -56,26 +56,31 @@ namespace GraphLibrary.Algorithm
 
         private IGraph BreadthFirstSearchAlgorithm(INode _Node)
         {
-            var hBfsQueue = new Queue<int>();
-            hBfsQueue.Enqueue(_Node.Id);
+            // ToDo Erstelle ein neues Graphen Objekt
+            // ToDo Füge den übergebenen Knoten hinzu (als Referenz auf den Original Knoten)
+
+            var hBfsQueue = new Queue<INode>();
+            hBfsQueue.Enqueue(_Node);
             FVisitedBfsNodes[_Node.Id] = true;
             AddNodeIdToSubgraph(_Node.Id);
 
             while (hBfsQueue.Count > 0)
             {
-                var hCurrentNodeId = hBfsQueue.Dequeue();
+                var hCurrentNode = hBfsQueue.Dequeue();
+                // ToDo Umbauen dass auch die Kanten Objekte geholt werden.
+                var hNeighbourEdges = hCurrentNode.NeighboursEdges;
 
-
-                var hNeighbourNodesIds = FGraphNodes[hCurrentNodeId].GetNeighbourIds();
-
-                foreach (var hNeighbourNodesId in hNeighbourNodesIds)
+                foreach (var hNeighbourEdge in hNeighbourEdges)
                 {
                     // Besuche nur weitere Knoten wenn diese noch nicht besucht wurden
-                    if (!FVisitedBfsNodes[hNeighbourNodesId])
+                    if (!FVisitedBfsNodes[hNeighbourEdge.Node.Id])
                     {
-                        FVisitedBfsNodes[hNeighbourNodesId] = true;
-                        AddNodeIdToSubgraph(hNeighbourNodesId);
-                        hBfsQueue.Enqueue(hNeighbourNodesId);
+                        FVisitedBfsNodes[hNeighbourEdge.Node.Id] = true;
+                        AddNodeIdToSubgraph(hNeighbourEdge.Node.Id);
+                        hBfsQueue.Enqueue(hNeighbourEdge.Node);
+
+                        // ToDo Es wurde ein neuer Knoten entdeckt. Speicher auch dessen Referenz
+                        // ToDo Speicher ebenfalls die Kante der Verbindung
                     }
                 }
             }

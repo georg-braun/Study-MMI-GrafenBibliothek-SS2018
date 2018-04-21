@@ -53,7 +53,7 @@ namespace GraphLibrary.DataStructure
 
         public List<NodeEdge> GetNodeNeighboursAndEdges(INode _Node)
         {
-            return _Node.NeighboursConnection;
+            return _Node.NeighboursEdges;
         }
 
         public void FillNeighbourInfoInNodes()
