@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace GraphLibrary.DataStructure
 {
-
     interface IGraph
     {
         Dictionary<int, INode> GetNodeIndices();

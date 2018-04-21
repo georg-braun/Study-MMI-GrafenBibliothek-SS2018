@@ -5,7 +5,7 @@ using GraphLibrary.DataStructure;
 
 namespace GraphLibrary.Algorithm
 {
-    class FindSubTreesWithBFS
+    class FindSubTrees
     {
         public IGraph UsedGraph { get; }
 
@@ -15,14 +15,14 @@ namespace GraphLibrary.Algorithm
 
         int FSubGraphId = 0;
 
-        public FindSubTreesWithBFS(IGraph _UsedGraph)
+        public FindSubTrees(IGraph _UsedGraph)
         {
             UsedGraph = _UsedGraph;
             FSubGraphs = new Dictionary<int, List<int>>();
             FVisitedBfsNodes = new Dictionary<int, bool>();
         }
 
-        public List<IGraph> Execute()
+        public List<IGraph> Execute<T>() where T : IGraphTraverseAlgorithm, new()
         {
             var hSubGraphs = new List<IGraph>();
 
@@ -40,8 +40,8 @@ namespace GraphLibrary.Algorithm
             {
                 FSubGraphs.Add(FSubGraphId, new List<int>());
                 var hUnvisitedNode = hGraphNodes[FindUnvisitedNode(FVisitedBfsNodes)];
-                var hBfsSearch = new BreadthFirstSearch(hUnvisitedNode);
-                var hSubGraph = hBfsSearch.Execute();
+                var hTraverseAlgorithm = new T();
+                var hSubGraph = hTraverseAlgorithm.Execute(hUnvisitedNode);
                 hSubGraphs.Add(hSubGraph);
                 SetSubGraphNodesAsVisited(hSubGraph);
                 FSubGraphId++;

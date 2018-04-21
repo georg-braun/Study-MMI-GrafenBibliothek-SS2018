@@ -8,23 +8,24 @@ using GraphLibrary.DataStructure;
 
 namespace GraphLibrary.Algorithm
 {
-    class BreadthFirstSearch
+    class BreadthFirstSearch : IGraphTraverseAlgorithm
     {
-        public INode StartNode { get; }
+        private INode FStartNode;
         
         
 
-        public BreadthFirstSearch(INode _StartNode)
+        public BreadthFirstSearch()
         {
-            StartNode = _StartNode;
+            
         }
 
 
 
 
-        public IGraph Execute()
+        public IGraph Execute(INode _StartNode)
         {
-            return BreadthFirstSearchAlgorithm(StartNode);
+            FStartNode = _StartNode;
+            return BreadthFirstSearchAlgorithm(FStartNode);
         }
 
         private IGraph BreadthFirstSearchAlgorithm(INode _Node)

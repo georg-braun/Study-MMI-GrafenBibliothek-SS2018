@@ -24,13 +24,12 @@ namespace GraphLibrary
             
             var hGraph = AdjacentListGraphImporter.ImportUnweighted(hFileName);
 
-            FindSubTreesWithBFS hFindSubTreesWithBFS = new FindSubTreesWithBFS(hGraph);
-            hFindSubTreesWithBFS.Execute();
-            hFindSubTreesWithBFS.PrintInfosToConsole();
+            FindSubTrees hFindSubTrees = new FindSubTrees(hGraph);
+            hFindSubTrees.Execute<BreadthFirstSearch>();
+            hFindSubTrees.PrintInfosToConsole();
 
-            IGraphAlgorithm hDepthFirstSearch = new DepthFirstSearch(hGraph);
-            hDepthFirstSearch.Execute();
-            hDepthFirstSearch.PrintInfosToConsole();
+            hFindSubTrees.Execute<DepthFirstSearch>();
+            hFindSubTrees.PrintInfosToConsole();
 
             Console.ReadLine();
 
