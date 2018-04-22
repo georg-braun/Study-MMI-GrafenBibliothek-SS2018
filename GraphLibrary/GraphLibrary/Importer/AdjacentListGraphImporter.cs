@@ -1,20 +1,32 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 using GraphLibrary.DataStructure;
 
 namespace GraphLibrary.Importer
 {
+    enum EdgeKind
+    {
+        UndirectedUnweighted,
+        UndirectedWeighted,
+        DirectedUnweighted,
+        DirectedWeighted
+    } 
+
     static class AdjacentListGraphImporter
     {
-        public static IGraph ImportUnweighted(string _FilePath)
+        public static IGraph ImportAdjacentList(string _FilePath, EdgeKind _EdgeKind)
         {
+            Console.WriteLine("Starte Importieren: " + _FilePath);
+            var hStopwatch = new Stopwatch();
+            hStopwatch.Start();
+
             String[] hAdjacentListFileContent = { };
             if (File.Exists(_FilePath))
             {
                 hAdjacentListFileContent = File.ReadAllLines(_FilePath);
             }
-
 
             // Initiales Anlegen der Knoten.
             var hGraph = new Graph();
@@ -25,10 +37,32 @@ namespace GraphLibrary.Importer
             }
 
             // Anlegen der Kanten
-            var hGraphNodes = hGraph.GetNodeIndices();
-            for (int hRowIndex = 1; hRowIndex < hAdjacentListFileContent.Length; hRowIndex++)
+            switch (_EdgeKind)
             {
-                var hRow = hAdjacentListFileContent[hRowIndex];
+                case EdgeKind.UndirectedUnweighted:
+                    ImportUnweightedUndirected(hGraph, hAdjacentListFileContent);
+                    break;
+                case EdgeKind.UndirectedWeighted:
+                    ImportWeightedUndirected(hGraph, hAdjacentListFileContent);
+                    break;
+            } //switch (_EdgeKind)
+            
+            
+
+            hStopwatch.Stop();
+            Console.WriteLine("Anzahl eingelesener Knoten:\t" + hGraph.GetNodeIndices().Count.ToString());
+            Console.WriteLine("Anzahl eingelesener Kanten:\t" + hGraph.GetEdgeIndices().Count.ToString());
+            Console.WriteLine("Dauer Einlesevorgang:\t\t" + hStopwatch.ElapsedMilliseconds.ToString() + " ms");
+
+            return hGraph;
+        }
+
+        private static void ImportUnweightedUndirected(IGraph _Graph, String [] _HAdjacentListFileContentStrings)
+        {
+            var hGraphNodes = _Graph.GetNodeIndices();
+            for (int hRowIndex = 1; hRowIndex < _HAdjacentListFileContentStrings.Length; hRowIndex++)
+            {
+                var hRow = _HAdjacentListFileContentStrings[hRowIndex];
                 var hEdgeInfo = hRow.Split('\t');
 
                 var hNodeAId = Convert.ToInt32(hEdgeInfo[0]);
@@ -37,12 +71,29 @@ namespace GraphLibrary.Importer
                 var hNodeA = hGraphNodes[hNodeAId];
                 var hNodeB = hGraphNodes[hNodeBId];
 
-                hGraph.CreateUndirectedEdge(hNodeA,hNodeB);
+                _Graph.CreateUndirectedEdge(hNodeA, hNodeB);
             }
-
-
-            return hGraph;
         }
 
+        private static void ImportWeightedUndirected(IGraph _Graph, String[] _HAdjacentListFileContentStrings)
+        {
+            var hGraphNodes = _Graph.GetNodeIndices();
+            for (int hRowIndex = 1; hRowIndex < _HAdjacentListFileContentStrings.Length; hRowIndex++)
+            {
+                var hRow = _HAdjacentListFileContentStrings[hRowIndex];
+                var hEdgeInfo = hRow.Split('\t');
+
+                var hNodeAId = Convert.ToInt32(hEdgeInfo[0]);
+                var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
+                var hEdgeWeight = Convert.ToDouble(hEdgeInfo[2]);
+
+                var hWeightValue = new CostWeighted(hEdgeWeight);
+
+                var hNodeA = hGraphNodes[hNodeAId];
+                var hNodeB = hGraphNodes[hNodeBId];
+
+                _Graph.CreateUndirectedEdge(hNodeA, hNodeB, hWeightValue);
+            }
+        }
     }
 }

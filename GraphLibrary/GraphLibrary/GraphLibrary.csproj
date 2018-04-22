@@ -45,7 +45,7 @@
     <Compile Include="Algorithm\BreadthFirstSearch.cs" />
     <Compile Include="Algorithm\DepthFirstSearch.cs" />
     <Compile Include="Algorithm\FindSubTrees.cs" />
-    <Compile Include="Algorithm\GraphTraverseAlgorithm.cs" />
+    <Compile Include="Algorithm\IGraphTraverseAlgorithm.cs" />
     <Compile Include="Algorithm\IGraphAlgorithm.cs" />
     <Compile Include="DataStructure\Edge.cs" />
     <Compile Include="DataStructure\Graph.cs" />

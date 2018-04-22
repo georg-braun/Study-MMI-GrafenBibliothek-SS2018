@@ -10,6 +10,7 @@ namespace GraphLibrary.Importer
         
         public static IGraph ImportUnweighted(string _FilePath)
         {
+            
             String[] hGraphMatrixFileContent = { };
             if (File.Exists(_FilePath))
             {
@@ -54,6 +55,7 @@ namespace GraphLibrary.Importer
                 hReadTillColumn++; // Die nächste Zeile kann eine Spalte weiter gelesen werden
             }
             
+
             return hGraph;
         }
         

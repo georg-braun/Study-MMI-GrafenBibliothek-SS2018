@@ -20,9 +20,8 @@ namespace GraphLibrary
 
             var hFileName = cAdjacentGraph3Path;
             
-            Console.WriteLine("Importiere Graph: " + hFileName);
             
-            var hGraph = AdjacentListGraphImporter.ImportUnweighted(hFileName);
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName,EdgeKind.UndirectedUnweighted);
 
             FindSubTrees hFindSubTrees = new FindSubTrees(hGraph);
             hFindSubTrees.Execute<BreadthFirstSearch>();
