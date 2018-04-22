@@ -12,7 +12,7 @@ namespace GraphLibrary.DataStructure
 
         public abstract INode GetOtherEndpoint(INode _Node);
 
-        public abstract List<INode> GetPossibleEnpoints();
+        public abstract INode[] GetPossibleEnpoints();
 
         protected Edge(IWeight _Weight)
         {
@@ -65,10 +65,9 @@ namespace GraphLibrary.DataStructure
             return hPossibleEndpoint;
         }
 
-        public override List<INode> GetPossibleEnpoints()
+        public override INode[] GetPossibleEnpoints()
         {
-            var hPossibleEndpoints = new List<INode> { FNodeA, FNodeB };
-            return hPossibleEndpoints;
+            return new[] { FNodeA, FNodeB };
         }
     }
 
@@ -100,10 +99,9 @@ namespace GraphLibrary.DataStructure
             return hPossibleEndpoint;
         }
 
-        public override List<INode> GetPossibleEnpoints()
+        public override INode[] GetPossibleEnpoints()
         {
-            var hPossibleEndpoints = new List<INode> { FEndNode };
-            return hPossibleEndpoints;
+            return new[] { FEndNode };
         }
     }
 }

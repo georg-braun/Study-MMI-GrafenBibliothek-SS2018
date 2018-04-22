@@ -17,9 +17,30 @@ namespace GraphLibrary
         {
 
             var hFileName = GraphFileRessources.P2AdjacentGraphG1_2Path;
-            
-            
-            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName,EdgeKind.UndirectedWeighted);
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+            var hKruskalAlgorithm = new KruskalAlgorithm(hGraph);
+            hKruskalAlgorithm.Execute();
+
+            //foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
+            //{
+            //    var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
+            //    Console.WriteLine("--- FindSubTrees BFS ---");
+            //    FindSubTrees hNewFindSubTrees = new FindSubTrees(hNewGraph);
+            //    hNewFindSubTrees.Execute<BreadthFirstSearch>();
+            //    hNewFindSubTrees.PrintInfosToConsole();
+            //    Console.WriteLine("");
+            //} 
+
+            Console.ReadLine();
+
+        }
+
+        private void P1Aufgaben()
+        {
+            var hFileName = GraphFileRessources.P1AdjacentGraph3Path;
+
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedUnweighted);
 
             FindSubTrees hFindSubTrees = new FindSubTrees(hGraph);
             Console.WriteLine("--- FindSubTrees BFS ---");
@@ -29,19 +50,8 @@ namespace GraphLibrary
             Console.WriteLine("--- FindSubTrees DFS ---");
             hFindSubTrees.Execute<DepthFirstSearch>();
             hFindSubTrees.PrintInfosToConsole();
-
-            foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
-            {
-                var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
-                Console.WriteLine("--- FindSubTrees BFS ---");
-                FindSubTrees hNewFindSubTrees = new FindSubTrees(hNewGraph);
-                hNewFindSubTrees.Execute<BreadthFirstSearch>();
-                hNewFindSubTrees.PrintInfosToConsole();
-                Console.WriteLine("");
-            } 
-
-            Console.ReadLine();
-
         }
     }
+
+    
 }
