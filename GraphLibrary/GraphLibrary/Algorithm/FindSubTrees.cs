@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GraphLibrary.DataStructure;
 
@@ -15,15 +16,20 @@ namespace GraphLibrary.Algorithm
 
         int FSubGraphId = 0;
 
+        private Stopwatch FStopwatch;
+
         public FindSubTrees(IGraph _UsedGraph)
         {
             UsedGraph = _UsedGraph;
             FSubGraphs = new Dictionary<int, List<int>>();
             FVisitedBfsNodes = new Dictionary<int, bool>();
+            FStopwatch = new Stopwatch();
         }
 
         public List<IGraph> Execute<T>() where T : IGraphTraverseAlgorithm, new()
         {
+            FStopwatch.Start();
+
             var hSubGraphs = new List<IGraph>();
 
             var hGraphNodes = UsedGraph.GetNodeIndices();
@@ -47,6 +53,7 @@ namespace GraphLibrary.Algorithm
                 FSubGraphId++;
             }
 
+            FStopwatch.Stop();
             return hSubGraphs;
         }
 
@@ -62,9 +69,10 @@ namespace GraphLibrary.Algorithm
 
         public void PrintInfosToConsole()
         {
-            Console.WriteLine("--- Breitensuche ---");
+            
             Console.WriteLine("Anzahl der Knoten: " + UsedGraph.GetNodeIndices().Count.ToString());
             Console.WriteLine("Anzahl der Kanten: " + UsedGraph.GetEdgeIndices().Count.ToString());
+            Console.WriteLine("Benötigte Zeit: " + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
             Console.WriteLine("Anzahl der Teilgrafen: " + FSubGraphs.Keys.Count.ToString());
             foreach (var hSubGraphList in FSubGraphs)
             {

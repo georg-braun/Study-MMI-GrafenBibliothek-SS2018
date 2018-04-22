@@ -22,15 +22,22 @@ namespace GraphLibrary
             var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName,EdgeKind.UndirectedWeighted);
 
             FindSubTrees hFindSubTrees = new FindSubTrees(hGraph);
+            Console.WriteLine("--- FindSubTrees BFS ---");
             hFindSubTrees.Execute<BreadthFirstSearch>();
             hFindSubTrees.PrintInfosToConsole();
 
+            Console.WriteLine("--- FindSubTrees DFS ---");
             hFindSubTrees.Execute<DepthFirstSearch>();
             hFindSubTrees.PrintInfosToConsole();
 
             foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
             {
                 var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
+                Console.WriteLine("--- FindSubTrees BFS ---");
+                FindSubTrees hNewFindSubTrees = new FindSubTrees(hNewGraph);
+                hNewFindSubTrees.Execute<BreadthFirstSearch>();
+                hNewFindSubTrees.PrintInfosToConsole();
+                Console.WriteLine("");
             } 
 
             Console.ReadLine();
