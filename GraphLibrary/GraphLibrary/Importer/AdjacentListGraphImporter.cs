@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 
 using GraphLibrary.DataStructure;
@@ -85,7 +86,7 @@ namespace GraphLibrary.Importer
 
                 var hNodeAId = Convert.ToInt32(hEdgeInfo[0]);
                 var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
-                var hEdgeWeight = Convert.ToDouble(hEdgeInfo[2]);
+                var hEdgeWeight = Convert.ToDouble(hEdgeInfo[2],CultureInfo.InvariantCulture);
 
                 var hWeightValue = new CostWeighted(hEdgeWeight);
 
