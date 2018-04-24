@@ -16,76 +16,85 @@ namespace GraphLibrary.Algorithm
 
         private Stopwatch FStopwatch;
 
+        private Stopwatch FindCircleStopwatch;
+
+        private long timeForFindingCircles;
+
         public KruskalAlgorithm(IGraph _UsedGraph)
         {
             FUsedGraph = _UsedGraph;
             FStopwatch = new Stopwatch();
+            FindCircleStopwatch = new Stopwatch();
+            
         }
 
         public void Execute()
         {
             // ToDo: Ggf. sinnvoll aus dem übergebenen Grafen die Subgrafen zu ermitteln und dann zu wissen welche Knoten darin vorhanden sind
             // Der Algorithmus könnte sonst Probleme bekommen wenn es mehr als eine Zusammenhangskomponente gibt
-
+            timeForFindingCircles = 0;
             FStopwatch.Start();
 
             // Use a copy of the Edge List. Don't wan't to affect the datastructure
             var hEdges = new List<Edge>(FUsedGraph.GetEdgeIndices());
-            var hNodes = FUsedGraph.GetNodeIndices();
+            var hNodeDictionary = FUsedGraph.GetNodeIndices();
             
             var hEdgeWeightComparerAsc = new EdgeWeightComparerAsc();
             hEdges.Sort(hEdgeWeightComparerAsc);
 
-            var hNodeCircleMarkers = new List<int>();
-            for (var i = 0; i < hNodes.Count; i++)
+            var hNodePathList = new Dictionary<int,List<int>>();
+            foreach (var hNodeValue in hNodeDictionary)
             {
-                hNodeCircleMarkers.Add(-1);
+                // Jeder Eintrag in der Path List hat eine Liste mit den in dem Path enthaltenen Knoten
+                var hNodesInPath = new List<int>();
+                hNodesInPath.Add(hNodeValue.Value.Id);
+                hNodePathList.Add(hNodeValue.Value.Id, hNodesInPath);
             }
 
 
             double hCosts = 0;
-            var hCircleId = 0;
+            var hNodesAdded = 1;    // Initial ein Knoten schon hinzugefügt
             var hCurrentEdgeId = 0;
+            var hEdgesCount = hEdges.Count;
+            var hNodesInDictionaryCount = hNodeDictionary.Count;
+            List<int> hBiggerPath;
+            List<int> hSmallerPath;
 
-            while (hCurrentEdgeId < hEdges.Count)
+            while (hCurrentEdgeId < hEdgesCount && hNodesAdded < hNodesInDictionaryCount)
             {
                 var hEdgeEndPoints = hEdges[hCurrentEdgeId].GetPossibleEnpoints();
-                var hNodeA = hEdgeEndPoints[0];
-                var hNodeB = hEdgeEndPoints[1];
+                var hNodeAId = hEdgeEndPoints[0].Id;
+                var hNodeBId = hEdgeEndPoints[1].Id;
 
-                if ( (hNodeCircleMarkers[hNodeA.Id] == -1) && (hNodeCircleMarkers[hNodeB.Id] ==-1))
+                if ( hNodePathList[hNodeAId] != hNodePathList[hNodeBId] )
                 {
-                    // Knoten A und B sind noch in keinem Teilgraf. Also kann die Kante rein
-                    hNodeCircleMarkers[hNodeA.Id] = hCircleId;
-                    hNodeCircleMarkers[hNodeB.Id] = hCircleId;
-                    hCircleId++;
+
+                    // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
+                    // Noch prüfen welcher Pfad der größere ist. Es soll nämlich der kleinere Pfad in den größeren Eingefügt werden
+                    if (hNodePathList[hNodeAId].Count >= hNodePathList[hNodeBId].Count)
+                    {
+                        // B in A
+                        hBiggerPath = hNodePathList[hNodeAId];
+                        hSmallerPath = hNodePathList[hNodeBId];
+                    }
+                    else
+                    {
+                        // A in B
+                        hBiggerPath = hNodePathList[hNodeBId];
+                        hSmallerPath = hNodePathList[hNodeAId];
+                    }
+
+                    // Die Pfad-Liste von dem kleineren in den größeren angehangen wird nun in die Pfadliste von A angehangen.
+                    hBiggerPath.AddRange(hSmallerPath);
+                    // Alle Knoten die im kleineren Pfad waren, sollen nun im Dictionary auch auf den zusammengeführten Pfad zeigen
+                    foreach (var hNodeInSmaller in hSmallerPath)
+                    {
+                        hNodePathList[hNodeInSmaller] = hBiggerPath;
+                    }
+
+                    // Kante wurde hinzugefügt. Also gewicht aufaddieren
                     hCosts += hEdges[hCurrentEdgeId].GetWeightValue();
-                }
-                else if ( hNodeCircleMarkers[hNodeA.Id] != -1 && (hNodeCircleMarkers[hNodeB.Id] == -1) )
-                {
-                    // Knoten A ist schon teil eines Teilgrafs, B aber noch nicht. B wird an A Teilgraf angehangen
-                    hNodeCircleMarkers[hNodeB.Id] = hNodeCircleMarkers[hNodeA.Id];
-                    hCosts += hEdges[hCurrentEdgeId].GetWeightValue();
-
-                }
-                else if (hNodeCircleMarkers[hNodeA.Id] == -1 && (hNodeCircleMarkers[hNodeB.Id] != -1))
-                {
-                    // Knoten B ist schon teil eines Teilgrafs, A aber noch nicht. A wird an B Teilgraf angehangen
-                    hNodeCircleMarkers[hNodeA.Id] = hNodeCircleMarkers[hNodeB.Id];
-                    hCosts += hEdges[hCurrentEdgeId].GetWeightValue();
-
-                }
-                else if (hNodeCircleMarkers[hNodeA.Id] != hNodeCircleMarkers[hNodeB.Id])
-                {
-                    // A und B sind in unterschiedlichen Teilgrafen, bilden aber keinen Kreis. Also werden die Teilgrafen verschmolzen (B in A)
-                    UpdateCircleIdInList(hNodeCircleMarkers, hNodeCircleMarkers[hNodeB.Id], hNodeCircleMarkers[hNodeA.Id]);
-                    hCosts += hEdges[hCurrentEdgeId].GetWeightValue();
-                }
-
-
-                if (!hNodeCircleMarkers.Contains(-1))
-                {
-                    break;
+                    hNodesAdded++;
                 }
 
                 hCurrentEdgeId++;
@@ -98,13 +107,16 @@ namespace GraphLibrary.Algorithm
 
         private void UpdateCircleIdInList(List<int> _List, int _OriginalValue, int _ReplaceValue)
         {
+            FindCircleStopwatch.Start();
             for (int i = 0; i < _List.Count; i++)
             {
                 if (_List[i] == _OriginalValue)
                 {
                     _List[i] = _ReplaceValue;
                 }
-            } 
+            }
+            FindCircleStopwatch.Stop();
+            timeForFindingCircles += FindCircleStopwatch.ElapsedMilliseconds;
         }
 
         public void PrintInfosToConsole()

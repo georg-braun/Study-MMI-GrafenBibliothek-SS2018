@@ -16,10 +16,6 @@ namespace GraphLibrary
         static void Main(string[] args)
         {
 
-            
-
-            
-
             foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
             {
                 var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
