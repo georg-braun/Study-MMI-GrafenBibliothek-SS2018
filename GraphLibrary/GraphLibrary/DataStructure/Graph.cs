@@ -29,6 +29,8 @@ namespace GraphLibrary.DataStructure
         void AddNode(INode _Node);
 
         void AddEdge(Edge _Edge);
+
+        double GetTotalGraphWeight();
     } 
 
     class Graph : IGraph
@@ -69,7 +71,11 @@ namespace GraphLibrary.DataStructure
         public void CreateNewNode(int _NodeId)
         {
             var hNewNode = new Node(_NodeId);
-            FNodeIndices.Add(hNewNode.Id, hNewNode);
+            if (!FNodeIndices.ContainsKey(_NodeId))
+            {
+                FNodeIndices.Add(hNewNode.Id, hNewNode);
+            }
+            
         }
 
         public void CreateDirectedEdge(INode _StartNode, INode _EndNode)
@@ -103,12 +109,30 @@ namespace GraphLibrary.DataStructure
 
         public void AddNode(INode _Node)
         {
-            FNodeIndices.Add(_Node.Id, _Node);
+            if (!FNodeIndices.ContainsKey(_Node.Id))
+            {
+                FNodeIndices.Add(_Node.Id, _Node);
+            }
+            
         }
 
         public void AddEdge(Edge _Edge)
         {
             FEdgeIndices.Add(_Edge);
+        }
+
+        public double GetTotalGraphWeight()
+        {
+            double hWeight = 0;
+            foreach (var hEdge in FEdgeIndices)
+            {
+                if (hEdge.IsWeighted())
+                {
+                    hWeight = hWeight + hEdge.GetWeightValue();
+                }
+            }
+
+            return hWeight;
         }
     }
 }

@@ -17,8 +17,7 @@ namespace GraphLibrary.Algorithm
         private Stopwatch FStopwatch;
 
         private Stopwatch FindCircleStopwatch;
-
-        private long timeForFindingCircles;
+        
 
         public KruskalAlgorithm(IGraph _UsedGraph)
         {
@@ -28,12 +27,13 @@ namespace GraphLibrary.Algorithm
             
         }
 
-        public void Execute()
+        public IGraph Execute()
         {
             // ToDo: Ggf. sinnvoll aus dem übergebenen Grafen die Subgrafen zu ermitteln und dann zu wissen welche Knoten darin vorhanden sind
             // Der Algorithmus könnte sonst Probleme bekommen wenn es mehr als eine Zusammenhangskomponente gibt
-            timeForFindingCircles = 0;
             FStopwatch.Start();
+
+            var hMinimalSpanningTree = new Graph();
 
             // Use a copy of the Edge List. Don't wan't to affect the datastructure
             var hEdges = new List<Edge>(FUsedGraph.GetEdgeIndices());
@@ -60,6 +60,7 @@ namespace GraphLibrary.Algorithm
             List<int> hBiggerPath;
             List<int> hSmallerPath;
 
+
             while (hCurrentEdgeId < hEdgesCount && hNodesAdded < hNodesInDictionaryCount)
             {
                 var hEdgeEndPoints = hEdges[hCurrentEdgeId].GetPossibleEnpoints();
@@ -68,6 +69,12 @@ namespace GraphLibrary.Algorithm
 
                 if ( hNodePathList[hNodeAId] != hNodePathList[hNodeBId] )
                 {
+                    var hNewNodeA = new Node(hNodeAId);
+                    var hNewNodeB = new Node(hNodeBId);
+                    hMinimalSpanningTree.AddNode(hNewNodeA);
+                    hMinimalSpanningTree.AddNode(hNewNodeB);
+                    hMinimalSpanningTree.CreateUndirectedEdge(hNewNodeA, hNewNodeB, new CostWeighted(hEdges[hCurrentEdgeId].GetWeightValue()));
+
 
                     // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
                     // Noch prüfen welcher Pfad der größere ist. Es soll nämlich der kleinere Pfad in den größeren Eingefügt werden
@@ -103,21 +110,10 @@ namespace GraphLibrary.Algorithm
             FStopwatch.Stop();
             Console.WriteLine("Kruskal-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
             Console.WriteLine("Kruskal-Kosten:\t " + hCosts.ToString());
+
+            return hMinimalSpanningTree;
         }
 
-        private void UpdateCircleIdInList(List<int> _List, int _OriginalValue, int _ReplaceValue)
-        {
-            FindCircleStopwatch.Start();
-            for (int i = 0; i < _List.Count; i++)
-            {
-                if (_List[i] == _OriginalValue)
-                {
-                    _List[i] = _ReplaceValue;
-                }
-            }
-            FindCircleStopwatch.Stop();
-            timeForFindingCircles += FindCircleStopwatch.ElapsedMilliseconds;
-        }
 
         public void PrintInfosToConsole()
         {

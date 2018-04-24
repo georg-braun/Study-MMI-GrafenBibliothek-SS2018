@@ -19,9 +19,11 @@ namespace GraphLibrary
             foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
             {
                 var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
+                var hNewGraphWeight = hNewGraph.GetTotalGraphWeight();
                 Console.WriteLine("--- Kruskal ---");
                 var hKruskalAlgorithm = new KruskalAlgorithm(hNewGraph);
-                hKruskalAlgorithm.Execute();
+                var hMST = hKruskalAlgorithm.Execute();
+                var hMSTWeight = hMST.GetTotalGraphWeight();
                 Console.WriteLine("");
             }
 
