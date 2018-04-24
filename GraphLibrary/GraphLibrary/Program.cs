@@ -16,21 +16,18 @@ namespace GraphLibrary
         static void Main(string[] args)
         {
 
-            var hFileName = GraphFileRessources.P2AdjacentGraphG1_2Path;
-            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+            
 
-            var hKruskalAlgorithm = new KruskalAlgorithm(hGraph);
-            hKruskalAlgorithm.Execute();
+            
 
-            //foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
-            //{
-            //    var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
-            //    Console.WriteLine("--- FindSubTrees BFS ---");
-            //    FindSubTrees hNewFindSubTrees = new FindSubTrees(hNewGraph);
-            //    hNewFindSubTrees.Execute<BreadthFirstSearch>();
-            //    hNewFindSubTrees.PrintInfosToConsole();
-            //    Console.WriteLine("");
-            //} 
+            foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
+            {
+                var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
+                Console.WriteLine("--- Kruskal ---");
+                var hKruskalAlgorithm = new KruskalAlgorithm(hNewGraph);
+                hKruskalAlgorithm.Execute();
+                Console.WriteLine("");
+            }
 
             Console.ReadLine();
 

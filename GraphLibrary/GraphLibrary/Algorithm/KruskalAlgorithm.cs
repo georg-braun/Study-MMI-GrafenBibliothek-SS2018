@@ -79,6 +79,7 @@ namespace GraphLibrary.Algorithm
                 {
                     // A und B sind in unterschiedlichen Teilgrafen, bilden aber keinen Kreis. Also werden die Teilgrafen verschmolzen (B in A)
                     UpdateCircleIdInList(hNodeCircleMarkers, hNodeCircleMarkers[hNodeB.Id], hNodeCircleMarkers[hNodeA.Id]);
+                    hCosts += hEdges[hCurrentEdgeId].GetWeightValue();
                 }
 
 
@@ -91,7 +92,8 @@ namespace GraphLibrary.Algorithm
             } 
 
             FStopwatch.Stop();
-            Console.WriteLine("Kruskal: " + FStopwatch.ElapsedMilliseconds.ToString());
+            Console.WriteLine("Kruskal-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
+            Console.WriteLine("Kruskal-Kosten:\t " + hCosts.ToString());
         }
 
         private void UpdateCircleIdInList(List<int> _List, int _OriginalValue, int _ReplaceValue)
