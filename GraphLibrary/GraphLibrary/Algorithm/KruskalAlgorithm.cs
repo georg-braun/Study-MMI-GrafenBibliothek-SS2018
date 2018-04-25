@@ -16,15 +16,11 @@ namespace GraphLibrary.Algorithm
 
         private Stopwatch FStopwatch;
 
-        private Stopwatch FindCircleStopwatch;
-        
 
         public KruskalAlgorithm(IGraph _UsedGraph)
         {
             FUsedGraph = _UsedGraph;
             FStopwatch = new Stopwatch();
-            FindCircleStopwatch = new Stopwatch();
-            
         }
 
         public IGraph Execute()
