@@ -25,25 +25,22 @@ namespace GraphLibrary.Algorithm
 
         public IGraph Execute()
         {
-            // ToDo: Ggf. sinnvoll aus dem übergebenen Grafen die Subgrafen zu ermitteln und dann zu wissen welche Knoten darin vorhanden sind
-            // Der Algorithmus könnte sonst Probleme bekommen wenn es mehr als eine Zusammenhangskomponente gibt
             FStopwatch.Start();
 
             var hMinimalSpanningTree = new Graph();
 
             // Use a copy of the Edge List. Don't wan't to affect the datastructure
-            var hEdges = new List<Edge>(FUsedGraph.GetEdgeIndices());
+            var hEdgesAsc = new List<Edge>(FUsedGraph.GetEdgeIndices());
             var hNodeDictionary = FUsedGraph.GetNodeIndices();
             
             var hEdgeWeightComparerAsc = new EdgeWeightComparerAsc();
-            hEdges.Sort(hEdgeWeightComparerAsc);
+            hEdgesAsc.Sort(hEdgeWeightComparerAsc);
 
             var hNodePathList = new Dictionary<int,List<int>>();
             foreach (var hNodeValue in hNodeDictionary)
             {
                 // Jeder Eintrag in der Path List hat eine Liste mit den in dem Path enthaltenen Knoten
-                var hNodesInPath = new List<int>();
-                hNodesInPath.Add(hNodeValue.Value.Id);
+                var hNodesInPath = new List<int> { hNodeValue.Value.Id };
                 hNodePathList.Add(hNodeValue.Value.Id, hNodesInPath);
             }
 
@@ -51,15 +48,12 @@ namespace GraphLibrary.Algorithm
             double hCosts = 0;
             var hNodesAdded = 1;    // Initial ein Knoten schon hinzugefügt
             var hCurrentEdgeId = 0;
-            var hEdgesCount = hEdges.Count;
+            var hEdgesCount = hEdgesAsc.Count;
             var hNodesInDictionaryCount = hNodeDictionary.Count;
-            List<int> hBiggerPath;
-            List<int> hSmallerPath;
-
 
             while (hCurrentEdgeId < hEdgesCount && hNodesAdded < hNodesInDictionaryCount)
             {
-                var hEdgeEndPoints = hEdges[hCurrentEdgeId].GetPossibleEnpoints();
+                var hEdgeEndPoints = hEdgesAsc[hCurrentEdgeId].GetPossibleEnpoints();
                 var hNodeAId = hEdgeEndPoints[0].Id;
                 var hNodeBId = hEdgeEndPoints[1].Id;
 
@@ -69,11 +63,13 @@ namespace GraphLibrary.Algorithm
                     var hNewNodeB = new Node(hNodeBId);
                     hMinimalSpanningTree.AddNode(hNewNodeA);
                     hMinimalSpanningTree.AddNode(hNewNodeB);
-                    hMinimalSpanningTree.CreateUndirectedEdge(hNewNodeA, hNewNodeB, new CostWeighted(hEdges[hCurrentEdgeId].GetWeightValue()));
+                    hMinimalSpanningTree.CreateUndirectedEdge(hNewNodeA, hNewNodeB, new CostWeighted(hEdgesAsc[hCurrentEdgeId].GetWeightValue()));
 
 
                     // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
                     // Noch prüfen welcher Pfad der größere ist. Es soll nämlich der kleinere Pfad in den größeren Eingefügt werden
+                    List<int> hBiggerPath;
+                    List<int> hSmallerPath;
                     if (hNodePathList[hNodeAId].Count >= hNodePathList[hNodeBId].Count)
                     {
                         // B in A
@@ -96,7 +92,7 @@ namespace GraphLibrary.Algorithm
                     }
 
                     // Kante wurde hinzugefügt. Also gewicht aufaddieren
-                    hCosts += hEdges[hCurrentEdgeId].GetWeightValue();
+                    hCosts += hEdgesAsc[hCurrentEdgeId].GetWeightValue();
                     hNodesAdded++;
                 }
 

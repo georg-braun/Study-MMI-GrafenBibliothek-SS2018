@@ -30,59 +30,74 @@ namespace GraphLibrary.Algorithm
             // Annahme: Der übergebene Graf ist zusammenhängend 
 
             var hMinimalSpanningTree = new Graph();
-            var hEdges = new HashSet<Edge>();
-            //var hPossibleEdges = new HashSet<Edge>();
-            var hEdgesToNodeDict = new Dictionary<int,List<Edge>>();
-            //var hEdgeWeightComparerAsc = new EdgeWeightComparerAsc();
-
+            var hEdges = FUsedGraph.GetEdgeIndices();
             var hNodeDictionary = FUsedGraph.GetNodeIndices();
-            var hVisitedNodes = new HashSet<int>();
+            
+            var hPossibleEdgeToNodeIdIndex = new Dictionary<Edge,int>();
+            var hReachableNodeIdWithEdgeIndex = new Dictionary<int, Edge>();
+            var hEdgeWeightAscComparer = new EdgeWeightComparerAsc();
+          
+        
+            var hVisitedNodes = new HashSet<int>();           
 
+            // Angabe eines Startknoten. Ein Knoten der mit der ersten Kante aus der Globalen Kantenliste erreicht wird.
+            // Eine Fake-Edge für den Einstieg in den Algorithmus
+            var hFakeEdge = new UndirectedEdge(new Node(-1), new Node(-1),new CostWeighted(0.0));
+            hPossibleEdgeToNodeIdIndex.Add(hFakeEdge, 0);
+            hReachableNodeIdWithEdgeIndex.Add(0, hFakeEdge);
+            //hUsableEdgesAsc.Add(hFakeEdge);
 
-            var hNewNodeId = hNodeDictionary[0].Id;
-            hVisitedNodes.Add(hNewNodeId);
             double hWeightValue = 0.0;
 
             while (hVisitedNodes.Count < hNodeDictionary.Count)
             {
-                // Ergänze die Kanten des aktuellen Knotens in die Liste der verfügbaren Kanten
-                foreach (var hPossibleEdge in hNodeDictionary[hNewNodeId].NeighboursEdges)
-                {
-                    // Wenn der erreichbare Knoten noch nicht besucht wurde, füge die Kante als mögliche hinzu
-                    if (!hVisitedNodes.Contains(hPossibleEdge.Node.Id))
-                    {
-                        hEdges.Add(hPossibleEdge.Edge);
-                        AddPossibleEdgeToNodeInfo(hEdgesToNodeDict, hPossibleEdge.Node.Id, hPossibleEdge.Edge);
-                    }
-                }
-
-                var hSmallestEdge = hEdges.First();
-                // Suche die niedrigste Kante
-                foreach (var hEdge in hEdges)
-                {
-                    if (hEdge.GetWeightValue() < hSmallestEdge.GetWeightValue())
-                    {
-                        hSmallestEdge = hEdge;
-                    }
-                } 
                 
-                hWeightValue += hSmallestEdge.GetWeightValue();
 
-                // Rausfinden welcher der beiden Knoten in der Kante der neu erreichte Knoten ist.
-                var hPossibleEndponts = hSmallestEdge.GetPossibleEnpoints();
-                if (hVisitedNodes.Contains(hPossibleEndponts[0].Id))
+                var hUsableEdgesAsc = new List<Edge>(hReachableNodeIdWithEdgeIndex.Values);
+                hUsableEdgesAsc.Sort(hEdgeWeightAscComparer);
+
+                // Finde niedrigste Kante die zu einem unbesuchten Knoten führt
+                var hSmallestPossibleEdge = hUsableEdgesAsc.First();
+                var hReachableNodeIdWithSmallestEdge = hPossibleEdgeToNodeIdIndex[hSmallestPossibleEdge];
+
+
+                // Knoten besucht
+                hVisitedNodes.Add(hReachableNodeIdWithSmallestEdge);
+                // Indizes anpassen
+                hPossibleEdgeToNodeIdIndex.Remove(hSmallestPossibleEdge);
+                hReachableNodeIdWithEdgeIndex.Remove(hReachableNodeIdWithSmallestEdge);
+                //hUsableEdgesAsc.Remove(hSmallestPossibleEdge);
+                
+                hWeightValue += hSmallestPossibleEdge.GetWeightValue();
+
+                // Durch den gerade besuchten Knoten gibt es evtl. neue potenziell erreichbare Knoten oder bereits erreichbare können noch "günstiger" erreicht werden.
+                // Diese Infos werden nun in die Erreichbaren Liste ergänzt.
+                foreach (var hNewEdgeInfos in hNodeDictionary[hReachableNodeIdWithSmallestEdge].NeighboursEdges)
                 {
-                    hNewNodeId = hPossibleEndponts[1].Id;
+                    if (!hVisitedNodes.Contains(hNewEdgeInfos.Node.Id))
+                    {
+                        // Knoten wurde noch nicht besucht
+                        if (hReachableNodeIdWithEdgeIndex.ContainsKey(hNewEdgeInfos.Node.Id))
+                        {
+                            // Es gibt schon einen Weg zu diesem Knoten
+                            if (hNewEdgeInfos.Edge.GetWeightValue() < hReachableNodeIdWithEdgeIndex[hNewEdgeInfos.Node.Id].GetWeightValue())
+                            {
+                                // Mit der neuen Kante kommt man aber günstiger zu dem Knoten
+                                //hUsableEdgesAsc.Remove(hReachableNodeIdWithEdgeIndex[hNewEdgeInfos.Node.Id]); // bisherige Kante in der sortierten Kanten-Liste entfernen
+                                //hUsableEdgesAsc.Add(hNewEdgeInfos.Edge);
+                                hPossibleEdgeToNodeIdIndex.Add(hNewEdgeInfos.Edge, hNewEdgeInfos.Node.Id);
+                                hReachableNodeIdWithEdgeIndex[hNewEdgeInfos.Node.Id] = hNewEdgeInfos.Edge;
+                            }
+                        }
+                        else
+                        {
+                            // Es gab bisher noch keinen Weg zu diesem Knoten. Also wird er nun aufgenommen
+                            //hUsableEdgesAsc.Add(hNewEdgeInfos.Edge);
+                            hPossibleEdgeToNodeIdIndex.Add(hNewEdgeInfos.Edge, hNewEdgeInfos.Node.Id);
+                            hReachableNodeIdWithEdgeIndex.Add(hNewEdgeInfos.Node.Id, hNewEdgeInfos.Edge);
+                        }
+                    }
                 }
-                else
-                {
-                    hNewNodeId = hPossibleEndponts[0].Id;
-                }
-
-                hVisitedNodes.Add(hNewNodeId);
-
-                // Kanten in der Liste die auch zu diesem neuen Knoten gehen werden nicht mehr benötigt.
-                DeleteEdgesToNode(hEdges,hEdgesToNodeDict[hNewNodeId]);
             }
 
             FStopwatch.Stop();
