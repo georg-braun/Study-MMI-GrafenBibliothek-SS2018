@@ -123,8 +123,8 @@ namespace GraphLibrary.Algorithm
         {
             var hXWeightValue = x.GetWeightValue();
             var hYWeightValue = y.GetWeightValue();
-
-            if (hXWeightValue == hYWeightValue)
+            
+            if (Equals(hXWeightValue, hYWeightValue))
             {
                 return 0;
             }

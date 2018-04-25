@@ -16,16 +16,18 @@ namespace GraphLibrary
         static void Main(string[] args)
         {
 
+
+
             foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
             {
                 var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
                 var hNewGraphWeight = hNewGraph.GetTotalGraphWeight();
                 Console.WriteLine("--- Prim ---");
-                var hPrimAlgorithm = new PrimAlgorithm(hNewGraph);
-                hPrimAlgorithm.Execute();
-                //var hKruskalAlgorithm = new KruskalAlgorithm(hNewGraph);
-                //var hMST = hKruskalAlgorithm.Execute();
-                //var hMSTWeight = hMST.GetTotalGraphWeight();
+                //var hPrimAlgorithm = new PrimAlgorithm(hNewGraph);
+                //hPrimAlgorithm.Execute();
+                var hKruskalAlgorithm = new KruskalAlgorithm(hNewGraph);
+                var hMST = hKruskalAlgorithm.Execute();
+                var hMSTWeight = hMST.GetTotalGraphWeight();
                 Console.WriteLine("");
             }
 
