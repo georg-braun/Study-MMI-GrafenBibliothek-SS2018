@@ -11,6 +11,14 @@ using Priority_Queue;
 
 namespace GraphLibrary.Algorithm
 {
+    /// <summary>
+    /// Idee des Algorithmus:
+    /// Es wird ein Startknoten ausgewählt. Solange der minimale Spannbaum noch nicht alle Knoten 
+    /// aus dem Ursprungsgraf enthält wird folgendes wiederholt:
+    /// (a) Die billigste Kante die von einem besuchten Knoten (im MST) zu einem nicht besuchten Knoten wird ausgewählt.
+    /// (b) Die Kante wird in den MST hinzugefügt.
+    /// (c) Prüfe die Nachbarn des neuen Knoten welche (neuen) Knoten erreicht werden können oder ob bisher unbesuchte registrierte Knoten günstiger erreicht werden.   
+    /// </summary>
     class PrimAlgorithm
     {
 
@@ -25,8 +33,18 @@ namespace GraphLibrary.Algorithm
             FStopwatch = new Stopwatch();
         }
 
+        /// <summary>
+        /// Ermittelt den Minimalen Spannbaum mit dem Prim Algorithmus
+        /// </summary>
+        /// <returns>Neuer Graf der den MST repräsentiert</returns>
+
         public IGraph Execute()
         {
+            // Umsetzung des Algorithmus:
+            // hInMst: Liste über alle KnotenIds und speichert ob die jeweilige KnotenId schon im MST drin ist.
+            // hNodeCosts : Liste über KnotenIds und speichert die minimalsten Kosten zu einem Knoten (dient als schneller Vergleich ob es eine günstigere Kante gibt)
+            // hSmallestEdgePq : PriorityQueue, wobei die Priority die Kantenkosten sind und als Value ein NodeEdge Objekt dient
+
             FStopwatch.Start();
 
             var hMinimalSpanningTree = new Graph();

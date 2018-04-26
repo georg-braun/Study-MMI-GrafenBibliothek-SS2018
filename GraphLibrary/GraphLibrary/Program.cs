@@ -18,7 +18,6 @@ namespace GraphLibrary
             foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
             {
                 var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
-                var hNewGraphWeight = hNewGraph.GetTotalGraphWeight();
                 
                 var hPrimAlgorithm = new PrimAlgorithm(hNewGraph);
                 var hMstPrim = hPrimAlgorithm.Execute();

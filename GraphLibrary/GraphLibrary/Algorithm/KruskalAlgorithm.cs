@@ -10,6 +10,12 @@ using GraphLibrary.DataStructure;
 
 namespace GraphLibrary.Algorithm
 {
+    /// <summary>
+    /// Idee des Algorithmus:
+    /// Alle Kanten des Algorithmus werden aufsteigend nach ihrem Kantengewicht sortiert
+    /// Solange noch nicht alle Knoten im MST drin sind
+    /// (a) Füge die kleinste Kante in den MST ein, falls diese zu keinem Kreis im MST führt. 
+    /// </summary>
     class KruskalAlgorithm
     {
         private IGraph FUsedGraph;
@@ -23,8 +29,18 @@ namespace GraphLibrary.Algorithm
             FStopwatch = new Stopwatch();
         }
 
+        /// <summary>
+        /// Ermittelt den Minimalen Spannbaum mit dem Kruskal Algorithmus
+        /// </summary>
+        /// <returns>Neuer Graf der den MST repräsentiert</returns>
         public IGraph Execute()
         {
+            // Umsetzung des Algorithmus:
+            // Zunächst werden die Kanten aufsteigend nach ihrem Gewicht sortiert
+            // hNodePathList: Dictionary über KnotenIds (Key). Als Value ist ein Verweis auf eine Pfadliste enthalten, die alle KnotenIds eines Pfads enthält.
+            //   initial hat also jeder Knoten seine eigene Liste (= PFad nur aus sich selbst).
+
+
             FStopwatch.Start();
 
             var hMinimalSpanningTree = new Graph();
@@ -59,26 +75,24 @@ namespace GraphLibrary.Algorithm
 
                 if ( hNodePathList[hNodeAId] != hNodePathList[hNodeBId] )
                 {
+                    // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
                     var hNewNodeA = new Node(hNodeAId);
                     var hNewNodeB = new Node(hNodeBId);
                     hMinimalSpanningTree.AddNode(hNewNodeA);
                     hMinimalSpanningTree.AddNode(hNewNodeB);
                     hMinimalSpanningTree.CreateUndirectedEdge(hNewNodeA, hNewNodeB, new CostWeighted(hEdgesAsc[hCurrentEdgeId].GetWeightValue()));
-
-
-                    // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
-                    // Noch prüfen welcher Pfad der größere ist. Es soll nämlich der kleinere Pfad in den größeren Eingefügt werden
+                    
+                    
+                    // Noch prüfen welcher Pfad der größere ist. Es soll nämlich die kleinere Pfadliste in die Größere eingefügt werden
                     List<int> hBiggerPath;
                     List<int> hSmallerPath;
                     if (hNodePathList[hNodeAId].Count >= hNodePathList[hNodeBId].Count)
                     {
-                        // B in A
                         hBiggerPath = hNodePathList[hNodeAId];
                         hSmallerPath = hNodePathList[hNodeBId];
                     }
                     else
                     {
-                        // A in B
                         hBiggerPath = hNodePathList[hNodeBId];
                         hSmallerPath = hNodePathList[hNodeAId];
                     }
@@ -91,7 +105,7 @@ namespace GraphLibrary.Algorithm
                         hNodePathList[hNodeInSmaller] = hBiggerPath;
                     }
 
-                    // Kante wurde hinzugefügt. Also gewicht aufaddieren
+                    // Kante wurde hinzugefügt. Also Gewicht aufaddieren
                     hCosts += hEdgesAsc[hCurrentEdgeId].GetWeightValue();
                     hNodesAdded++;
                 }
