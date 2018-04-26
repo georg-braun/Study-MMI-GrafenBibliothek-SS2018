@@ -31,14 +31,13 @@ namespace GraphLibrary.Algorithm
 
             var hMinimalSpanningTree = new Graph();
             double hCosts = 0.0;
-            var hCostsList = new List<double>();
 
             var hNodeIndex = FUsedGraph.GetNodeIndices();
             var hEdgeIndex = FUsedGraph.GetEdgeIndices();
             var hNodesAdded = 0;
 
             var hInMst = new List<bool>();
-            var hNodeCosts = new List<double>();
+            var hNodeCosts = new List<double>();    // Sichert die minimalen Kosten mit denen ein Knoten erreicht werden kann
             var hSmallestEdgePq = new SimplePriorityQueue<NodeEdge, double>();
 
             for (var i = 0; i < hNodeIndex.Count; i++)
@@ -50,6 +49,7 @@ namespace GraphLibrary.Algorithm
             var hStartNodeIndex = 0;
             var hStartNode = hNodeIndex[hStartNodeIndex];
             var hNodeEdge = new NodeEdge(hStartNode, new UndirectedEdge(hStartNode, hStartNode, new CostWeighted(0.0)));
+            
             // Startknoten hinzufügen
             hSmallestEdgePq.Enqueue(hNodeEdge, 0.0);
             hNodeCosts[hStartNodeIndex] = 0.0;
@@ -59,23 +59,20 @@ namespace GraphLibrary.Algorithm
                 var hNewNodeEdge = hSmallestEdgePq.Dequeue();
                 var hNewNodeInId = hNewNodeEdge.Node.Id;
 
-                if (hInMst[hNewNodeInId] == false)
+                if (hInMst[hNewNodeInId]) continue;  // Der Zielknoten der kleinsten Kante wurde bereits besucht. Also nächste Iteration durchlaufen (=nächste Kante nehmen)
+                hInMst[hNewNodeInId] = true;
+                hNodesAdded++;
+                hCosts += hNewNodeEdge.Edge.GetWeightValue();
+
+                foreach (var hNeighbourNodeEdges in hNewNodeEdge.Node.NeighboursEdges)
                 {
-                    hInMst[hNewNodeInId] = true;
-                    hNodesAdded++;
-                    hCosts += hNewNodeEdge.Edge.GetWeightValue();
-                    hCostsList.Add(hNewNodeEdge.Edge.GetWeightValue());
+                    var hNeighbourId = hNeighbourNodeEdges.Node.Id;
+                    var hNeighbourWeight = hNeighbourNodeEdges.Edge.GetWeightValue();
 
-                    foreach (var hNeighbourNodeEdges in hNewNodeEdge.Node.NeighboursEdges)
+                    if (hInMst[hNeighbourId] == false && hNodeCosts[hNeighbourId] > hNeighbourWeight)
                     {
-                        var hNeighbourId = hNeighbourNodeEdges.Node.Id;
-                        var hNeighbourWeight = hNeighbourNodeEdges.Edge.GetWeightValue();
-
-                        if (hInMst[hNeighbourId] == false && hNodeCosts[hNeighbourId] > hNeighbourWeight)
-                        {
-                            hNodeCosts[hNeighbourId] = hNeighbourWeight;
-                            hSmallestEdgePq.Enqueue(hNeighbourNodeEdges, hNeighbourWeight);
-                        }
+                        hNodeCosts[hNeighbourId] = hNeighbourWeight;
+                        hSmallestEdgePq.Enqueue(hNeighbourNodeEdges, hNeighbourWeight);
                     }
                 }
 
