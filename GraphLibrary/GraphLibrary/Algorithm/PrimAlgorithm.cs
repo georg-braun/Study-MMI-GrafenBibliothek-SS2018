@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using GraphLibrary.DataStructure;
 
+using Priority_Queue;
+
 namespace GraphLibrary.Algorithm
 {
     class PrimAlgorithm
@@ -27,84 +29,71 @@ namespace GraphLibrary.Algorithm
         {
             FStopwatch.Start();
 
-            // Annahme: Der übergebene Graf ist zusammenhängend 
-
             var hMinimalSpanningTree = new Graph();
-            var hNodeDictionary = FUsedGraph.GetNodeIndices();
-            
-            var hPossibleEdgeToNodeIdIndex = new Dictionary<Edge,int>(FUsedGraph.GetEdgeIndices().Count);
-            var hReachableNodeIdWithEdgeIndex = new Dictionary<int, Edge>(FUsedGraph.GetNodeIndices().Count);
-            var hEdgeWeightAscComparer = new EdgeWeightComparerAsc();
-            
+            double hCosts = 0.0;
+            var hCostsList = new List<double>();
 
-              var hVisitedNodes = new HashSet<int>();           
+            var hNodeIndex = FUsedGraph.GetNodeIndices();
+            var hEdgeIndex = FUsedGraph.GetEdgeIndices();
+            var hNodesAdded = 0;
 
-            // Angabe eines Startknoten. Ein Knoten der mit der ersten Kante aus der Globalen Kantenliste erreicht wird.
-            // Eine Fake-Edge für den Einstieg in den Algorithmus
-            var hFakeEdge = new UndirectedEdge(new Node(-1), new Node(-1),new CostWeighted(0.0));
-            hPossibleEdgeToNodeIdIndex.Add(hFakeEdge, 0);
-            hReachableNodeIdWithEdgeIndex.Add(0, hFakeEdge);
-            var hUsableEdgesAsc = new List<Edge>(hReachableNodeIdWithEdgeIndex.Values);
-            
+            var hInMst = new List<bool>();
+            var hNodeCosts = new List<double>();
+            var hSmallestEdgePq = new SimplePriorityQueue<NodeEdge, double>();
 
-            double hWeightValue = 0.0;
-            int hTotalNodeCount = hNodeDictionary.Count;
-
-            while (hVisitedNodes.Count < hTotalNodeCount)
+            for (var i = 0; i < hNodeIndex.Count; i++)
             {
-                hUsableEdgesAsc.Sort(hEdgeWeightAscComparer);
+                hInMst.Add(false);
+                hNodeCosts.Add(double.MaxValue);
+            }
 
-                // Finde niedrigste Kante die zu einem unbesuchten Knoten führt
-                var hSmallestPossibleEdge = hUsableEdgesAsc.First();
-                var hReachableNodeIdWithSmallestEdge = hPossibleEdgeToNodeIdIndex[hSmallestPossibleEdge];
-                
-                // Knoten besucht
-                hVisitedNodes.Add(hReachableNodeIdWithSmallestEdge);
-                // Indizes anpassen
-                hPossibleEdgeToNodeIdIndex.Remove(hSmallestPossibleEdge);
-                hReachableNodeIdWithEdgeIndex.Remove(hReachableNodeIdWithSmallestEdge);
-                hUsableEdgesAsc.Remove(hSmallestPossibleEdge);
-                
-                hWeightValue += hSmallestPossibleEdge.GetWeightValue();
+            var hStartNodeIndex = 0;
+            var hStartNode = hNodeIndex[hStartNodeIndex];
+            var hNodeEdge = new NodeEdge(hStartNode, new UndirectedEdge(hStartNode, hStartNode, new CostWeighted(0.0)));
+            // Startknoten hinzufügen
+            hSmallestEdgePq.Enqueue(hNodeEdge, 0.0);
+            hNodeCosts[hStartNodeIndex] = 0.0;
 
-                // Durch den gerade besuchten Knoten gibt es evtl. neue potenziell erreichbare Knoten oder bereits erreichbare können noch "günstiger" erreicht werden.
-                // Diese Infos werden nun in die Erreichbaren Liste ergänzt.
-                foreach (var hNewEdgeInfos in hNodeDictionary[hReachableNodeIdWithSmallestEdge].NeighboursEdges)
+            while (hNodesAdded < hNodeIndex.Count)
+            {
+                var hNewNodeEdge = hSmallestEdgePq.Dequeue();
+                var hNewNodeInId = hNewNodeEdge.Node.Id;
+
+                if (hInMst[hNewNodeInId] == false)
                 {
-                    var hNeighbourNodeId = hNewEdgeInfos.Node.Id;
-                    var hEdgeToNeighbour = hNewEdgeInfos.Edge;
-                    if (!hVisitedNodes.Contains(hNeighbourNodeId))
+                    hInMst[hNewNodeInId] = true;
+                    hNodesAdded++;
+                    hCosts += hNewNodeEdge.Edge.GetWeightValue();
+                    hCostsList.Add(hNewNodeEdge.Edge.GetWeightValue());
+
+                    foreach (var hNeighbourNodeEdges in hNewNodeEdge.Node.NeighboursEdges)
                     {
-                        // Knoten wurde noch nicht besucht
-                        if (hReachableNodeIdWithEdgeIndex.ContainsKey(hNeighbourNodeId))
+                        var hNeighbourId = hNeighbourNodeEdges.Node.Id;
+                        var hNeighbourWeight = hNeighbourNodeEdges.Edge.GetWeightValue();
+
+                        if (hInMst[hNeighbourId] == false && hNodeCosts[hNeighbourId] > hNeighbourWeight)
                         {
-                            // Es gibt schon einen Weg zu diesem Knoten
-                            if (hEdgeToNeighbour.GetWeightValue() < hReachableNodeIdWithEdgeIndex[hNeighbourNodeId].GetWeightValue())
-                            {
-                                // Mit der neuen Kante kommt man aber günstiger zu dem Knoten
-                                hUsableEdgesAsc.Remove(hReachableNodeIdWithEdgeIndex[hNeighbourNodeId]); // bisherige Kante in der sortierten Kanten-Liste entfernen
-                                hUsableEdgesAsc.Add(hEdgeToNeighbour);
-                                hPossibleEdgeToNodeIdIndex.Add(hEdgeToNeighbour, hNeighbourNodeId);
-                                hReachableNodeIdWithEdgeIndex[hNeighbourNodeId] = hEdgeToNeighbour;
-                            }
-                        }
-                        else
-                        {
-                            // Es gab bisher noch keinen Weg zu diesem Knoten. Also wird er nun aufgenommen
-                            hUsableEdgesAsc.Add(hEdgeToNeighbour);
-                            hPossibleEdgeToNodeIdIndex.Add(hEdgeToNeighbour, hNeighbourNodeId);
-                            hReachableNodeIdWithEdgeIndex.Add(hNeighbourNodeId, hEdgeToNeighbour);
+                            hNodeCosts[hNeighbourId] = hNeighbourWeight;
+                            hSmallestEdgePq.Enqueue(hNeighbourNodeEdges, hNeighbourWeight);
                         }
                     }
                 }
+
             }
 
+
             FStopwatch.Stop();
-            Console.WriteLine("Prim-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
-            Console.WriteLine("Prim-Kosten:\t " + hWeightValue.ToString());
+            Console.WriteLine("Kruskal-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
+            Console.WriteLine("Kruskal-Kosten:\t " + hCosts.ToString());
+
         }
 
-        
+
+        private string GenerateEdgeHashValue(Edge _Edge)
+        {
+            var hEndpoints = _Edge.GetPossibleEnpoints();
+            return hEndpoints[0].Id.ToString() + "-" + hEndpoints[1].Id.ToString();
+        }
 
 
         private void AddPossibleEdgeToNodeInfo(Dictionary<int, List<Edge>> _Dict, int _NodeId, Edge _Edge)
