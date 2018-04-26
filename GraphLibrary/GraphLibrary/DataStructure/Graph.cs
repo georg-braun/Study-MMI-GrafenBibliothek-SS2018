@@ -14,7 +14,7 @@ namespace GraphLibrary.DataStructure
 
         List<NodeEdge> GetNodeNeighboursAndEdges(INode _Node);
 
-        void FillNeighbourInfoInNodes();
+        void UpdateNeighbourInfoInNodes();
 
         void CreateNewNode(int _Node);
 
@@ -31,6 +31,10 @@ namespace GraphLibrary.DataStructure
         void AddEdge(Edge _Edge);
 
         double GetTotalGraphWeight();
+
+        INode GetNodeById(int _NodeId);
+
+        void RemoveEdge(Edge _Edge);
     } 
 
     class Graph : IGraph
@@ -60,7 +64,7 @@ namespace GraphLibrary.DataStructure
             return _Node.NeighboursEdges;
         }
 
-        public void FillNeighbourInfoInNodes()
+        public void UpdateNeighbourInfoInNodes()
         {
             foreach (var hNode in FNodeIndices)
             {
@@ -133,6 +137,20 @@ namespace GraphLibrary.DataStructure
             }
 
             return hWeight;
+        }
+
+        public INode GetNodeById(int _NodeId)
+        {
+            return FNodeIndices[_NodeId];
+        }
+
+        public void RemoveEdge(Edge _Edge)
+        {
+            var hEndPoints = _Edge.GetPossibleEnpoints();
+            hEndPoints[0].RemoveEdge(_Edge);
+            hEndPoints[1].RemoveEdge(_Edge);
+            FEdgeIndices.Remove(_Edge);
+            UpdateNeighbourInfoInNodes(); // Update der Kanten-Infos
         }
     }
 }

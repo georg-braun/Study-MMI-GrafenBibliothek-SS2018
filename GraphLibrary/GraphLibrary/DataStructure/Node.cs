@@ -19,6 +19,8 @@ namespace GraphLibrary.DataStructure
         void FindNeighbours();
 
         List<int> GetNeighbourIds();
+
+        void RemoveEdge(Edge _Edge);
     }
 
     class Node : INode
@@ -50,18 +52,23 @@ namespace GraphLibrary.DataStructure
             Id = _Id;
             FEdges = new List<Edge>();
         }
-        
+
 
         public void AddEdge(Edge _Edge)
         {
             FEdges.Add(_Edge);
         }
 
+        public void RemoveEdge(Edge _Edge)
+        {
+            FEdges.Remove(_Edge);
+        }
 
-        /// <summary>
-        ///  Inspiziert die Kanten und sichert diese mit den entsprechend gefunden Nachbarknoten ab.
-        /// </summary>
-        public void FindNeighbours()
+
+            /// <summary>
+            ///  Inspiziert die Kanten und sichert diese mit den entsprechend gefunden Nachbarknoten ab.
+            /// </summary>
+            public void FindNeighbours()
         {
             FNeighbours = new List<NodeEdge>();
 

@@ -25,7 +25,7 @@ namespace GraphLibrary.Algorithm
             FStopwatch = new Stopwatch();
         }
 
-        public void Execute()
+        public IGraph Execute()
         {
             FStopwatch.Start();
 
@@ -48,23 +48,31 @@ namespace GraphLibrary.Algorithm
 
             var hStartNodeIndex = 0;
             var hStartNode = hNodeIndex[hStartNodeIndex];
-            var hNodeEdge = new NodeEdge(hStartNode, new UndirectedEdge(hStartNode, hStartNode, new CostWeighted(0.0)));
+            var hStartFakeEdge = new UndirectedEdge(hStartNode, hStartNode, new CostWeighted(0.0));
+            var hStartNodeEdge = new NodeEdge(hStartNode, hStartFakeEdge); // Fake-Edge für den Startknoten.
             
             // Startknoten hinzufügen
-            hSmallestEdgePq.Enqueue(hNodeEdge, 0.0);
+            hSmallestEdgePq.Enqueue(hStartNodeEdge, 0.0);
             hNodeCosts[hStartNodeIndex] = 0.0;
 
             while (hNodesAdded < hNodeIndex.Count)
             {
-                var hNewNodeEdge = hSmallestEdgePq.Dequeue();
-                var hNewNodeInId = hNewNodeEdge.Node.Id;
+                var hSmallestNodeEdge = hSmallestEdgePq.Dequeue();
+                var hSmallestEdgesNodeId = hSmallestNodeEdge.Node.Id;
 
-                if (hInMst[hNewNodeInId]) continue;  // Der Zielknoten der kleinsten Kante wurde bereits besucht. Also nächste Iteration durchlaufen (=nächste Kante nehmen)
-                hInMst[hNewNodeInId] = true;
+                if (hInMst[hSmallestEdgesNodeId]) continue;  // Der Zielknoten der kleinsten Kante wurde bereits besucht. Also nächste Iteration durchlaufen (=nächste Kante nehmen)
+                hInMst[hSmallestEdgesNodeId] = true;
                 hNodesAdded++;
-                hCosts += hNewNodeEdge.Edge.GetWeightValue();
+                // Create MSG Graph
+                var hNewNode = new Node(hSmallestEdgesNodeId);
+                hMinimalSpanningTree.CreateNewNode(hSmallestEdgesNodeId);
+                var hFromNodeId = hSmallestNodeEdge.Edge.GetOtherEndpoint(hSmallestNodeEdge.Node).Id;
+                var hFromNode = hMinimalSpanningTree.GetNodeById(hFromNodeId);
+                hMinimalSpanningTree.CreateUndirectedEdge(hNewNode, hFromNode, new CostWeighted(hSmallestNodeEdge.Edge.GetWeightValue()));
 
-                foreach (var hNeighbourNodeEdges in hNewNodeEdge.Node.NeighboursEdges)
+                hCosts += hSmallestNodeEdge.Edge.GetWeightValue();
+
+                foreach (var hNeighbourNodeEdges in hSmallestNodeEdge.Node.NeighboursEdges)
                 {
                     var hNeighbourId = hNeighbourNodeEdges.Node.Id;
                     var hNeighbourWeight = hNeighbourNodeEdges.Edge.GetWeightValue();
@@ -78,11 +86,15 @@ namespace GraphLibrary.Algorithm
 
             }
 
+            // Die Fake-Edge des Startknotens wieder aus dem MST-Graf rausnehmen. (Es ist die erste Kante des Startknotens)
+            hMinimalSpanningTree.RemoveEdge( hMinimalSpanningTree.GetNodeIndices()[hStartNodeIndex].NeighboursEdges[0].Edge );
 
             FStopwatch.Stop();
-            Console.WriteLine("Kruskal-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
-            Console.WriteLine("Kruskal-Kosten:\t " + hCosts.ToString());
+            Console.WriteLine("--- Prim ---");
+            Console.WriteLine("Prim-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
+            Console.WriteLine("Prim-Kosten:\t " + hCosts.ToString());
 
+            return hMinimalSpanningTree;
         }
 
 

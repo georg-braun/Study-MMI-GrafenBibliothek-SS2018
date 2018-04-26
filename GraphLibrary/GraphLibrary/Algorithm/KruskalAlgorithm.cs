@@ -100,6 +100,7 @@ namespace GraphLibrary.Algorithm
             } 
 
             FStopwatch.Stop();
+            Console.WriteLine("--- Kruskal ---");
             Console.WriteLine("Kruskal-Zeit:\t" + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
             Console.WriteLine("Kruskal-Kosten:\t " + hCosts.ToString());
 
