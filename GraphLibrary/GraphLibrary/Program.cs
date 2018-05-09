@@ -11,20 +11,15 @@ namespace GraphLibrary
 {
     class Program
     {
-       
+
         static void Main(string[] args)
         {
-            foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
-            {
-                var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
-                
-                var hPrimAlgorithm = new PrimAlgorithm(hNewGraph);
-                var hMstPrim = hPrimAlgorithm.Execute();
+            var hFileName = GraphFileRessources.P2K10GraphPath;
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
 
-                var hKruskalAlgorithm = new KruskalAlgorithm(hNewGraph);
-                var hMstKruskal = hKruskalAlgorithm.Execute();
-                Console.WriteLine("");
-            }
+            var hNearestNeighborAlgorithm = new NearestNeighborAlgorithm(hGraph);
+            hNearestNeighborAlgorithm.Execute(hGraph.GetNodeIndices()[0]);
+            
 
             Console.ReadLine();
 
@@ -45,7 +40,23 @@ namespace GraphLibrary
             hFindSubTrees.Execute<DepthFirstSearch>();
             hFindSubTrees.PrintInfosToConsole();
         }
+
+        private void P2Aufgaben()
+        {
+            foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
+            {
+                var hNewGraph = AdjacentListGraphImporter.ImportAdjacentList(hCurrentGraphFile, EdgeKind.UndirectedWeighted);
+
+                var hPrimAlgorithm = new PrimAlgorithm(hNewGraph);
+                var hMstPrim = hPrimAlgorithm.Execute();
+
+                var hKruskalAlgorithm = new KruskalAlgorithm(hNewGraph);
+                var hMstKruskal = hKruskalAlgorithm.Execute();
+                Console.WriteLine("");
+            }
+        }
+
     }
 
-    
+
 }

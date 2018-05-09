@@ -25,5 +25,8 @@ namespace GraphLibrary
             @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum2\G_10_200.txt",
             @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum2\G_100_200.txt",
         };
+
+        // P3
+        public const string P2K10GraphPath = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_10.txt";
     }
 }

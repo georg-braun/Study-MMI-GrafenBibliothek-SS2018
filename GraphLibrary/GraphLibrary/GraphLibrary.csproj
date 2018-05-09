@@ -51,6 +51,7 @@
     <Compile Include="Algorithm\IGraphTraverseAlgorithm.cs" />
     <Compile Include="Algorithm\IGraphAlgorithm.cs" />
     <Compile Include="Algorithm\KruskalAlgorithm.cs" />
+    <Compile Include="Algorithm\NearestNeighborAlgorithm.cs" />
     <Compile Include="Algorithm\PrimAlgorithm.cs" />
     <Compile Include="DataStructure\Edge.cs" />
     <Compile Include="DataStructure\Graph.cs" />
