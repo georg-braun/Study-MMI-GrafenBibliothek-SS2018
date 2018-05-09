@@ -58,6 +58,7 @@ namespace GraphLibrary.Algorithm
             var hNodeCosts = new List<double>();    // Sichert die minimalen Kosten mit denen ein Knoten erreicht werden kann
             var hSmallestEdgePq = new SimplePriorityQueue<NodeEdge, double>();
 
+            // ToDo Bei der Deklaration schon initialisieren
             for (var i = 0; i < hNodeIndex.Count; i++)
             {
                 hInMst.Add(false);
@@ -66,6 +67,7 @@ namespace GraphLibrary.Algorithm
 
             var hStartNodeIndex = 0;
             var hStartNode = hNodeIndex[hStartNodeIndex];
+            // ToDo Vorher initialisieren
             var hStartFakeEdge = new UndirectedEdge(hStartNode, hStartNode, new CostWeighted(0.0));
             var hStartNodeEdge = new NodeEdge(hStartNode, hStartFakeEdge); // Fake-Edge für den Startknoten.
             
@@ -81,7 +83,7 @@ namespace GraphLibrary.Algorithm
                 if (hInMst[hSmallestEdgesNodeId]) continue;  // Der Zielknoten der kleinsten Kante wurde bereits besucht. Also nächste Iteration durchlaufen (=nächste Kante nehmen)
                 hInMst[hSmallestEdgesNodeId] = true;
                 hNodesAdded++;
-                // Create MSG Graph
+                // Create MST Graph
                 var hNewNode = new Node(hSmallestEdgesNodeId);
                 hMinimalSpanningTree.CreateNewNode(hSmallestEdgesNodeId);
                 var hFromNodeId = hSmallestNodeEdge.Edge.GetOtherEndpoint(hSmallestNodeEdge.Node).Id;

@@ -22,7 +22,7 @@ namespace GraphLibrary.Algorithm
 
         private Stopwatch FStopwatch;
 
-
+        
         public KruskalAlgorithm(IGraph _UsedGraph)
         {
             FUsedGraph = _UsedGraph;
@@ -67,6 +67,7 @@ namespace GraphLibrary.Algorithm
             var hEdgesCount = hEdgesAsc.Count;
             var hNodesInDictionaryCount = hNodeDictionary.Count;
 
+            // ToDo Fehlerfall mit ausgeben wenn es keinen MST gibt
             while (hCurrentEdgeId < hEdgesCount && hNodesAdded < hNodesInDictionaryCount)
             {
                 var hEdgeEndPoints = hEdgesAsc[hCurrentEdgeId].GetPossibleEnpoints();
@@ -75,6 +76,7 @@ namespace GraphLibrary.Algorithm
 
                 if ( hNodePathList[hNodeAId] != hNodePathList[hNodeBId] )
                 {
+                    // ToDo Kann sicher sein dass es ein MST ist (abprüfen), vorher schon Knoten initialisieren
                     // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
                     var hNewNodeA = new Node(hNodeAId);
                     var hNewNodeB = new Node(hNodeBId);
@@ -106,6 +108,7 @@ namespace GraphLibrary.Algorithm
                     }
 
                     // Kante wurde hinzugefügt. Also Gewicht aufaddieren
+                    // Todo Nach oben zu der MST Generierung verschieben
                     hCosts += hEdgesAsc[hCurrentEdgeId].GetWeightValue();
                     hNodesAdded++;
                 }
