@@ -24,7 +24,7 @@ namespace GraphLibrary.Algorithm
 
         private INode FStartNode;
 
-        private List<List<INode>> FAllTours;
+        //private List<List<INode>> FAllTours;
 
         private List<INode> FSmallestTour;
 
@@ -45,7 +45,7 @@ namespace GraphLibrary.Algorithm
             FStartNode = hNodeDictionary[0];
             var hUnvisitedNodes = hNodeDictionary.Values.ToList();
 
-            FAllTours = new List<List<INode>>();
+            //FAllTours = new List<List<INode>>();
 
             FindBestRouteRecursive(FStartNode, hUnvisitedNodes, new List<INode>(), 0.0);
 
@@ -69,7 +69,7 @@ namespace GraphLibrary.Algorithm
             {
                 // Jeder Knoten wurde besucht. Jetzt noch die Tour zum Startknoten schließen
                 _Tour.Add(FStartNode);
-                FAllTours.Add(_Tour);
+                //FAllTours.Add(_Tour);
 
                 var hClosingEdge = FUsedGraph.GetEdge(_CurrentNode.Id, FStartNode.Id, true);
                 var hTotalTourCost = _TourCost + hClosingEdge.GetWeightValue();
@@ -83,6 +83,7 @@ namespace GraphLibrary.Algorithm
             {
                 foreach (var hNeighborEdge in _CurrentNode.NeighbourEdges)
                 {
+                    
                     if (_UnvisitedNodes.Contains(hNeighborEdge.Node))
                     {
                         var hTourCost = _TourCost + hNeighborEdge.Edge.GetWeightValue();
@@ -90,6 +91,71 @@ namespace GraphLibrary.Algorithm
                     }
                 }
             }
+        }
+
+
+        public void TSPBruteIterativ()
+        {
+            FStopwatch.Start();
+            var hDfsStack = new Stack<INode>();
+            var hTourStack = new Stack<string>();
+            var hCostStack = new Stack<double>();
+            var hUnvisitedNodesStack = new Stack<HashSet<INode>>();
+            var hSmallestTourCost = Double.PositiveInfinity;
+            string hSmallestTour = "";
+
+            var hNodeDictionary = FUsedGraph.GetNodeDictionary();
+            var hStartNode = hNodeDictionary[0];
+            var hUnsivitedNodes = new HashSet<INode>(hNodeDictionary.Values);
+            //hUnsivitedNodes.Remove(hStartNode);
+
+
+            hDfsStack.Push(hStartNode);
+            hTourStack.Push(hStartNode.Id.ToString());
+            hCostStack.Push(0.0);
+            hUnvisitedNodesStack.Push(hUnsivitedNodes);
+
+            while (hDfsStack.Count > 0)
+            {
+                var hCurrentNode = hDfsStack.Pop();
+                var hCurrentPath = hTourStack.Pop();
+                var hCurrentCost = hCostStack.Pop();
+                var hCurrentUnvisitedNodes = hUnvisitedNodesStack.Pop();
+                hCurrentUnvisitedNodes.Remove(hCurrentNode);
+
+                if (hCurrentUnvisitedNodes.Count == 0)
+                {
+                    // Am Ende angelangt
+                    var hNodeIdsInTour = hCurrentPath.Split(',');
+                    var hLastNodeInTour = Convert.ToInt32(hNodeIdsInTour.Last());
+                    var hClosingEdge = FUsedGraph.GetEdge(hLastNodeInTour, hStartNode.Id, true);
+                    var hTotalTourCost = hCurrentCost + hClosingEdge.GetWeightValue();
+                    if (hTotalTourCost <= hSmallestTourCost)
+                    {
+                        hSmallestTourCost = hTotalTourCost;
+                        hSmallestTour = hCurrentPath;
+                    }
+                }
+                else
+                {
+                    foreach (var hNeighborEdge in hCurrentNode.NeighbourEdges)
+                    {
+                        if (hCurrentUnvisitedNodes.Contains(hNeighborEdge.Node))
+                        {
+                            hDfsStack.Push(hNeighborEdge.Node);
+                            hTourStack.Push(hCurrentPath + "," + hNeighborEdge.Node.Id.ToString());
+                            hCostStack.Push(hCurrentCost + hNeighborEdge.Edge.GetWeightValue());
+                            hUnvisitedNodesStack.Push(new HashSet<INode>(hCurrentUnvisitedNodes));
+                        }
+                    }
+                }
+                
+            }
+
+            FStopwatch.Stop();
+            Console.WriteLine("Dauer der Berechnung: " + FStopwatch.ElapsedMilliseconds + " ms");
+            Console.WriteLine("Tour Kosten: " + hSmallestTourCost);
+            Console.WriteLine("Tour Verlauf: " + hSmallestTour);
         }
 
 

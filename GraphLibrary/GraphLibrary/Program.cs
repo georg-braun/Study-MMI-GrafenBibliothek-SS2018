@@ -23,7 +23,8 @@ namespace GraphLibrary
                 var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
 
                 var hTSPBruteForceAlgorithm = new TSPBruteForce(hGraph);
-                hTSPBruteForceAlgorithm.Execute();
+                //hTSPBruteForceAlgorithm.Execute();
+                hTSPBruteForceAlgorithm.TSPBruteIterativ();
             }
 
 
