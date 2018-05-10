@@ -14,13 +14,18 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            var hFileName = GraphFileRessources.P2K10GraphPath;
-            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
 
-            var hNearestNeighborAlgorithm = new NearestNeighborAlgorithm(hGraph);
-            hNearestNeighborAlgorithm.Execute(hGraph.GetNodeIndices()[0]);
+            for (int i = 0; i < 11; i++)
+            {
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Neuer Graph");
+                var hFileName = GraphFileRessources.P3GraphFiles[i];
+                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+                var hNearestNeighborAlgorithm = new NearestNeighborAlgorithm(hGraph);
+                hNearestNeighborAlgorithm.Execute(hGraph.GetNodeIndices()[0]);
+            } 
             
-
             Console.ReadLine();
 
         }

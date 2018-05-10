@@ -27,6 +27,20 @@ namespace GraphLibrary
         };
 
         // P3
-        public const string P2K10GraphPath = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_10.txt";
-    }
+        public const string P3K10GraphPath = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_10.txt";
+        public static readonly string[] P3GraphFiles =
+         {
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_10.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_10e.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_12.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_12e.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_15.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_15e.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_20.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_30.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_50.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_70.txt",
+            @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_100.txt"
+        };
+}
 }

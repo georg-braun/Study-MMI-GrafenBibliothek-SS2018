@@ -54,6 +54,7 @@ namespace GraphLibrary.Importer
             Console.WriteLine("Anzahl eingelesener Knoten:\t" + hGraph.GetNodeIndices().Count.ToString());
             Console.WriteLine("Anzahl eingelesener Kanten:\t" + hGraph.GetEdgeIndices().Count.ToString());
             Console.WriteLine("Dauer Einlesevorgang:\t\t" + hStopwatch.ElapsedMilliseconds.ToString() + " ms");
+            Console.WriteLine();
 
             return hGraph;
         }
