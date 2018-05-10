@@ -19,6 +19,11 @@ namespace GraphLibrary.Algorithm
             FUsedGraph = _UsedGraph;
         }
 
+        /// <summary>
+        ///  Führt den Doppelten Baum Algorithmus aus.
+        /// </summary>
+        /// <param name="_StartNode"></param>
+        /// <returns>Neues Graphen Objekt.</returns>
         public IGraph Execute(INode _StartNode)
         {
             var hStopwatch = new Stopwatch();
