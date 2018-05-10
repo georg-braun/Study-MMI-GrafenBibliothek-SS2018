@@ -80,9 +80,9 @@ namespace GraphLibrary.Algorithm
                     // Knoten A und B verweisen auf verschiedene Pfad-Listen. Also sind die nicht im selben Pfad und würden keinen Kreis bilden
                     var hNewNodeA = new Node(hNodeAId);
                     var hNewNodeB = new Node(hNodeBId);
-                    hMinimalSpanningTree.AddNode(hNewNodeA);
-                    hMinimalSpanningTree.AddNode(hNewNodeB);
-                    hMinimalSpanningTree.CreateUndirectedEdge(hNewNodeA, hNewNodeB, new CostWeighted(hEdgesAsc[hCurrentEdgeId].GetWeightValue()));
+                    var hNodeA = hMinimalSpanningTree.TryToAddNode(hNewNodeA);
+                    var hNodeB = hMinimalSpanningTree.TryToAddNode(hNewNodeB);
+                    hMinimalSpanningTree.CreateUndirectedEdge(hNodeA, hNodeB, new CostWeighted(hEdgesAsc[hCurrentEdgeId].GetWeightValue()));
                     
                     
                     // Noch prüfen welcher Pfad der größere ist. Es soll nämlich die kleinere Pfadliste in die Größere eingefügt werden
@@ -115,6 +115,7 @@ namespace GraphLibrary.Algorithm
 
                 hCurrentEdgeId++;
             } 
+            hMinimalSpanningTree.UpdateNeighbourInfoInNodes();
 
             FStopwatch.Stop();
             Console.WriteLine("--- Kruskal ---");

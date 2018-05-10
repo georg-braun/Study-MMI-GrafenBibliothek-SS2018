@@ -14,23 +14,15 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-
-            for (int i = 0; i < 11; i++)
-            {
-                Console.WriteLine("-------------------------------");
-                Console.WriteLine("Neuer Graph");
-                var hFileName = GraphFileRessources.P3GraphFiles[i];
-                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
-
-                var hNearestNeighborAlgorithm = new NearestNeighborAlgorithm(hGraph);
-                hNearestNeighborAlgorithm.Execute(hGraph.GetNodeDictionary()[0]);
-            } 
             
+            P3DoppelterBaum();
+
+
             Console.ReadLine();
 
         }
 
-        private void P1Aufgaben()
+        private static void P1Aufgaben()
         {
             var hFileName = GraphFileRessources.P1AdjacentGraph3Path;
 
@@ -46,7 +38,7 @@ namespace GraphLibrary
             hFindSubTrees.PrintInfosToConsole();
         }
 
-        private void P2Aufgaben()
+        private static void P2Aufgaben()
         {
             foreach (var hCurrentGraphFile in GraphFileRessources.P2GraphFiles)
             {
@@ -59,6 +51,35 @@ namespace GraphLibrary
                 var hMstKruskal = hKruskalAlgorithm.Execute();
                 Console.WriteLine("");
             }
+        }
+
+        private static void P3NearestNeighbor()
+        {
+            for (int i = 0; i < 11; i++)
+            {
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Neuer Graph");
+                var hFileName = GraphFileRessources.P3GraphFiles[i];
+                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+                var hNearestNeighborAlgorithm = new NearestNeighborAlgorithm(hGraph);
+                hNearestNeighborAlgorithm.Execute(hGraph.GetNodeDictionary()[0]);
+            }
+        }
+
+        private static void P3DoppelterBaum()
+        {
+            for (int i = 0; i < 11; i++)
+            {
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Neuer Graph");
+                var hFileName = GraphFileRessources.P3GraphFiles[i];
+                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+                var hDoppelterBaumAlgorithm = new DoppelterBaumAlgorithm(hGraph);
+                hDoppelterBaumAlgorithm.Execute(hGraph.GetNodeDictionary()[0]);
+            }
+
         }
 
     }

@@ -26,7 +26,9 @@ namespace GraphLibrary.DataStructure
 
         void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight);
 
-        void AddNode(INode _Node);
+        void CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
+
+        INode TryToAddNode(INode _Node);
 
         void AddEdge(Edge _Edge);
 
@@ -35,6 +37,8 @@ namespace GraphLibrary.DataStructure
         INode GetNodeById(int _NodeId);
 
         void RemoveEdge(Edge _Edge);
+
+        Edge GetEdge(int _FromNodeId, int _ToNodeId, bool _Undirected);
     } 
 
     class Graph : IGraph
@@ -107,17 +111,35 @@ namespace GraphLibrary.DataStructure
             FEdgeIndices.Add(hNewUndirectedEdge);
             _NodeOne.AddEdge(hNewUndirectedEdge);
             _NodeTwo.AddEdge(hNewUndirectedEdge);
-
-            
         }
 
-        public void AddNode(INode _Node)
+        public void CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight)
+        {
+            var hNodeOne = FNodeIndices[_NodeOneId];
+            var hNodeTwo = FNodeIndices[_NodeTwoId];
+
+            var hNewUndirectedEdge = new UndirectedEdge(hNodeOne, hNodeTwo, _Weight);
+            FEdgeIndices.Add(hNewUndirectedEdge);
+            hNodeOne.AddEdge(hNewUndirectedEdge);
+            hNodeTwo.AddEdge(hNewUndirectedEdge);
+        }
+
+
+        /// <summary>
+        /// Versucht einen Knoten hinzuzufügen. Ggf. ist dieser schon vorhanden.
+        /// </summary>
+        /// <param name="_Node"></param>
+        /// <returns>Referenz auf den Knoten (hinzugefügter, oder war schon vorhanden)</returns>
+        public INode TryToAddNode(INode _Node)
         {
             if (!FNodeIndices.ContainsKey(_Node.Id))
             {
                 FNodeIndices.Add(_Node.Id, _Node);
             }
-            
+
+            return FNodeIndices[_Node.Id];
+
+
         }
 
         public void AddEdge(Edge _Edge)
@@ -151,6 +173,40 @@ namespace GraphLibrary.DataStructure
             hEndPoints[1].RemoveEdge(_Edge);
             FEdgeIndices.Remove(_Edge);
             UpdateNeighbourInfoInNodes(); // Update der Kanten-Infos
+        }
+
+        public Edge GetEdge(int _FromNodeId, int _ToNodeId, bool _Undirected)
+        {
+            var hFromNode = FNodeIndices[_FromNodeId];
+            var hToNode = FNodeIndices[_ToNodeId];
+
+            Edge hEdge = null;
+            if (_Undirected)
+            {
+                foreach (var hCurrentEdge in FEdgeIndices)
+                {
+                    var hPossibleEndpoints = hCurrentEdge.GetPossibleEnpoints();
+                    if (hPossibleEndpoints.Contains(hFromNode) && hPossibleEndpoints.Contains(hToNode))
+                    {
+                        hEdge = hCurrentEdge;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var hCurrentEdge in FEdgeIndices)
+                {
+                    var hPossibleEndpoints = hCurrentEdge.GetPossibleEnpoints();
+                    if (hPossibleEndpoints[0] == hFromNode && hPossibleEndpoints[1] == hToNode)
+                    {
+                        hEdge = hCurrentEdge;
+                        break;
+                    }
+                }
+            }
+
+            return hEdge;
         }
     }
 }

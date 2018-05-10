@@ -31,7 +31,7 @@ namespace GraphLibrary.Algorithm
         private IGraph BreadthFirstSearchAlgorithm(INode _Node)
         {
             var hSubGraph = new Graph();
-            hSubGraph.AddNode(_Node);
+            hSubGraph.TryToAddNode(_Node);
 
             var FVisitedBfsNodes = new HashSet<int>();
             var hBfsQueue = new Queue<INode>();
@@ -50,7 +50,7 @@ namespace GraphLibrary.Algorithm
                     {
                         FVisitedBfsNodes.Add(hNeighbourEdge.Node.Id);
                         hBfsQueue.Enqueue(hNeighbourEdge.Node);
-                        hSubGraph.AddNode(hNeighbourEdge.Node);
+                        hSubGraph.TryToAddNode(hNeighbourEdge.Node);
                         hSubGraph.AddEdge(hNeighbourEdge.Edge);
                     }
                 }

@@ -8,11 +8,14 @@ using GraphLibrary.DataStructure;
 
 namespace GraphLibrary.Algorithm
 {
+    /// <summary>
+    /// Führt auf dem Graphen eine Tiefensuche durch. 
+    /// </summary>
     class DepthFirstSearch : IGraphTraverseAlgorithm
     {
         private INode FStartNode;
 
-        private IGraph FSubGraph;
+        private IGraph FDfsGraph;
 
         public DepthFirstSearch()
         {
@@ -21,15 +24,21 @@ namespace GraphLibrary.Algorithm
         
         private HashSet<int> FVisitedBfsNodes = new HashSet<int>();
 
+        /// <summary>
+        /// Ausführung der Tiefensuche
+        /// </summary>
+        /// <param name="_StartNode"></param>
+        /// <returns>Ein neues Graph Objekt welches die Tiefensuche repräsentiert. Die Knoten und Kanten Referenzen zeigen auf den übergebenen Graphen.
+        /// Es handelt sich um eine Art Overlay über den alten Graphen</returns>
         public IGraph Execute(INode _StartNode)
         {
             FStartNode = _StartNode;
-            FSubGraph = new Graph();
-            FSubGraph.AddNode(FStartNode);
+            FDfsGraph = new Graph();
+            FDfsGraph.TryToAddNode(FStartNode);
 
             FVisitedBfsNodes.Clear();
             DfsRecursive(FStartNode);
-            return FSubGraph;
+            return FDfsGraph;
         }
 
         public void DfsRecursive(INode _Node)
@@ -42,8 +51,8 @@ namespace GraphLibrary.Algorithm
                 var hNeighbourNode = hNeighbourEdge.Node;
                 if (!FVisitedBfsNodes.Contains(hNeighbourNode.Id))
                 {
-                    FSubGraph.AddNode(hNeighbourEdge.Node);
-                    FSubGraph.AddEdge(hNeighbourEdge.Edge);
+                    FDfsGraph.TryToAddNode(hNeighbourEdge.Node);
+                    FDfsGraph.AddEdge(hNeighbourEdge.Edge);
                     DfsRecursive(hNeighbourNode);
                 }
             }
