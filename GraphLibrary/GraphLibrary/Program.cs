@@ -14,8 +14,17 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            
-            P3DoppelterBaum();
+
+            for (int i = 0; i < 4; i++)
+            {
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Neuer Graph");
+                var hFileName = GraphFileRessources.P3GraphFiles[i];
+                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+                var hTSPBruteForceAlgorithm = new TSPBruteForce(hGraph);
+                hTSPBruteForceAlgorithm.Execute();
+            }
 
 
             Console.ReadLine();
