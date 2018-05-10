@@ -51,7 +51,7 @@ namespace GraphLibrary.Importer
             
 
             hStopwatch.Stop();
-            Console.WriteLine("Anzahl eingelesener Knoten:\t" + hGraph.GetNodeIndices().Count.ToString());
+            Console.WriteLine("Anzahl eingelesener Knoten:\t" + hGraph.GetNodeDictionary().Count.ToString());
             Console.WriteLine("Anzahl eingelesener Kanten:\t" + hGraph.GetEdgeIndices().Count.ToString());
             Console.WriteLine("Dauer Einlesevorgang:\t\t" + hStopwatch.ElapsedMilliseconds.ToString() + " ms");
             Console.WriteLine();
@@ -61,7 +61,7 @@ namespace GraphLibrary.Importer
 
         private static void ImportUnweightedUndirected(IGraph _Graph, String [] _HAdjacentListFileContentStrings)
         {
-            var hGraphNodes = _Graph.GetNodeIndices();
+            var hGraphNodes = _Graph.GetNodeDictionary();
             for (int hRowIndex = 1; hRowIndex < _HAdjacentListFileContentStrings.Length; hRowIndex++)
             {
                 var hRow = _HAdjacentListFileContentStrings[hRowIndex];
@@ -79,7 +79,7 @@ namespace GraphLibrary.Importer
 
         private static void ImportWeightedUndirected(IGraph _Graph, String[] _HAdjacentListFileContentStrings)
         {
-            var hGraphNodes = _Graph.GetNodeIndices();
+            var hGraphNodes = _Graph.GetNodeDictionary();
             for (int hRowIndex = 1; hRowIndex < _HAdjacentListFileContentStrings.Length; hRowIndex++)
             {
                 var hRow = _HAdjacentListFileContentStrings[hRowIndex];

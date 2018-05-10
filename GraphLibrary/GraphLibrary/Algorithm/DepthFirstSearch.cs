@@ -35,7 +35,7 @@ namespace GraphLibrary.Algorithm
         public void DfsRecursive(INode _Node)
         {
             FVisitedBfsNodes.Add(_Node.Id);
-            var hNodeNeighboursConnection = _Node.NeighboursEdges;
+            var hNodeNeighboursConnection = _Node.NeighbourEdges;
             
             foreach (var hNeighbourEdge in hNodeNeighboursConnection)
             {

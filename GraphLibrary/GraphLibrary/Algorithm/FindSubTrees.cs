@@ -32,7 +32,7 @@ namespace GraphLibrary.Algorithm
 
             var hSubGraphs = new List<IGraph>();
 
-            var hGraphNodes = UsedGraph.GetNodeIndices();
+            var hGraphNodes = UsedGraph.GetNodeDictionary();
             FVisitedBfsNodes.Clear();
             FSubGraphs.Clear();
             FSubGraphId = 0;
@@ -59,7 +59,7 @@ namespace GraphLibrary.Algorithm
 
         private void SetSubGraphNodesAsVisited(IGraph _SubGraph)
         {
-            foreach (var hNode in _SubGraph.GetNodeIndices())
+            foreach (var hNode in _SubGraph.GetNodeDictionary())
             {
                 var hNodeId = hNode.Value.Id;
                 FVisitedBfsNodes[hNodeId] = true;
@@ -70,7 +70,7 @@ namespace GraphLibrary.Algorithm
         public void PrintInfosToConsole()
         {
             
-            Console.WriteLine("Anzahl der Knoten: " + UsedGraph.GetNodeIndices().Count.ToString());
+            Console.WriteLine("Anzahl der Knoten: " + UsedGraph.GetNodeDictionary().Count.ToString());
             Console.WriteLine("Anzahl der Kanten: " + UsedGraph.GetEdgeIndices().Count.ToString());
             Console.WriteLine("Benötigte Zeit: " + FStopwatch.ElapsedMilliseconds.ToString() + " ms");
             Console.WriteLine("Anzahl der Teilgrafen: " + FSubGraphs.Keys.Count.ToString());

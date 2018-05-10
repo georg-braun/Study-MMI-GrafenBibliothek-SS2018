@@ -47,7 +47,7 @@ namespace GraphLibrary.Algorithm
 
             // Use a copy of the Edge List. Don't wan't to affect the datastructure
             var hEdgesAsc = new List<Edge>(FUsedGraph.GetEdgeIndices());
-            var hNodeDictionary = FUsedGraph.GetNodeIndices();
+            var hNodeDictionary = FUsedGraph.GetNodeDictionary();
             
             var hEdgeWeightComparerAsc = new EdgeWeightComparerAsc();
             hEdgesAsc.Sort(hEdgeWeightComparerAsc);

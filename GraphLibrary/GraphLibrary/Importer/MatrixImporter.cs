@@ -26,7 +26,7 @@ namespace GraphLibrary.Importer
                 hGraph.CreateNewNode(hNewNodeId);
             }
 
-            var hGraphNodes = hGraph.GetNodeIndices();
+            var hGraphNodes = hGraph.GetNodeDictionary();
 
 
             // Erneutes durchlaufen der Matrix um die Knoten zu verbinden. 

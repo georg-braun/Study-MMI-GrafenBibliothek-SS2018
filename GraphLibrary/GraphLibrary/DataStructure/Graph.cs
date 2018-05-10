@@ -8,7 +8,7 @@ namespace GraphLibrary.DataStructure
 {
     interface IGraph
     {
-        Dictionary<int, INode> GetNodeIndices();
+        Dictionary<int, INode> GetNodeDictionary();
 
         List<Edge> GetEdgeIndices();
 
@@ -49,7 +49,7 @@ namespace GraphLibrary.DataStructure
             FEdgeIndices = new List<Edge>();
         }
 
-        public Dictionary<int, INode> GetNodeIndices()
+        public Dictionary<int, INode> GetNodeDictionary()
         {
             return FNodeIndices;
         }
@@ -61,7 +61,7 @@ namespace GraphLibrary.DataStructure
 
         public List<NodeEdge> GetNodeNeighboursAndEdges(INode _Node)
         {
-            return _Node.NeighboursEdges;
+            return _Node.NeighbourEdges;
         }
 
         public void UpdateNeighbourInfoInNodes()

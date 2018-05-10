@@ -41,7 +41,7 @@ namespace GraphLibrary.Algorithm
             while (hBfsQueue.Count > 0)
             {
                 var hCurrentNode = hBfsQueue.Dequeue();
-                var hNeighbourEdges = hCurrentNode.NeighboursEdges;
+                var hNeighbourEdges = hCurrentNode.NeighbourEdges;
 
                 foreach (var hNeighbourEdge in hNeighbourEdges)
                 {

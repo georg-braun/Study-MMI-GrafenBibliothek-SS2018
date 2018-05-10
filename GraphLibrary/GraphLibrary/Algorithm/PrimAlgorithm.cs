@@ -50,7 +50,7 @@ namespace GraphLibrary.Algorithm
             var hMinimalSpanningTree = new Graph();
             double hCosts = 0.0;
 
-            var hNodeIndex = FUsedGraph.GetNodeIndices();
+            var hNodeIndex = FUsedGraph.GetNodeDictionary();
             var hEdgeIndex = FUsedGraph.GetEdgeIndices();
             var hNodesAdded = 0;
 
@@ -92,7 +92,7 @@ namespace GraphLibrary.Algorithm
 
                 hCosts += hSmallestNodeEdge.Edge.GetWeightValue();
 
-                foreach (var hNeighbourNodeEdges in hSmallestNodeEdge.Node.NeighboursEdges)
+                foreach (var hNeighbourNodeEdges in hSmallestNodeEdge.Node.NeighbourEdges)
                 {
                     var hNeighbourId = hNeighbourNodeEdges.Node.Id;
                     var hNeighbourWeight = hNeighbourNodeEdges.Edge.GetWeightValue();
@@ -107,7 +107,7 @@ namespace GraphLibrary.Algorithm
             }
 
             // Die Fake-Edge des Startknotens wieder aus dem MST-Graf rausnehmen. (Es ist die erste Kante des Startknotens)
-            hMinimalSpanningTree.RemoveEdge( hMinimalSpanningTree.GetNodeIndices()[hStartNodeIndex].NeighboursEdges[0].Edge );
+            hMinimalSpanningTree.RemoveEdge( hMinimalSpanningTree.GetNodeDictionary()[hStartNodeIndex].NeighbourEdges[0].Edge );
 
             FStopwatch.Stop();
             Console.WriteLine("--- Prim ---");

@@ -23,7 +23,7 @@ namespace GraphLibrary
                 var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
 
                 var hNearestNeighborAlgorithm = new NearestNeighborAlgorithm(hGraph);
-                hNearestNeighborAlgorithm.Execute(hGraph.GetNodeIndices()[0]);
+                hNearestNeighborAlgorithm.Execute(hGraph.GetNodeDictionary()[0]);
             } 
             
             Console.ReadLine();

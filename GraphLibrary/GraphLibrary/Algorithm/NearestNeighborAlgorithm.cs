@@ -27,7 +27,7 @@ namespace GraphLibrary.Algorithm
             Console.WriteLine("Start Nearest Neigbor Algorithmus");
             hStopwatch.Start();
 
-            var hNodeInGraphCount = FUsedGraph.GetNodeIndices().Count;
+            var hNodeInGraphCount = FUsedGraph.GetNodeDictionary().Count;
             var hTourCosts = 0.0;
             var hVisitedNodes = new HashSet<INode>();
 
@@ -44,7 +44,7 @@ namespace GraphLibrary.Algorithm
                 NodeEdge hMinimumNodeEdge = null;
 
                 // Guck dir alle Nachbarn vom aktuellen Nachbarn an und wähle die niedrigste Kante zu einem unbesuchten Knoten
-                foreach (var hEdgeToNeighbor in hCurrentNode.NeighboursEdges)
+                foreach (var hEdgeToNeighbor in hCurrentNode.NeighbourEdges)
                 {
                     var hEdgeToNeighborWeight = hEdgeToNeighbor.Edge.GetWeightValue();
                     if (!hVisitedNodes.Contains(hEdgeToNeighbor.Node) && hEdgeToNeighborWeight < hMinimumEdgeWeight)
@@ -68,7 +68,7 @@ namespace GraphLibrary.Algorithm
             }
 
             // Kreis schließen
-            foreach (var hEdgeToNeighbor in hCurrentNode.NeighboursEdges)
+            foreach (var hEdgeToNeighbor in hCurrentNode.NeighbourEdges)
             {
                 if (hEdgeToNeighbor.Node == _StartNode)
                 {
