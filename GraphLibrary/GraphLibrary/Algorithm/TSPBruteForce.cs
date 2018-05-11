@@ -14,23 +14,23 @@ namespace GraphLibrary.Algorithm
     {
         private IGraph FUsedGraph;
 
+        private int FNodeCount;
+
+        private INode FStartNode;
+
+        private Dictionary<string, Edge> FEdgeDictionary;
+
+        private HashSet<int> FSmallestTour;
+
+        private double FSmallestTourCost = Double.PositiveInfinity;
+
+        private Stopwatch FStopwatch;
+
         public TSPBruteForce(IGraph _UsedGraph)
         {
             FUsedGraph = _UsedGraph;
             FStopwatch = new Stopwatch();
         }
-
-        private int FNodeCount;
-
-        private INode FStartNode;
-
-        //private List<List<INode>> FAllTours;
-
-        private List<INode> FSmallestTour;
-
-        private double FSmallestTourCost = Double.PositiveInfinity;
-
-        private Stopwatch FStopwatch;
 
         /// <summary>
         /// Probiert alle Routen aus (auch Duplikate). Also (n-1)! mögliche
@@ -40,13 +40,13 @@ namespace GraphLibrary.Algorithm
             Console.WriteLine("Brute Force TSP");
             FStopwatch.Start();
             var hNodeDictionary = FUsedGraph.GetNodeDictionary();
+            var hUnvisitedNodes = new HashSet<INode>(hNodeDictionary.Values);
             FNodeCount = hNodeDictionary.Count;
+            FEdgeDictionary = FUsedGraph.GetEdgeDictionary();
 
             FStartNode = hNodeDictionary[0];
-            var hUnvisitedNodes = new HashSet<INode>(hNodeDictionary.Values);
-
             
-            FindBestRouteRecursive(FStartNode, hUnvisitedNodes, new List<INode>(), 0.0);
+            FindBestRouteRecursive(FStartNode, new HashSet<int>(), 0.0);
 
             FStopwatch.Stop();
             Console.WriteLine("Dauer der Berechnung: " + FStopwatch.ElapsedMilliseconds + " ms");
@@ -54,23 +54,19 @@ namespace GraphLibrary.Algorithm
             Console.WriteLine("Tour Verlauf: ");
             foreach (var hNode in FSmallestTour)
             {
-                Console.WriteLine(hNode.Id);
+                Console.WriteLine(hNode);
             } 
 
         }
 
-        private void FindBestRouteRecursive(INode _CurrentNode, HashSet<INode> _UnvisitedNodes, List<INode> _Tour, double _TourCost)
+        private void FindBestRouteRecursive(INode _CurrentNode, HashSet<int> _Tour, double _TourCost)
         {
-            _Tour.Add(_CurrentNode);
-            _UnvisitedNodes.Remove(_CurrentNode);
+            _Tour.Add(_CurrentNode.Id);
 
             if (_Tour.Count == FNodeCount)  
             {
                 // Jeder Knoten wurde besucht. Jetzt noch die Tour zum Startknoten schließen
-                _Tour.Add(FStartNode);
-                //FAllTours.Add(_Tour);
-
-                var hClosingEdge = FUsedGraph.GetEdge(_CurrentNode.Id, FStartNode.Id, true);
+                var hClosingEdge = FEdgeDictionary[_CurrentNode.Id + "-" + FStartNode.Id];
                 var hTotalTourCost = _TourCost + hClosingEdge.GetWeightValue();
                 if (hTotalTourCost <= FSmallestTourCost)
                 {
@@ -83,12 +79,11 @@ namespace GraphLibrary.Algorithm
                 foreach (var hNeighborEdge in _CurrentNode.NeighbourEdges)
                 {
                     
-                    if (_UnvisitedNodes.Contains(hNeighborEdge.Node))
+                    if (!_Tour.Contains(hNeighborEdge.Node.Id))
                     {
                         var hTourCost = _TourCost + hNeighborEdge.Edge.GetWeightValue();
-                        var hUnvisitedNodesClone = new HashSet<INode>(_UnvisitedNodes);
-                        var hTourClone = new List<INode>(_Tour);
-                        FindBestRouteRecursive(hNeighborEdge.Node, hUnvisitedNodesClone, hTourClone, hTourCost);
+                        var hTourClone = new HashSet<int>(_Tour);
+                        FindBestRouteRecursive(hNeighborEdge.Node, hTourClone, hTourCost);
                     }
                 }
             }

@@ -39,6 +39,10 @@ namespace GraphLibrary.DataStructure
         void RemoveEdge(Edge _Edge);
 
         Edge GetEdge(int _FromNodeId, int _ToNodeId, bool _Undirected);
+
+        void ComputeEdgeDictionary();
+
+        Dictionary<string, Edge> GetEdgeDictionary();
     } 
 
     class Graph : IGraph
@@ -47,10 +51,30 @@ namespace GraphLibrary.DataStructure
 
         private readonly List<Edge> FEdgeIndices;
 
+        public Dictionary<string, Edge> FEdgeDictionary;
+
         public Graph()
         {
             FNodeIndices = new Dictionary<int, INode>();
             FEdgeIndices = new List<Edge>();
+            FEdgeDictionary = new Dictionary<string, Edge>();
+        }
+
+        public void ComputeEdgeDictionary()
+        {
+            FEdgeDictionary.Clear();
+            foreach (var hEdge in FEdgeIndices)
+            {
+                var hNodes = hEdge.GetPossibleEnpoints();
+                FEdgeDictionary.Add(hNodes[0].Id+"-" + hNodes[1].Id, hEdge);
+                FEdgeDictionary.Add(hNodes[1].Id + "-" + hNodes[0].Id, hEdge);
+            } 
+        }
+
+        public Dictionary<string, Edge> GetEdgeDictionary()
+        {
+            ComputeEdgeDictionary();
+            return FEdgeDictionary;
         }
 
         public Dictionary<int, INode> GetNodeDictionary()
