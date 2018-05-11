@@ -54,7 +54,7 @@
     <Compile Include="Algorithm\KruskalAlgorithm.cs" />
     <Compile Include="Algorithm\NearestNeighborAlgorithm.cs" />
     <Compile Include="Algorithm\PrimAlgorithm.cs" />
-    <Compile Include="Algorithm\TSPBruteForce.cs" />
+    <Compile Include="Algorithm\TSPSolver.cs" />
     <Compile Include="DataStructure\Edge.cs" />
     <Compile Include="DataStructure\Graph.cs" />
     <Compile Include="DataStructure\Node.cs" />

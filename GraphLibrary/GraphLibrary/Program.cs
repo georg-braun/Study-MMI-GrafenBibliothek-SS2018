@@ -14,14 +14,12 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            //P3NearestNeighbor();
+            P3NearestNeighbor();
             //P3DoppelterBaum();
-            P4TSPBruteForce();
-            P4TSPBranchAndBound();
-        
+            //P4TSPBruteForce();
+            //P4TSPBranchAndBound();
 
             Console.ReadLine();
-
         }
 
         private static void P1Aufgaben()
