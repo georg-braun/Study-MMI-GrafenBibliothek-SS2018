@@ -43,10 +43,9 @@ namespace GraphLibrary.Algorithm
             FNodeCount = hNodeDictionary.Count;
 
             FStartNode = hNodeDictionary[0];
-            var hUnvisitedNodes = hNodeDictionary.Values.ToList();
+            var hUnvisitedNodes = new HashSet<INode>(hNodeDictionary.Values);
 
-            //FAllTours = new List<List<INode>>();
-
+            
             FindBestRouteRecursive(FStartNode, hUnvisitedNodes, new List<INode>(), 0.0);
 
             FStopwatch.Stop();
@@ -60,7 +59,7 @@ namespace GraphLibrary.Algorithm
 
         }
 
-        private void FindBestRouteRecursive(INode _CurrentNode, List<INode> _UnvisitedNodes, List<INode> _Tour, double _TourCost)
+        private void FindBestRouteRecursive(INode _CurrentNode, HashSet<INode> _UnvisitedNodes, List<INode> _Tour, double _TourCost)
         {
             _Tour.Add(_CurrentNode);
             _UnvisitedNodes.Remove(_CurrentNode);
@@ -87,7 +86,9 @@ namespace GraphLibrary.Algorithm
                     if (_UnvisitedNodes.Contains(hNeighborEdge.Node))
                     {
                         var hTourCost = _TourCost + hNeighborEdge.Edge.GetWeightValue();
-                        FindBestRouteRecursive(hNeighborEdge.Node, new List<INode>(_UnvisitedNodes), new List<INode>(_Tour), hTourCost);
+                        var hUnvisitedNodesClone = new HashSet<INode>(_UnvisitedNodes);
+                        var hTourClone = new List<INode>(_Tour);
+                        FindBestRouteRecursive(hNeighborEdge.Node, hUnvisitedNodesClone, hTourClone, hTourCost);
                     }
                 }
             }
