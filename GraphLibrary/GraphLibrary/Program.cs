@@ -14,19 +14,11 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-
-            for (int i = 0; i < 4; i++)
-            {
-                Console.WriteLine("-------------------------------");
-                Console.WriteLine("Neuer Graph");
-                var hFileName = GraphFileRessources.P3GraphFiles[i];
-                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
-
-                var hTSPBruteForceAlgorithm = new TSPBruteForce(hGraph);
-                hTSPBruteForceAlgorithm.Execute();
-                //hTSPBruteForceAlgorithm.TSPBruteIterativ();
-            }
-
+            //P3NearestNeighbor();
+            //P3DoppelterBaum();
+            P4TSPBruteForce();
+            P4TSPBranchAndBound();
+        
 
             Console.ReadLine();
 
@@ -89,7 +81,34 @@ namespace GraphLibrary
                 var hDoppelterBaumAlgorithm = new DoppelterBaumAlgorithm(hGraph);
                 hDoppelterBaumAlgorithm.Execute(hGraph.GetNodeDictionary()[0]);
             }
+        }
 
+        private static void P4TSPBruteForce()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Neuer Graph");
+                var hFileName = GraphFileRessources.P3GraphFiles[i];
+                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+                var hTSPBruteForceAlgorithm = new TSPSolver(hGraph,false);
+                hTSPBruteForceAlgorithm.Execute();
+            }
+        }
+
+        private static void P4TSPBranchAndBound()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Neuer Graph");
+                var hFileName = GraphFileRessources.P3GraphFiles[i];
+                var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+                var hTSPBruteForceAlgorithm = new TSPSolver(hGraph, true);
+                hTSPBruteForceAlgorithm.Execute();
+            }
         }
 
     }

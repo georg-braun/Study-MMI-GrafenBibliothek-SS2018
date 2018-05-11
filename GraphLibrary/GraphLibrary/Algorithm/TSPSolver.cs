@@ -10,7 +10,7 @@ using GraphLibrary.DataStructure;
 
 namespace GraphLibrary.Algorithm
 {
-    class TSPBruteForce
+    class TSPSolver
     {
         private IGraph FUsedGraph;
 
@@ -24,20 +24,26 @@ namespace GraphLibrary.Algorithm
 
         private double FSmallestTourCost = Double.PositiveInfinity;
 
+        private bool FUseBranchAndBound = true;
+
         private Stopwatch FStopwatch;
 
-        public TSPBruteForce(IGraph _UsedGraph)
+        public TSPSolver(IGraph _UsedGraph, bool _UseBranchAndBound = true)
         {
             FUsedGraph = _UsedGraph;
             FStopwatch = new Stopwatch();
+            FUseBranchAndBound = _UseBranchAndBound;
         }
 
         /// <summary>
-        /// Probiert alle Routen aus (auch Duplikate). Also (n-1)! mögliche
+        /// Findet eine exakte Möglichkeit. Zwei Modi:
+        /// 1. BruteForce: Alle n-1! Möglichkeiten (also auch Duplikate) werden geprüft
+        /// 2. Branch-And-Bound: 
         /// </summary>
         public void Execute()
         {
-            Console.WriteLine("Brute Force TSP");
+            Console.WriteLine("TSP");
+            Console.WriteLine("Nutzung von Branch-And-Bound: " + FUseBranchAndBound.ToString());
             FStopwatch.Start();
             var hNodeDictionary = FUsedGraph.GetNodeDictionary();
             var hUnvisitedNodes = new HashSet<INode>(hNodeDictionary.Values);
@@ -61,6 +67,8 @@ namespace GraphLibrary.Algorithm
 
         private void FindBestRouteRecursive(INode _CurrentNode, HashSet<int> _Tour, double _TourCost)
         {
+            if (FUseBranchAndBound && _TourCost > FSmallestTourCost) return; // Bound: Bisherige Tour ist schlechter als die bisher beste
+
             _Tour.Add(_CurrentNode.Id);
 
             if (_Tour.Count == FNodeCount)  
