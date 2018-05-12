@@ -42,5 +42,12 @@ namespace GraphLibrary
             @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_70.txt",
             @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum3\K_100.txt"
         };
-}
+
+        // P4
+        public const string P4GraphWege1 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum4\Wege1.txt";
+        public const string P4GraphWege2 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum4\Wege2.txt";
+        public const string P4GraphWege3 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum4\Wege3.txt";
+        public const string P4GraphG12 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum2\G_1_2.txt";
+
+    }
 }

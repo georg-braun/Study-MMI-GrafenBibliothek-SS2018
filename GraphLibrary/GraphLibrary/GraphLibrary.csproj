@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Algorithm\BreadthFirstSearch.cs" />
     <Compile Include="Algorithm\DepthFirstSearch.cs" />
+    <Compile Include="Algorithm\Dijkstra.cs" />
     <Compile Include="Algorithm\DoppelterBaumAlgorithm.cs" />
     <Compile Include="Algorithm\FindSubTrees.cs" />
     <Compile Include="Algorithm\IGraphTraverseAlgorithm.cs" />

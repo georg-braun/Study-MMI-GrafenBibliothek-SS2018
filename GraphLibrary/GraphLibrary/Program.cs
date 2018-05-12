@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GraphLibrary.Algorithm;
+using GraphLibrary.DataStructure;
 using GraphLibrary.Importer;
 
 namespace GraphLibrary
@@ -14,10 +15,7 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            P3NearestNeighbor();
-            //P3DoppelterBaum();
-            //P4TSPBruteForce();
-            //P4TSPBranchAndBound();
+            P4Dijkstra();
 
             Console.ReadLine();
         }
@@ -107,6 +105,45 @@ namespace GraphLibrary
                 var hTSPBruteForceAlgorithm = new TSPSolver(hGraph, true);
                 hTSPBruteForceAlgorithm.Execute();
             }
+        }
+
+        private static void P4Dijkstra()
+        {
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            var hFileName = GraphFileRessources.P4GraphWege1;
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedUnweighted);
+
+            var hDijkstraAlgorithm = new Dijkstra(hGraph);
+            hDijkstraAlgorithm.Execute(2,0);
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P4GraphWege2;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedUnweighted);
+
+            hDijkstraAlgorithm = new Dijkstra(hGraph);
+            hDijkstraAlgorithm.Execute(2, 0);
+
+            //Console.WriteLine("-------------------------------");
+            //Console.WriteLine("Neuer Graph");
+            //hFileName = GraphFileRessources.P4GraphWege2;
+            //hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+
+            //hDijkstraAlgorithm = new Dijkstra(hGraph);
+            //hDijkstraAlgorithm.Execute(2, 0);
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P4GraphG12;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedUnweighted);
+
+            hDijkstraAlgorithm = new Dijkstra(hGraph);
+            hDijkstraAlgorithm.Execute(0, 1);
+
+
+
         }
 
     }

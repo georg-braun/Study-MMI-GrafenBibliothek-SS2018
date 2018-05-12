@@ -46,7 +46,6 @@ namespace GraphLibrary.Algorithm
             Console.WriteLine("Nutzung von Branch-And-Bound: " + FUseBranchAndBound.ToString());
             FStopwatch.Start();
             var hNodeDictionary = FUsedGraph.GetNodeDictionary();
-            var hUnvisitedNodes = new HashSet<INode>(hNodeDictionary.Values);
             FNodeCount = hNodeDictionary.Count;
             FEdgeDictionary = FUsedGraph.GetEdgeDictionary();
 
@@ -90,6 +89,7 @@ namespace GraphLibrary.Algorithm
                     if (!_Tour.Contains(hNeighborEdge.Node.Id))
                     {
                         var hTourCost = _TourCost + hNeighborEdge.Edge.GetWeightValue();
+                        // ToDo Nicht: pass value sondern wieder runternehmen
                         var hTourClone = new HashSet<int>(_Tour);
                         FindBestRouteRecursive(hNeighborEdge.Node, hTourClone, hTourCost);
                     }

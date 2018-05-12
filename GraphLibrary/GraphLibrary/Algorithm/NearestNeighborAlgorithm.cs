@@ -43,7 +43,7 @@ namespace GraphLibrary.Algorithm
                 double hMinimumEdgeWeight = Double.MaxValue;
                 NodeEdge hMinimumNodeEdge = null;
 
-                // Guck dir alle Nachbarn vom aktuellen Nachbarn an und wähle die niedrigste Kante zu einem unbesuchten Knoten
+                // Guck dir alle Nachbarn vom aktuellen Knoten an und wähle die niedrigste Kante zu einem unbesuchten Knoten
                 foreach (var hEdgeToNeighbor in hCurrentNode.NeighbourEdges)
                 {
                     var hEdgeToNeighborWeight = hEdgeToNeighbor.Edge.GetWeightValue();
