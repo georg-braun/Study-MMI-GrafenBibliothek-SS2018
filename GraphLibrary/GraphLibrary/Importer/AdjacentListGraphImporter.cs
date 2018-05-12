@@ -46,6 +46,9 @@ namespace GraphLibrary.Importer
                 case EdgeKind.UndirectedWeighted:
                     ImportWeightedUndirected(hGraph, hAdjacentListFileContent);
                     break;
+                case EdgeKind.DirectedWeighted:
+                    ImportWeightedDirected(hGraph, hAdjacentListFileContent);
+                    break;
             } //switch (_EdgeKind)
             
             
@@ -57,6 +60,27 @@ namespace GraphLibrary.Importer
             Console.WriteLine();
 
             return hGraph;
+        }
+
+        private static void ImportWeightedDirected(IGraph _Graph, String[] _AdjacentListFileContent)
+        {
+            var hGraphNodes = _Graph.GetNodeDictionary();
+            for (int hRowIndex = 1; hRowIndex < _AdjacentListFileContent.Length; hRowIndex++)
+            {
+                var hRow = _AdjacentListFileContent[hRowIndex];
+                var hEdgeInfo = hRow.Split('\t');
+
+                var hNodeAId = Convert.ToInt32(hEdgeInfo[0]);
+                var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
+                var hEdgeWeight = Convert.ToDouble(hEdgeInfo[2], CultureInfo.InvariantCulture);
+
+                var hWeightValue = new CostWeighted(hEdgeWeight);
+
+                var hNodeA = hGraphNodes[hNodeAId];
+                var hNodeB = hGraphNodes[hNodeBId];
+
+                _Graph.CreateDirectedEdge(hNodeA, hNodeB, hWeightValue);
+            }
         }
 
         private static void ImportUnweightedUndirected(IGraph _Graph, String [] _HAdjacentListFileContentStrings)

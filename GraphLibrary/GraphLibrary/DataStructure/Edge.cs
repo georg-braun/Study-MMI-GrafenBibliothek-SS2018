@@ -99,6 +99,11 @@ namespace GraphLibrary.DataStructure
             return hPossibleEndpoint;
         }
 
+        public INode GetEdgeSource()
+        {
+            return FStartNode;
+        }
+
         public override INode[] GetPossibleEnpoints()
         {
             return new[] { FEndNode };

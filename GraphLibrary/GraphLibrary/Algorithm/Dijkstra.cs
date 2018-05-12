@@ -19,7 +19,7 @@ namespace GraphLibrary.Algorithm
             FUsedGraph = _UsedGraph;
         }
 
-        // ToDo: Noch fehlerhaft! Muss mich gerichteten Kanten noch umgehen. Bisher immer nur ungerichtet geguckt
+        // ToDo: Noch fehlerhaft! Bei Wege 2 noch anderes Ergebnis
         public void Execute(int _SourceNodeId, int _TargetNodeId)
         {
             var hNodeDictionary = FUsedGraph.GetNodeDictionary();
@@ -85,7 +85,18 @@ namespace GraphLibrary.Algorithm
                 hCosts += hParentNodeEdge[hTmpNode].GetWeightValue();
                 hShortestPathStack.Push(hTmpNode.Id);
                 // "Knoten davor"
-                hTmpNode = hParentNodeEdge[hTmpNode].GetOtherEndpoint(hTmpNode);
+                if (hParentNodeEdge[hTmpNode] is DirectedEdge)
+                {
+                    DirectedEdge hEdge = (DirectedEdge)hParentNodeEdge[hTmpNode];
+                    hTmpNode = hEdge.GetEdgeSource();
+                }
+                else if(hParentNodeEdge[hTmpNode] is UndirectedEdge)
+                {
+                    UndirectedEdge hEdge = (UndirectedEdge)hParentNodeEdge[hTmpNode];
+                    hTmpNode = hParentNodeEdge[hTmpNode].GetOtherEndpoint(hTmpNode);
+                }
+
+
             }
             hShortestPathStack.Push(hStartNode.Id);
 

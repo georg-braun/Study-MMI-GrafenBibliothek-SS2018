@@ -113,31 +113,46 @@ namespace GraphLibrary
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
             var hFileName = GraphFileRessources.P4GraphWege1;
-            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedUnweighted);
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
 
             var hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(2,0);
 
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
+            Console.WriteLine("Gerichtet");
             hFileName = GraphFileRessources.P4GraphWege2;
-            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedUnweighted);
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
 
             hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(2, 0);
 
-            //Console.WriteLine("-------------------------------");
-            //Console.WriteLine("Neuer Graph");
-            //hFileName = GraphFileRessources.P4GraphWege2;
-            //hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            Console.WriteLine("Gerichtet");
+            hFileName = GraphFileRessources.P4GraphWege3;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
 
-            //hDijkstraAlgorithm = new Dijkstra(hGraph);
-            //hDijkstraAlgorithm.Execute(2, 0);
+            
+            hDijkstraAlgorithm = new Dijkstra(hGraph);
+            hDijkstraAlgorithm.Execute(2, 0);
 
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
+            Console.WriteLine("Gerichtet");
             hFileName = GraphFileRessources.P4GraphG12;
-            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedUnweighted);
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
+
+            hDijkstraAlgorithm = new Dijkstra(hGraph);
+            hDijkstraAlgorithm.Execute(0, 1);
+
+
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            Console.WriteLine("Ungerichtet");
+            hFileName = GraphFileRessources.P4GraphG12;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.UndirectedWeighted);
 
             hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(0, 1);
