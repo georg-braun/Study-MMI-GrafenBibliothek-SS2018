@@ -19,91 +19,120 @@ namespace GraphLibrary.Algorithm
             FUsedGraph = _UsedGraph;
         }
 
-        // ToDo: Noch fehlerhaft! Bei Wege 2 noch anderes Ergebnis
+
         public void Execute(int _SourceNodeId, int _TargetNodeId)
         {
-            var hNodeDictionary = FUsedGraph.GetNodeDictionary();
-            var hStartNode = hNodeDictionary[_SourceNodeId];
-            var hTargetNode = hNodeDictionary[_TargetNodeId];
-            bool hTargetFound = false;
 
-            var hCostDictionary = new Dictionary<INode,double>();
-            var hParentNodeEdge = new Dictionary<INode, Edge>();    // Speichert mit welcher Kante ein Knoten erreicht wurde
-            var hNodePriorityQueue = new SimplePriorityQueue<INode, double>();
-            var hVisitedNodes = new HashSet<INode>();
-
-            // Initialisierung
-            foreach (var hNode in hNodeDictionary.Values)
+            try
             {
-                hParentNodeEdge.Add(hNode, null);
-                hCostDictionary.Add(hNode,Double.PositiveInfinity);
-            }
-            hNodePriorityQueue.Enqueue(hStartNode, 0.0);
-            hCostDictionary[hStartNode] = 0.0;
-            
-
-            while (!hTargetFound)
-            {
-                var hCurrentNode = hNodePriorityQueue.Dequeue();
-                hVisitedNodes.Add(hCurrentNode);
-
-                if (hCurrentNode == hTargetNode)
+                foreach (var hEdge in FUsedGraph.GetEdgeIndices())
                 {
-                    hTargetFound = true;
+                    if (hEdge.GetWeightValue() < 0.0)
+                    {
+                        throw new DijkastraException("Negative Kantengewichte gefunden. Der Dijkstra-Algorithmus kann nicht mit mit negativen Werten umgehen.");
+                    }
                 }
 
-                foreach (var hNeighborEdge in hCurrentNode.NeighbourEdges)
+                var hNodeDictionary = FUsedGraph.GetNodeDictionary();
+                var hStartNode = hNodeDictionary[_SourceNodeId];
+                var hTargetNode = hNodeDictionary[_TargetNodeId];
+                bool hTargetFound = false;
+
+                var hCostDictionary = new Dictionary<INode, double>();
+                var hParentNodeEdge = new Dictionary<INode, Edge>(); // Speichert mit welcher Kante ein Knoten erreicht wurde
+                var hNodePriorityQueue = new SimplePriorityQueue<INode, double>();
+                var hVisitedNodes = new HashSet<INode>();
+
+                // Initialisierung
+                foreach (var hNode in hNodeDictionary.Values)
                 {
-                    if (!hVisitedNodes.Contains(hNeighborEdge.Node))
+                    hParentNodeEdge.Add(hNode, null);
+                    hCostDictionary.Add(hNode, Double.PositiveInfinity);
+                }
+
+                hNodePriorityQueue.Enqueue(hStartNode, 0.0);
+                hCostDictionary[hStartNode] = 0.0;
+
+
+                while (!hTargetFound)
+                {
+                    var hCurrentNode = hNodePriorityQueue.Dequeue();
+                    hVisitedNodes.Add(hCurrentNode);
+
+                    if (hCurrentNode == hTargetNode)
                     {
-                        // Nachbar ist noch nicht besucht worden
-                        var hTourCostToNeighbor = hCostDictionary[hCurrentNode] + hNeighborEdge.Edge.GetWeightValue();
-                        // Ist der Nachbar schon in der Priority Queue drin und hab einen besseren Weg gefunden?
-                        if (hNodePriorityQueue.Contains(hNeighborEdge.Node) && (hTourCostToNeighbor < hNodePriorityQueue.GetPriority(hNeighborEdge.Node)))
+                        hTargetFound = true;
+                    }
+
+                    foreach (var hNeighborEdge in hCurrentNode.NeighbourEdges)
+                    {
+                        if (!hVisitedNodes.Contains(hNeighborEdge.Node))
                         {
-                            hNodePriorityQueue.UpdatePriority(hNeighborEdge.Node, hTourCostToNeighbor);
-                            hParentNodeEdge[hNeighborEdge.Node] = hNeighborEdge.Edge;
-                            hCostDictionary[hNeighborEdge.Node] = hTourCostToNeighbor;
-                        }
-                        else if (!hNodePriorityQueue.Contains(hNeighborEdge.Node))
-                        {
-                            // Nachbarknoten wurde noch garnicht bemerkt. Also mit den gerade gefunden Kosten in die Priority Queue
-                            hNodePriorityQueue.Enqueue(hNeighborEdge.Node, hTourCostToNeighbor);
-                            hParentNodeEdge[hNeighborEdge.Node] = hNeighborEdge.Edge;
-                            hCostDictionary[hNeighborEdge.Node] = hTourCostToNeighbor;
+                            // Nachbar ist noch nicht besucht worden
+                            var hTourCostToNeighbor = hCostDictionary[hCurrentNode] + hNeighborEdge.Edge.GetWeightValue();
+
+                            // Ist der Nachbar schon in der Priority Queue drin und hab einen besseren Weg gefunden?
+                            if (hNodePriorityQueue.Contains(hNeighborEdge.Node) && (hTourCostToNeighbor < hNodePriorityQueue.GetPriority(hNeighborEdge.Node)))
+                            {
+                                hNodePriorityQueue.UpdatePriority(hNeighborEdge.Node, hTourCostToNeighbor);
+                                hParentNodeEdge[hNeighborEdge.Node] = hNeighborEdge.Edge;
+                                hCostDictionary[hNeighborEdge.Node] = hTourCostToNeighbor;
+                            }
+                            else if (!hNodePriorityQueue.Contains(hNeighborEdge.Node))
+                            {
+                                // Nachbarknoten wurde noch garnicht bemerkt. Also mit den gerade gefunden Kosten in die Priority Queue
+                                hNodePriorityQueue.Enqueue(hNeighborEdge.Node, hTourCostToNeighbor);
+                                hParentNodeEdge[hNeighborEdge.Node] = hNeighborEdge.Edge;
+                                hCostDictionary[hNeighborEdge.Node] = hTourCostToNeighbor;
+                            }
                         }
                     }
                 }
-            } 
 
-            // Jetzt vom Zielknonten zurück zum Startknoten ;)
-            var hTmpNode = hTargetNode;
-            var hShortestPathStack = new Stack<int>();
-            var hCosts = 0.0;
-            while (hTmpNode != hStartNode)
-            {
-                hCosts += hParentNodeEdge[hTmpNode].GetWeightValue();
-                hShortestPathStack.Push(hTmpNode.Id);
-                // "Knoten davor"
-                if (hParentNodeEdge[hTmpNode] is DirectedEdge)
+                // Jetzt vom Zielknonten zurück zum Startknoten ;)
+                var hTmpNode = hTargetNode;
+                var hShortestPathStack = new Stack<int>();
+                var hCosts = 0.0;
+                while (hTmpNode != hStartNode)
                 {
-                    DirectedEdge hEdge = (DirectedEdge)hParentNodeEdge[hTmpNode];
-                    hTmpNode = hEdge.GetEdgeSource();
-                }
-                else if(hParentNodeEdge[hTmpNode] is UndirectedEdge)
-                {
-                    UndirectedEdge hEdge = (UndirectedEdge)hParentNodeEdge[hTmpNode];
-                    hTmpNode = hParentNodeEdge[hTmpNode].GetOtherEndpoint(hTmpNode);
-                }
+                    hCosts += hParentNodeEdge[hTmpNode].GetWeightValue();
+                    hShortestPathStack.Push(hTmpNode.Id);
+
+                    // "Knoten davor"
+                    if (hParentNodeEdge[hTmpNode] is DirectedEdge)
+                    {
+                        DirectedEdge hEdge = (DirectedEdge)hParentNodeEdge[hTmpNode];
+                        hTmpNode = hEdge.GetEdgeSource();
+                    }
+                    else if (hParentNodeEdge[hTmpNode] is UndirectedEdge)
+                    {
+                        UndirectedEdge hEdge = (UndirectedEdge)hParentNodeEdge[hTmpNode];
+                        hTmpNode = hParentNodeEdge[hTmpNode].GetOtherEndpoint(hTmpNode);
+                    }
 
 
+                }
+
+                hShortestPathStack.Push(hStartNode.Id);
+
+                // Ausgabe
+                Console.WriteLine("Kürzeste Route:\t" + string.Join(",", hShortestPathStack));
+                Console.WriteLine("Kosten:\t" + hCosts);
             }
-            hShortestPathStack.Push(hStartNode.Id);
+            catch (DijkastraException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
-            // Ausgabe
-            Console.WriteLine("Kürzeste Route:\t"+ string.Join(",", hShortestPathStack));
-            Console.WriteLine("Kosten:\t" + hCosts);
-        }
-
+        }  // Execute
     }
+    internal class DijkastraException : Exception
+    {
+        public DijkastraException(string _Message)
+            : base(_Message)
+        {
+        }
+    }
+
+
 }
