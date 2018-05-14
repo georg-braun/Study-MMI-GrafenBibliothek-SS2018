@@ -22,7 +22,7 @@ namespace GraphLibrary.Algorithm
 
         public void Execute(int _SourceNodeId, int _TargetNodeId)
         {
-
+            Console.WriteLine("Start Dijkstra");
             try
             {
                 foreach (var hEdge in FUsedGraph.GetEdgeIndices())
@@ -109,8 +109,6 @@ namespace GraphLibrary.Algorithm
                         UndirectedEdge hEdge = (UndirectedEdge)hParentNodeEdge[hTmpNode];
                         hTmpNode = hParentNodeEdge[hTmpNode].GetOtherEndpoint(hTmpNode);
                     }
-
-
                 }
 
                 hShortestPathStack.Push(hStartNode.Id);

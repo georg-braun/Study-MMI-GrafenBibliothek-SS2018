@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\BellmanFordAlgorithm.cs" />
     <Compile Include="Algorithm\BreadthFirstSearch.cs" />
     <Compile Include="Algorithm\DepthFirstSearch.cs" />
     <Compile Include="Algorithm\Dijkstra.cs" />

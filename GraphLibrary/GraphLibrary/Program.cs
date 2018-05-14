@@ -118,6 +118,9 @@ namespace GraphLibrary
             var hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(2,0);
 
+            var hBellmanFordAlgorithm = new BellmanFordAlgorithm(hGraph);
+            hBellmanFordAlgorithm.Execute(2, 0);
+
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
             Console.WriteLine("Gerichtet");
@@ -126,6 +129,9 @@ namespace GraphLibrary
 
             hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(2, 0);
+
+            hBellmanFordAlgorithm = new BellmanFordAlgorithm(hGraph);
+            hBellmanFordAlgorithm.Execute(2, 0);
 
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
@@ -137,6 +143,9 @@ namespace GraphLibrary
             hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(2, 0);
 
+            hBellmanFordAlgorithm = new BellmanFordAlgorithm(hGraph);
+            hBellmanFordAlgorithm.Execute(2, 0);
+
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
             Console.WriteLine("Gerichtet");
@@ -146,6 +155,8 @@ namespace GraphLibrary
             hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(0, 1);
 
+            hBellmanFordAlgorithm = new BellmanFordAlgorithm(hGraph);
+            hBellmanFordAlgorithm.Execute(0, 1);
 
 
             Console.WriteLine("-------------------------------");
@@ -156,6 +167,9 @@ namespace GraphLibrary
 
             hDijkstraAlgorithm = new Dijkstra(hGraph);
             hDijkstraAlgorithm.Execute(0, 1);
+
+            hBellmanFordAlgorithm = new BellmanFordAlgorithm(hGraph);
+            hBellmanFordAlgorithm.Execute(0, 1);
 
 
 
