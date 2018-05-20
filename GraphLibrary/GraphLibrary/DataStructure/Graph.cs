@@ -22,6 +22,8 @@ namespace GraphLibrary.DataStructure
 
         void CreateDirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight);
 
+        void CreateDirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
+
         void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo);
 
         void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight);
@@ -40,9 +42,8 @@ namespace GraphLibrary.DataStructure
 
         Edge GetEdge(int _FromNodeId, int _ToNodeId, bool _Undirected);
 
-        void ComputeEdgeDictionary();
-
-        Dictionary<string, Edge> GetEdgeDictionary();
+        
+        Dictionary<string, Edge> GenerateEdgeHashDictionary();
     } 
 
     class Graph : IGraph
@@ -51,31 +52,34 @@ namespace GraphLibrary.DataStructure
 
         private readonly List<Edge> FEdgeIndices;
 
-        public Dictionary<string, Edge> FEdgeDictionary;
+        private Dictionary<string, Edge> FEdgeHashDictionary;
 
         public Graph()
         {
             FNodeIndices = new Dictionary<int, INode>();
             FEdgeIndices = new List<Edge>();
-            FEdgeDictionary = new Dictionary<string, Edge>();
         }
 
-        public void ComputeEdgeDictionary()
+        public Dictionary<string, Edge> GenerateEdgeHashDictionary()
         {
-            FEdgeDictionary.Clear();
-            foreach (var hEdge in FEdgeIndices)
+            if (FEdgeHashDictionary == null)
             {
-                var hNodes = hEdge.GetPossibleEnpoints();
-                FEdgeDictionary.Add(hNodes[0].Id+"-" + hNodes[1].Id, hEdge);
-                FEdgeDictionary.Add(hNodes[1].Id + "-" + hNodes[0].Id, hEdge);
-            } 
-        }
+                FEdgeHashDictionary = new Dictionary<string, Edge>();
 
-        public Dictionary<string, Edge> GetEdgeDictionary()
-        {
-            ComputeEdgeDictionary();
-            return FEdgeDictionary;
+                foreach (var hEdge in FEdgeIndices)
+                {
+                    var hEdgeHashes = hEdge.EdgeHashInfo();
+
+                    foreach (var hEdgeHash in hEdgeHashes)
+                    {
+                        FEdgeHashDictionary.Add(hEdgeHash, hEdge);
+                    }
+                }
+            }
+
+            return FEdgeHashDictionary;
         }
+        
 
         public Dictionary<int, INode> GetNodeDictionary()
         {
@@ -122,6 +126,16 @@ namespace GraphLibrary.DataStructure
             FEdgeIndices.Add(hNewDirectedEdge);
             _StartNode.AddEdge(hNewDirectedEdge);
             
+        }
+
+        public void CreateDirectedEdge(int _StartNodeId, int _TargetNodeId, IWeight _Weight)
+        {
+            var hStartNode = FNodeIndices[_StartNodeId];
+            var hTargetNode = FNodeIndices[_TargetNodeId];
+
+            var hNewDirectedEdge = new DirectedEdge(hStartNode, hTargetNode, _Weight);
+            FEdgeIndices.Add(hNewDirectedEdge);
+            hStartNode.AddEdge(hNewDirectedEdge);
         }
 
         public void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo)

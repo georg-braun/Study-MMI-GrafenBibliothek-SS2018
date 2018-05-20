@@ -14,6 +14,8 @@ namespace GraphLibrary.DataStructure
 
         public abstract INode[] GetPossibleEnpoints();
 
+        public abstract List<string> EdgeHashInfo();
+
         protected Edge(IWeight _Weight)
         {
             FWeight = _Weight;
@@ -69,6 +71,14 @@ namespace GraphLibrary.DataStructure
         {
             return new[] { FNodeA, FNodeB };
         }
+
+        public override List<string> EdgeHashInfo()
+        {
+            var hResult = new List<string>();
+            hResult.Add(FNodeA.Id + "-" + FNodeB.Id);
+            hResult.Add(FNodeB.Id + "-" + FNodeA.Id);
+            return hResult;
+        }
     }
 
     class DirectedEdge : Edge
@@ -107,6 +117,13 @@ namespace GraphLibrary.DataStructure
         public override INode[] GetPossibleEnpoints()
         {
             return new[] { FEndNode };
+        }
+
+        public override List<string> EdgeHashInfo()
+        {
+            var hResult = new List<string>();
+            hResult.Add(FStartNode.Id + "-" + FEndNode.Id);
+            return hResult;
         }
     }
 }
