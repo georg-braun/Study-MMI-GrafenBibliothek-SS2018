@@ -11,17 +11,14 @@ namespace GraphLibrary.Algorithm
     class BreadthFirstSearch : IGraphTraverseAlgorithm
     {
         private INode FStartNode;
-        
-        
+
+        private Dictionary<int, NodeEdge> FParentNodeEdges; // Speichert den "Vaterknoten" und dessen Kante
 
         public BreadthFirstSearch()
         {
             
         }
-
-
-
-
+        
         public IGraph Execute(INode _StartNode)
         {
             FStartNode = _StartNode;
@@ -30,8 +27,9 @@ namespace GraphLibrary.Algorithm
 
         private IGraph BreadthFirstSearchAlgorithm(INode _Node)
         {
+            FParentNodeEdges = new Dictionary<int, NodeEdge>();
             var hSubGraph = new Graph();
-            hSubGraph.TryToAddNode(_Node);
+            hSubGraph.CreateNewNode(_Node.Id);
 
             var FVisitedBfsNodes = new HashSet<int>();
             var hBfsQueue = new Queue<INode>();
@@ -50,14 +48,29 @@ namespace GraphLibrary.Algorithm
                     {
                         FVisitedBfsNodes.Add(hNeighbourEdge.Node.Id);
                         hBfsQueue.Enqueue(hNeighbourEdge.Node);
-                        hSubGraph.TryToAddNode(hNeighbourEdge.Node);
-                        hSubGraph.AddEdge(hNeighbourEdge.Edge);
+                        var hNewNode = hSubGraph.CreateNewNode(hNeighbourEdge.Node.Id);
+                        Edge hNewEdge;
+                        if (hNeighbourEdge.Edge.IsWeighted())
+                        {
+                            hNewEdge = hSubGraph.CreateUndirectedEdge(hCurrentNode.Id, hNewNode.Id, new CostWeighted(hNeighbourEdge.Edge.GetWeightValue()));
+                        }
+                        else
+                        {
+                            hNewEdge = hSubGraph.CreateUndirectedEdge(hCurrentNode.Id, hNewNode.Id);
+                        }
+                        FParentNodeEdges.Add(hNewNode.Id, new NodeEdge(hCurrentNode, hNewEdge));
                     }
                 }
             }
+
+            hSubGraph.UpdateNeighbourInfoInNodes();
             return hSubGraph;
         }
 
+        public Dictionary<int, NodeEdge> GetParentNodeEdge()
+        {
+            return FParentNodeEdges;
+        }
 
 
         public void PrintInfosToConsole()

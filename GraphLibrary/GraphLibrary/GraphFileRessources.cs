@@ -49,5 +49,8 @@ namespace GraphLibrary
         public const string P4GraphWege3 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum4\Wege3.txt";
         public const string P4GraphG12 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum2\G_1_2.txt";
 
+        // P5
+        public const string P5Fluesse = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum5\Fluss.txt";
+        public const string P5GraphG12 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum2\G_1_2.txt";
     }
 }

@@ -47,7 +47,7 @@ namespace GraphLibrary.Algorithm
             FStopwatch.Start();
             var hNodeDictionary = FUsedGraph.GetNodeDictionary();
             FNodeCount = hNodeDictionary.Count;
-            FEdgeDictionary = FUsedGraph.GenerateEdgeDictionary();
+            FEdgeDictionary = FUsedGraph.GenerateEdgeHashDictionary();
 
             FStartNode = hNodeDictionary[0];
             

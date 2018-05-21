@@ -16,7 +16,7 @@ namespace GraphLibrary.DataStructure
 
         void UpdateNeighbourInfoInNodes();
 
-        void CreateNewNode(int _Node);
+        INode CreateNewNode(int _Node);
 
         void CreateDirectedEdge(INode _StartNode, INode _EndNode);
 
@@ -24,11 +24,13 @@ namespace GraphLibrary.DataStructure
 
         void CreateDirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
 
-        void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo);
+        Edge CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo);
 
-        void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight);
+        Edge CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId);
 
-        void CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
+        Edge CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight);
+
+        Edge CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
 
         INode TryToAddNode(INode _Node);
 
@@ -104,14 +106,16 @@ namespace GraphLibrary.DataStructure
             } 
         }
 
-        public void CreateNewNode(int _NodeId)
+        public INode CreateNewNode(int _NodeId)
         {
             var hNewNode = new Node(_NodeId);
             if (!FNodeIndices.ContainsKey(_NodeId))
             {
                 FNodeIndices.Add(hNewNode.Id, hNewNode);
             }
-            
+
+            return hNewNode;
+
         }
 
         public void CreateDirectedEdge(INode _StartNode, INode _EndNode)
@@ -138,20 +142,30 @@ namespace GraphLibrary.DataStructure
             hStartNode.AddEdge(hNewDirectedEdge);
         }
 
-        public void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo)
+        public Edge CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo)
         {
-            CreateUndirectedEdge(_NodeOne, _NodeTwo, new Unweighted());
+            return CreateUndirectedEdge(_NodeOne, _NodeTwo, new Unweighted());
         }
 
-        public void CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight)
+        public Edge CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId)
+        {
+            var hNodeOne = FNodeIndices[_NodeOneId];
+            var hNodeTwo = FNodeIndices[_NodeTwoId];
+
+            return CreateUndirectedEdge(hNodeOne, hNodeTwo);
+        }
+
+        public Edge CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo, IWeight _Weight)
         {
             var hNewUndirectedEdge = new UndirectedEdge(_NodeOne, _NodeTwo, _Weight);
             FEdgeIndices.Add(hNewUndirectedEdge);
             _NodeOne.AddEdge(hNewUndirectedEdge);
             _NodeTwo.AddEdge(hNewUndirectedEdge);
+
+            return hNewUndirectedEdge;
         }
 
-        public void CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight)
+        public Edge CreateUndirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight)
         {
             var hNodeOne = FNodeIndices[_NodeOneId];
             var hNodeTwo = FNodeIndices[_NodeTwoId];
@@ -160,6 +174,8 @@ namespace GraphLibrary.DataStructure
             FEdgeIndices.Add(hNewUndirectedEdge);
             hNodeOne.AddEdge(hNewUndirectedEdge);
             hNodeTwo.AddEdge(hNewUndirectedEdge);
+
+            return hNewUndirectedEdge;
         }
 
 

@@ -15,7 +15,7 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            P4Dijkstra();
+            P5EdmondsKarp();
 
             Console.ReadLine();
         }
@@ -170,9 +170,25 @@ namespace GraphLibrary
 
             hBellmanFordAlgorithm = new BellmanFordAlgorithm(hGraph);
             hBellmanFordAlgorithm.Execute(0, 1);
+        }
 
+        private static void P5EdmondsKarp()
+        {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            var hFileName = GraphFileRessources.P5Fluesse;
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
 
+            var hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(hGraph);
+            hEdmondsKarpAlgorithm.Execute(0,7);
 
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P5GraphG12;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
+
+            hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(hGraph);
+            hEdmondsKarpAlgorithm.Execute(0, 7);
         }
 
     }
