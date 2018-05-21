@@ -99,8 +99,11 @@ namespace GraphLibrary.Algorithm
             Console.WriteLine("Flussverlauf:");
             foreach (var hFlussInfo in FFlussGraphDictionary)
             {
-                Console.WriteLine(hFlussInfo.Key + "\t" + hFlussInfo.Value);
-            } //foreach (var VARIABLE in COLLECTION)
+                if (hFlussInfo.Value > 0.0)
+                {
+                    Console.WriteLine(hFlussInfo.Key + "\t" + hFlussInfo.Value);
+                }
+            } 
             Console.WriteLine("Gesamtfluss:\t" + hGesamtfluss);
 
         }
