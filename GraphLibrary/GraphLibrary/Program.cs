@@ -15,7 +15,7 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            P5EdmondsKarp();
+            P5DijkstraBellman();
 
             Console.ReadLine();
         }
@@ -107,7 +107,7 @@ namespace GraphLibrary
             }
         }
 
-        private static void P4Dijkstra()
+        private static void P5DijkstraBellman()
         {
 
             Console.WriteLine("-------------------------------");
@@ -172,7 +172,7 @@ namespace GraphLibrary
             hBellmanFordAlgorithm.Execute(0, 1);
         }
 
-        private static void P5EdmondsKarp()
+        private static void P6EdmondsKarp()
         {
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");

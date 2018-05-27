@@ -32,6 +32,11 @@ namespace GraphLibrary.DataStructure
             return FWeight.WeightValue();
         }
 
+        public IWeight GetWeight()
+        {
+            return FWeight;
+        }
+
         
 
     }
