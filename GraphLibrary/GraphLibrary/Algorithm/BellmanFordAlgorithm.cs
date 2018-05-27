@@ -30,6 +30,11 @@ namespace GraphLibrary.Algorithm
         private IGraph FShortestPathGraph;
         public IGraph ShortestPathGraph => FShortestPathGraph;
 
+        private List<int> FCycleList;
+        public List<int> CycleList => FCycleList;
+
+        public double CycleCosts { get; set; } = 0.0;
+
         public void Execute(int _SourceNodeId, int _TargetNodeId)
         {
             Console.WriteLine("Start Bellman Ford");
@@ -78,8 +83,65 @@ namespace GraphLibrary.Algorithm
             if (hGraphHasNegativeCycle)
             {
                 FHasNegativeCylces = true;
+
+                // Bei einem Zyklus laufe ich solange die Parents durch bis ich wieder beim ursprünglichen Knoten auskomme
+                // Ermitteln der negativen Zyklen
+                var hAvailableNodes = new List<INode>(FParentNodeEdge.Keys);
+                var hCycleList = new List<int>();
+                var hCycleDetected = false;
+                var hCycleCosts = 0.0;
+
+                while (!hCycleDetected)
+                {
+                    var hStartNodeInCycleDetection = hAvailableNodes[0];
+                    var hCurrentNode = hStartNodeInCycleDetection;
+                    hCycleList.Clear();
+                    hCycleCosts = 0.0;
+
+                    // Pfad entlang laufen
+                    while (hCurrentNode != null)
+                    {
+                        // Prüfen ob der Knoten im aktuellen Pfad schon vorkam
+                        if (hCycleList.Contains(hCurrentNode.Id))
+                        {
+                            if (hCycleList[0] == hCurrentNode.Id)
+                            {
+                                // Zyklus fertig. Beim Startknoten geschlossen
+                                // Wert zurückgeben
+                                hCycleDetected = true;
+                            }
+                            else
+                            {
+                                // Zyklus vorhanden, aber es sind noch Nicht-Zyklus-Knoten vorhanden
+                                hAvailableNodes.Remove(hStartNodeInCycleDetection);
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            // Knoten in den aktuellen Pfad einfügen
+                            hCycleList.Add(hCurrentNode.Id);
+                            hCycleCosts += (FParentNodeEdge[hCurrentNode].Edge.GetWeightValue());
+                            // Nächsten Knoten betrachten
+                            hCurrentNode = FParentNodeEdge[hCurrentNode].Node;
+                        }
+                        
+                    }
+
+                    // Wenn der aktuelle Knoten == null ist gab es von dem ersten Knoten aus keinen Zyklus
+                   hAvailableNodes.Remove(hStartNodeInCycleDetection);
+                }
+
+                // Zyklus gefunden. Die Elemente noch in eine richtige Reihenfolge bringen
+                hCycleList.Reverse();
+                FCycleList = hCycleList;
+                CycleCosts = hCycleCosts;
+
+                // Ausgabe: 
                 Console.WriteLine("Graph enthält einen negativen Zyklus");
-                // ToDo Ausgeben welche negativen Zyklen es gibt
+                Console.WriteLine(string.Join(",", FCycleList));
+                Console.WriteLine("Zykluskosten: " + CycleCosts);
+
             }
             else
             {
@@ -148,6 +210,7 @@ namespace GraphLibrary.Algorithm
         private bool BellmanFordIteration()
         {
             var hCostsImproved = false;
+            // Für alle Kanten( Für jeden Knoten -> Alle möglichen Kanten des Knotens)
             // Für jeden vorhandenen Knoten..
             foreach (var hCurrentNode in FNodeDictionary.Values)
             {
