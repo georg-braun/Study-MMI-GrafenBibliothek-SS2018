@@ -62,6 +62,7 @@ namespace GraphLibrary.Algorithm
                     if (hCurrentNode == hTargetNode)
                     {
                         hTargetFound = true;
+                        // break
                     }
 
                     foreach (var hNeighborEdge in hCurrentNode.NeighbourEdges)
