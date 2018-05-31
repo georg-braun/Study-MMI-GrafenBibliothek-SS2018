@@ -15,7 +15,7 @@ namespace GraphLibrary
 
         static void Main(string[] args)
         {
-            P5DijkstraBellman();
+            P7CycleCanceling();
 
             Console.ReadLine();
         }
@@ -189,6 +189,15 @@ namespace GraphLibrary
 
             hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(hGraph);
             hEdmondsKarpAlgorithm.Execute(0, 7);
+        }
+
+        private static void P7CycleCanceling()
+        {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            var hFileName = GraphFileRessources.P7CostMinFluesse1;
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+            
         }
 
     }

@@ -28,7 +28,7 @@ namespace GraphLibrary.DataStructure
             FWeight.Add(_Weight);
         }
 
-        protected void AddWeight(IWeight _Weight)
+        public void AddWeight(IWeight _Weight)
         {
             FWeight.Add(_Weight);
         }
@@ -164,6 +164,12 @@ namespace GraphLibrary.DataStructure
         private INode FEndNode;
 
         public DirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight) : base(_Weight)
+        {
+            FStartNode = _StartNode;
+            FEndNode = _EndNode;
+        }
+
+        public DirectedEdge(INode _StartNode, INode _EndNode) : base()
         {
             FStartNode = _StartNode;
             FEndNode = _EndNode;

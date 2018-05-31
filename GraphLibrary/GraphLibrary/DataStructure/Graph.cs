@@ -132,6 +132,19 @@ namespace GraphLibrary.DataStructure
             
         }
 
+        public void CreateDirectedEdge(INode _StartNode, INode _EndNode, IWeight[] _Weight)
+        {
+            var hNewDirectedEdge = new DirectedEdge(_StartNode, _EndNode);
+            foreach (var hWeight in _Weight)
+            {
+                hNewDirectedEdge.AddWeight(hWeight);
+            } 
+            // Todo: Checken dass keine Duplikate entstehen?
+            FEdgeIndices.Add(hNewDirectedEdge);
+            _StartNode.AddEdge(hNewDirectedEdge);
+
+        }
+
         public void CreateDirectedEdge(int _StartNodeId, int _TargetNodeId, IWeight _Weight)
         {
             var hStartNode = FNodeIndices[_StartNodeId];
@@ -199,6 +212,7 @@ namespace GraphLibrary.DataStructure
         public void AddEdge(Edge _Edge)
         {
             FEdgeIndices.Add(_Edge);
+
         }
 
         public double GetTotalGraphWeight()

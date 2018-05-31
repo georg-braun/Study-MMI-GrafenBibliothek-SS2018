@@ -52,5 +52,12 @@ namespace GraphLibrary
         // P5
         public const string P5Fluesse = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum5\Fluss.txt";
         public const string P5GraphG12 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum2\G_1_2.txt";
+
+        // Praktikum Kosten Minimale Flüsse
+        public const string P7CostMinFluesse1 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum6\Kostenminimal1.txt";
+        public const string P7CostMinFluesse2 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum6\Kostenminimal2.txt";
+        public const string P7CostMinFluesse3 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum6\Kostenminimal3.txt";
+        public const string P7CostMinFluesse4 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum6\Kostenminimal4.txt";
+
     }
 }
