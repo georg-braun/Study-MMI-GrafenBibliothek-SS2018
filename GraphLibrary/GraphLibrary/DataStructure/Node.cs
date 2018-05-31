@@ -97,4 +97,14 @@ namespace GraphLibrary.DataStructure
             return hNeighbourIds;
         }
     }
+
+    class BalancedNode : Node
+    {
+        private double Balance { get; set; }
+        public BalancedNode(int _Id, double _Balance)
+            : base(_Id)
+        {
+            Balance = _Balance;
+        }
+    }
 }

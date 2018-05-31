@@ -12,7 +12,8 @@ namespace GraphLibrary.Importer
         UndirectedUnweighted,
         UndirectedWeighted,
         DirectedUnweighted,
-        DirectedWeighted
+        DirectedWeighted,
+        Directed
     } 
 
     static class AdjacentListGraphImporter

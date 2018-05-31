@@ -27,11 +27,11 @@ namespace GraphLibrary.DataStructure
 
     class CostWeighted : IWeight
     {
-        private double FWeightValue;
+        private double FCostValue;
 
-        public CostWeighted(double _WeightValue)
+        public CostWeighted(double _CostValue)
         {
-            FWeightValue = _WeightValue;
+            FCostValue = _CostValue;
         }
 
         public bool HasWeightValue()
@@ -41,7 +41,27 @@ namespace GraphLibrary.DataStructure
 
         public double WeightValue()
         {
-            return FWeightValue;
+            return FCostValue;
+        }
+    }
+
+    class CapacityWeighted : IWeight
+    {
+        private double FCapacityValue;
+
+        public CapacityWeighted(double _CapacityValue)
+        {
+            FCapacityValue = _CapacityValue;
+        }
+
+        public bool HasWeightValue()
+        {
+            return true;
+        }
+
+        public double WeightValue()
+        {
+            return FCapacityValue;
         }
     }
 

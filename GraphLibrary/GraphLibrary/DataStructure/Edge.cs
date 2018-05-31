@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace GraphLibrary.DataStructure
 {
     abstract class Edge
     {
-        private IWeight FWeight;
+        private List<IWeight> FWeight;
 
         public abstract INode GetOtherEndpoint(INode _Node);
 
@@ -16,28 +17,99 @@ namespace GraphLibrary.DataStructure
 
         public abstract List<string> EdgeHashInfo();
 
-        protected Edge(IWeight _Weight)
+        protected Edge()
         {
-            FWeight = _Weight;
+            FWeight = new List<IWeight>();
         }
 
-        
+        protected Edge(IWeight _Weight) 
+            : this()
+        {
+            FWeight.Add(_Weight);
+        }
+
+        protected void AddWeight(IWeight _Weight)
+        {
+            FWeight.Add(_Weight);
+        }
+
+        /// <summary>
+        /// Deprecated. Für Kompatibilitätszwecke noch vorhanden
+        /// Prüft ob es ein Kostengewichtetes Kantengewicht gibt
+        /// </summary>
+        /// <returns>Existenz eines Kostengewichts</returns>
         public bool IsWeighted()
         {
-            return FWeight.HasWeightValue();
+            return IsWeighted<CostWeighted>();
         }
 
+        public bool IsWeighted<T>() where T : IWeight
+        {
+            var hIsWeighted = false;
+            foreach (var hWeight in FWeight)
+            {
+                if (hWeight is T)
+                {
+                    hIsWeighted = true;
+                    break;
+                }
+            }
+            return hIsWeighted;
+        }
+
+
+        /// <summary>
+        /// Deprecated. Für Kompatibilitätszwecke noch vorhanden
+        /// Gibt das Kantengewicht zurück wenn es sich um eine Kosten gewichtete Kante handelt.
+        /// </summary>
+        /// <returns>Wert eines Kostengewichts</returns>
         public double GetWeightValue()
         {
-            return FWeight.WeightValue();
+            return GetWeightValue<CostWeighted>();
+        }
+
+        public double GetWeightValue<T>() where T : IWeight
+        {
+            foreach (var hWeight in FWeight)
+            {
+                switch (hWeight)
+                {
+                    case CapacityWeighted hCapacityWeighted:
+                        return hCapacityWeighted.WeightValue();
+                    case CostWeighted hCostWeighted:
+                        return hCostWeighted.WeightValue();
+                    case Unweighted hUnweighted:
+                        return hUnweighted.WeightValue();
+                } 
+            }
+
+            throw new Exception("No valid Weight Class");
         }
 
         public IWeight GetWeight()
         {
-            return FWeight;
+            return GetWeight<CostWeighted>();
         }
 
-        
+        public IWeight GetWeight<T>() where T : IWeight
+        {
+            foreach (var hWeight in FWeight)
+            {
+                switch (hWeight)
+                {
+                    case CapacityWeighted hCapacityWeighted:
+                        return hCapacityWeighted;
+                    case CostWeighted hCostWeighted:
+                        return hCostWeighted;
+                    case Unweighted hUnweighted:
+                        return hUnweighted;
+                }
+            }
+
+            throw new Exception("No valid Weight Class");
+        }
+
+
 
     }
 
