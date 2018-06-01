@@ -24,7 +24,7 @@ namespace GraphLibrary.Algorithm
             FUsedGraph = _UsedGraph;
         }
 
-        public void Execute(int _StartNodeId, int _TargetNodeId)
+        public Dictionary<string, double> Execute(int _StartNodeId, int _TargetNodeId)
         {
             Console.WriteLine("Starte Edmonds Karp Algorithmus");
             var hStartNode = FUsedGraph.GetNodeDictionary()[_StartNodeId];
@@ -96,16 +96,19 @@ namespace GraphLibrary.Algorithm
                 hBfsGraph = hBfsSearch.Execute(hAugmentationsGraph.GetNodeDictionary()[_StartNodeId]);
             }
 
+            Dictionary<string, double> hResultFlow = new Dictionary<string, double>();
             Console.WriteLine("Flussverlauf:");
             foreach (var hFlussInfo in FFlussGraphDictionary)
             {
                 if (hFlussInfo.Value > 0.0)
                 {
                     Console.WriteLine(hFlussInfo.Key + "\t" + hFlussInfo.Value);
+                    hResultFlow.Add(hFlussInfo.Key, hFlussInfo.Value);
                 }
             } 
             Console.WriteLine("Gesamtfluss:\t" + hGesamtfluss);
 
+            return hResultFlow;
         }
 
         private string InvertEdgeHash(string _BfsPathEdgeHash)
