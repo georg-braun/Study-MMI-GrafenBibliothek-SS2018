@@ -38,12 +38,12 @@ namespace GraphLibrary.Algorithm
                 FFlussGraphDictionary.Add(hEdgeHash,0.0);
             } 
 
-            // Erstelle ein Augmentationsnetzwerk
-            var hAugmentationsGraph = GenerateAugmentationsGraph(FUsedGraph);
+            // Erstelle den Residualgraph
+            var hResidualGraph = GenerateResidualGraph(FUsedGraph);
 
             // Eine Breitensuche auf dem Augmentationsnetzwerk
             var hBfsSearch = new BreadthFirstSearch();
-            var hBfsGraph = hBfsSearch.Execute<CapacityWeighted>(hAugmentationsGraph.GetNodeDictionary()[_StartNodeId]);
+            var hBfsGraph = hBfsSearch.Execute<CapacityWeighted>(hResidualGraph.GetNodeDictionary()[_StartNodeId]);
 
             // Solange im Augmentationsnetzwerk noch ein Pfad zum Zielknoten gefunden wird.
             while (hBfsGraph.GetNodeDictionary().ContainsKey(_TargetNodeId))
@@ -89,11 +89,11 @@ namespace GraphLibrary.Algorithm
                 } 
 
                 // Neues Augmentationsnetzwerk
-                hAugmentationsGraph = GenerateAugmentationsGraph(FUsedGraph);
+                hResidualGraph = GenerateResidualGraph(FUsedGraph);
 
                 // Bfs darauf
                 hBfsSearch = new BreadthFirstSearch();
-                hBfsGraph = hBfsSearch.Execute(hAugmentationsGraph.GetNodeDictionary()[_StartNodeId]);
+                hBfsGraph = hBfsSearch.Execute(hResidualGraph.GetNodeDictionary()[_StartNodeId]);
             }
 
             Dictionary<string, double> hResultFlow = new Dictionary<string, double>();
@@ -117,7 +117,7 @@ namespace GraphLibrary.Algorithm
             return hNodes[1] + "-" + hNodes[0];
         }
 
-        public IGraph GenerateAugmentationsGraph(IGraph _SourceGraph)
+        public IGraph GenerateResidualGraph(IGraph _SourceGraph)
         {
             IGraph hNewAugmentationsGraph = new Graph();
             FHinkantenEdgeHashes = new List<string>();

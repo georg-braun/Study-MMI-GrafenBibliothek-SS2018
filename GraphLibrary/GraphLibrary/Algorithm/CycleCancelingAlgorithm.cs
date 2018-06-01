@@ -20,12 +20,12 @@ namespace GraphLibrary.Algorithm
         public void Execute()
         {
             var hNodeDictionary = FUsedGraph.GetNodeDictionary();
-
+            var hNodeCount = hNodeDictionary.Count;
             // Erstellen der SuperQuelle
-            var hSuperSource = new BalancedNode(-1,0.0);
+            var hSuperSource = new BalancedNode(hNodeCount, 0.0);
             FUsedGraph.TryToAddNode(hSuperSource);
             // Erstellen der SuperSenke
-            var hSuperTarget = new BalancedNode(-2, 0.0);
+            var hSuperTarget = new BalancedNode(hNodeCount+1, 0.0);
             FUsedGraph.TryToAddNode(hSuperTarget);
 
             // Balance der Knoten prüfen und an SuperQuelle und SuperSenke anhängen
@@ -43,7 +43,7 @@ namespace GraphLibrary.Algorithm
                 {
                     // Es ist eine Senke. Dieser Knoten soll nun eine Kante zur SuperSenke haben. Die Kapazität der Kante entspricht der Balance des Knotens
                     var hNewEdge = new DirectedEdge(hNode, hSuperTarget);
-                    hNewEdge.AddWeight(new CapacityWeighted(hNodeBalance));
+                    hNewEdge.AddWeight(new CapacityWeighted(-1.0 * hNodeBalance));
                     FUsedGraph.AddEdge(hNewEdge);   // Todo: Prüfen ob es richtig funktioniert
                 }
             } 
@@ -52,6 +52,8 @@ namespace GraphLibrary.Algorithm
             
 
             // Nun soll der Edmonds-Karp Algorithmus ausgeführt werden. Dabei werden die SuperQuelle und SuperSenke verwendet
+            var hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(FUsedGraph);
+            var hFlow = hEdmondsKarpAlgorithm.Execute(hSuperSource.Id, hSuperTarget.Id);
         }
 
     }
