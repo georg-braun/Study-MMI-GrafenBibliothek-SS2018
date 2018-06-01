@@ -18,14 +18,22 @@ namespace GraphLibrary.Algorithm
         {
             
         }
-        
+
         public IGraph Execute(INode _StartNode)
         {
             FStartNode = _StartNode;
-            return BreadthFirstSearchAlgorithm(FStartNode);
+            return BreadthFirstSearchAlgorithm<CostWeighted>(FStartNode);
         }
 
-        private IGraph BreadthFirstSearchAlgorithm(INode _Node)
+        public IGraph Execute<T>(INode _StartNode) where T : IWeight, new()
+        {
+            FStartNode = _StartNode;
+            return BreadthFirstSearchAlgorithm<T>(FStartNode);
+        }
+
+
+
+        private IGraph BreadthFirstSearchAlgorithm<T>(INode _Node) where T : IWeight, new()
         {
             FParentNodeEdges = new Dictionary<int, NodeEdge>();
             var hSubGraph = new Graph();
@@ -52,7 +60,9 @@ namespace GraphLibrary.Algorithm
                         Edge hNewEdge;
                         if (hNeighbourEdge.Edge.IsWeighted())
                         {
-                            hNewEdge = hSubGraph.CreateUndirectedEdge(hCurrentNode.Id, hNewNode.Id, new CostWeighted(hNeighbourEdge.Edge.GetWeightValue()));
+                            var hNewWeight = new T();
+                            hNewWeight.SetValue(hNeighbourEdge.Edge.GetWeightValue());
+                            hNewEdge = hSubGraph.CreateUndirectedEdge(hCurrentNode.Id, hNewNode.Id, hNewWeight);
                         }
                         else
                         {

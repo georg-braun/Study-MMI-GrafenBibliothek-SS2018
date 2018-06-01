@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,17 +34,20 @@ namespace GraphLibrary.DataStructure
             FWeight.Add(_Weight);
         }
 
-        /// <summary>
-        /// Deprecated. Für Kompatibilitätszwecke noch vorhanden
-        /// Prüft ob es ein Kostengewichtetes Kantengewicht gibt
-        /// </summary>
-        /// <returns>Existenz eines Kostengewichts</returns>
+
         public bool IsWeighted()
         {
-            return IsWeighted<CostWeighted>();
+            foreach (var hWeight in FWeight)
+            {
+                if (hWeight.HasWeightValue())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public bool IsWeighted<T>() where T : IWeight
+        public bool HasWeight<T>() where T : IWeight
         {
             var hIsWeighted = false;
             foreach (var hWeight in FWeight)

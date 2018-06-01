@@ -31,7 +31,7 @@ namespace GraphLibrary.Importer
             return ImportAdjacentList<CostWeighted>(_FilePath, _EdgeKind);
         }
 
-        public static IGraph ImportAdjacentList<T>(string _FilePath, EdgeKind _EdgeKind) where T : IWeight
+        public static IGraph ImportAdjacentList<T>(string _FilePath, EdgeKind _EdgeKind) where T : IWeight, new()
         {
             Console.WriteLine("Starte Importieren: " + _FilePath);
             var hStopwatch = new Stopwatch();
@@ -60,10 +60,10 @@ namespace GraphLibrary.Importer
                     ImportUnweightedUndirected(hGraph, hAdjacentListFileContent);
                     break;
                 case EdgeKind.UndirectedWeighted:
-                    ImportWeightedUndirected(hGraph, hAdjacentListFileContent);
+                    ImportWeightedUndirected<T>(hGraph, hAdjacentListFileContent);
                     break;
                 case EdgeKind.DirectedWeighted:
-                    ImportWeightedDirected(hGraph, hAdjacentListFileContent);
+                    ImportWeightedDirected<T>(hGraph, hAdjacentListFileContent);
                     break;
             } //switch (_EdgeKind)
             

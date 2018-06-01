@@ -43,7 +43,7 @@ namespace GraphLibrary.Algorithm
 
             // Eine Breitensuche auf dem Augmentationsnetzwerk
             var hBfsSearch = new BreadthFirstSearch();
-            var hBfsGraph = hBfsSearch.Execute(hAugmentationsGraph.GetNodeDictionary()[_StartNodeId]);
+            var hBfsGraph = hBfsSearch.Execute<CapacityWeighted>(hAugmentationsGraph.GetNodeDictionary()[_StartNodeId]);
 
             // Solange im Augmentationsnetzwerk noch ein Pfad zum Zielknoten gefunden wird.
             while (hBfsGraph.GetNodeDictionary().ContainsKey(_TargetNodeId))
@@ -145,14 +145,14 @@ namespace GraphLibrary.Algorithm
                 // Hinkante einfügen?
                 if (hValueRestkapa > 0.0)
                 {
-                    hNewAugmentationsGraph.CreateDirectedEdge(hStartNode.Id, hTargetNode.Id, new CostWeighted(hValueRestkapa));
+                    hNewAugmentationsGraph.CreateDirectedEdge(hStartNode.Id, hTargetNode.Id, new CapacityWeighted(hValueRestkapa));
                     FHinkantenEdgeHashes.Add(hStartNode.Id + "-" + hTargetNode.Id);
                 }
 
                 // Rückkante einfügen?
                 if (hValueAktuellerFluss > 0.0)
                 {
-                    hNewAugmentationsGraph.CreateDirectedEdge(hTargetNode.Id, hStartNode.Id, new CostWeighted(hValueAktuellerFluss));
+                    hNewAugmentationsGraph.CreateDirectedEdge(hTargetNode.Id, hStartNode.Id, new CapacityWeighted(hValueAktuellerFluss));
                     FRueckKantenEdgeHashes.Add(hTargetNode.Id + "-" + hStartNode.Id);
                 }
             }

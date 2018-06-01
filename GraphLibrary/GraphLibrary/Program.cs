@@ -178,7 +178,7 @@ namespace GraphLibrary
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
             var hFileName = GraphFileRessources.P5Fluesse;
-            var hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentList<CapacityWeighted>(hFileName, EdgeKind.DirectedWeighted);
 
             var hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(hGraph);
             hEdmondsKarpAlgorithm.Execute(0,7);
@@ -186,7 +186,7 @@ namespace GraphLibrary
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
             hFileName = GraphFileRessources.P5GraphG12;
-            hGraph = AdjacentListGraphImporter.ImportAdjacentList(hFileName, EdgeKind.DirectedWeighted);
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList<CapacityWeighted>(hFileName, EdgeKind.DirectedWeighted);
 
             hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(hGraph);
             hEdmondsKarpAlgorithm.Execute(0, 7);
