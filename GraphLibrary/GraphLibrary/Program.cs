@@ -198,6 +198,8 @@ namespace GraphLibrary
             var hFileName = GraphFileRessources.P7CostMinFluesse1;
             var hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
             
+            var hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
+            hCycleCancelingAlgorithm.Execute();
         }
 
     }

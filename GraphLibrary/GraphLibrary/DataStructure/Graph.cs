@@ -213,6 +213,24 @@ namespace GraphLibrary.DataStructure
         {
             FEdgeIndices.Add(_Edge);
 
+            
+            // Die Kante noch in den Knoten ergänzen
+            if (_Edge is DirectedEdge)
+            {
+                var hStartNode = ((DirectedEdge)_Edge).GetEdgeSource();
+                hStartNode.AddEdge(_Edge);
+            }
+            else if (_Edge is UndirectedEdge)
+            {
+                var hEndPoints = _Edge.GetPossibleEnpoints();
+                var hNodeA = hEndPoints[0];
+                var hNodeB = hEndPoints[1];
+                hNodeA.AddEdge(_Edge);
+                hNodeB.AddEdge(_Edge);
+            }
+
+            UpdateNeighbourInfoInNodes();
+
         }
 
         public double GetTotalGraphWeight()

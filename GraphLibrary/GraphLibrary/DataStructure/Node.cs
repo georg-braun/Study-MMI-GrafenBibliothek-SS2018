@@ -100,7 +100,7 @@ namespace GraphLibrary.DataStructure
 
     class BalancedNode : Node
     {
-        private double Balance { get; set; }
+        public double Balance { get; set; }
         public BalancedNode(int _Id, double _Balance)
             : base(_Id)
         {
