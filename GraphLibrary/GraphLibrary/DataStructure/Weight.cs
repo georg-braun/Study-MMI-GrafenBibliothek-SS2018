@@ -10,6 +10,7 @@ namespace GraphLibrary.DataStructure
     {
         bool HasWeightValue();
         double WeightValue();
+        void SetValue(double _Value);
     }
 
     class Unweighted : IWeight
@@ -23,15 +24,29 @@ namespace GraphLibrary.DataStructure
         {
             throw new NotImplementedException();
         }
+
+        public void SetValue(double _Value)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     class CostWeighted : IWeight
     {
         private double FCostValue;
 
+        public void SetValue(double _Value)
+        {
+            FCostValue = _Value;
+        }
+
         public CostWeighted(double _CostValue)
         {
             FCostValue = _CostValue;
+        }
+
+        public CostWeighted()
+        {
         }
 
         public bool HasWeightValue()
@@ -47,11 +62,20 @@ namespace GraphLibrary.DataStructure
 
     class CapacityWeighted : IWeight
     {
-        private double FCapacityValue;
-
         public CapacityWeighted(double _CapacityValue)
         {
             FCapacityValue = _CapacityValue;
+        }
+
+        public CapacityWeighted()
+        {
+        }
+
+        private double FCapacityValue;
+
+        public void SetValue(double _Value)
+        {
+            FCapacityValue = _Value;
         }
 
         public bool HasWeightValue()

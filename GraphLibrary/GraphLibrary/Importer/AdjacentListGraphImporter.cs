@@ -20,7 +20,18 @@ namespace GraphLibrary.Importer
 
     static class AdjacentListGraphImporter
     {
+        /// <summary>
+        /// Deprecated!
+        /// </summary>
+        /// <param name="_FilePath"></param>
+        /// <param name="_EdgeKind"></param>
+        /// <returns></returns>
         public static IGraph ImportAdjacentList(string _FilePath, EdgeKind _EdgeKind)
+        {
+            return ImportAdjacentList<CostWeighted>(_FilePath, _EdgeKind);
+        }
+
+        public static IGraph ImportAdjacentList<T>(string _FilePath, EdgeKind _EdgeKind) where T : IWeight
         {
             Console.WriteLine("Starte Importieren: " + _FilePath);
             var hStopwatch = new Stopwatch();
@@ -67,7 +78,17 @@ namespace GraphLibrary.Importer
             return hGraph;
         }
 
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="_Graph"></param>
+        /// <param name="_AdjacentListFileContent"></param>
         private static void ImportWeightedDirected(IGraph _Graph, String[] _AdjacentListFileContent)
+        {
+            ImportWeightedDirected<CostWeighted>(_Graph, _AdjacentListFileContent);
+        }
+
+        private static void ImportWeightedDirected<T>(IGraph _Graph, String[] _AdjacentListFileContent) where  T : IWeight, new()
         {
             var hGraphNodes = _Graph.GetNodeDictionary();
             for (int hRowIndex = 1; hRowIndex < _AdjacentListFileContent.Length; hRowIndex++)
@@ -79,7 +100,8 @@ namespace GraphLibrary.Importer
                 var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
                 var hEdgeWeight = Convert.ToDouble(hEdgeInfo[2], CultureInfo.InvariantCulture);
 
-                var hWeightValue = new CostWeighted(hEdgeWeight);
+                var hWeightValue = new T();
+                hWeightValue.SetValue(hEdgeWeight);
 
                 var hNodeA = hGraphNodes[hNodeAId];
                 var hNodeB = hGraphNodes[hNodeBId];
@@ -108,6 +130,11 @@ namespace GraphLibrary.Importer
 
         private static void ImportWeightedUndirected(IGraph _Graph, String[] _HAdjacentListFileContentStrings)
         {
+            ImportWeightedUndirected<CostWeighted>(_Graph, _HAdjacentListFileContentStrings);
+        }
+
+        private static void ImportWeightedUndirected<T>(IGraph _Graph, String[] _HAdjacentListFileContentStrings) where T : IWeight, new()
+        {
             var hGraphNodes = _Graph.GetNodeDictionary();
             for (int hRowIndex = 1; hRowIndex < _HAdjacentListFileContentStrings.Length; hRowIndex++)
             {
@@ -118,7 +145,8 @@ namespace GraphLibrary.Importer
                 var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
                 var hEdgeWeight = Convert.ToDouble(hEdgeInfo[2],CultureInfo.InvariantCulture);
 
-                var hWeightValue = new CostWeighted(hEdgeWeight);
+                var hWeightValue = new T();
+                hWeightValue.SetValue(hEdgeWeight);
 
                 var hNodeA = hGraphNodes[hNodeAId];
                 var hNodeB = hGraphNodes[hNodeBId];
@@ -165,8 +193,10 @@ namespace GraphLibrary.Importer
                 
                 var hNodeA = hGraphNodes[hNodeAId];
                 var hNodeB = hGraphNodes[hNodeBId];
-                var hCostWeight = new CostWeighted(hCostWeightValue);
-                var hCapcacityWeight = new CapacityWeighted(hCapacityWeightValue);
+                var hCostWeight = new CostWeighted();
+                hCostWeight.SetValue(hCostWeightValue);
+                var hCapcacityWeight = new CapacityWeighted();
+                hCapcacityWeight.SetValue(hCapacityWeightValue);
 
                 hGraph.CreateDirectedEdge(hNodeA, hNodeB, new IWeight[]{hCostWeight, hCapcacityWeight});
 
