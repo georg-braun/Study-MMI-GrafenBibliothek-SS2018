@@ -30,19 +30,28 @@ namespace GraphLibrary.Algorithm
         private IGraph FShortestPathGraph;
         public IGraph ShortestPathGraph => FShortestPathGraph;
 
-        private List<int> FCycleList;
-        public List<int> CycleList => FCycleList;
+        private List<int> FCycleNodes;
+        public List<int> CycleNodes => FCycleNodes;
+
+        //private List<Edge> FCycleEdges;
+
+       // public List<Edge> CycleEdges => CycleEdges;
 
         public double CycleCosts { get; set; } = 0.0;
 
-        public void Execute(int _SourceNodeId, int _TargetNodeId)
+        public void Execute(int _SourceNodeId)
+        {
+            Execute(_SourceNodeId, -1, true);
+        }
+
+        public void Execute(int _SourceNodeId, int _TargetNodeId, bool _IgnoreTarget = false)
         {
             Console.WriteLine("Start Bellman Ford");
 
             FNodeDictionary = FUsedGraph.GetNodeDictionary();
             var hNodeCount = FNodeDictionary.Count;
             var hStartNode = FNodeDictionary[_SourceNodeId];
-            var hTargetNode = FNodeDictionary[_TargetNodeId];
+            
 
 
             // Initialisierung
@@ -88,6 +97,7 @@ namespace GraphLibrary.Algorithm
                 // Ermitteln der negativen Zyklen
                 var hAvailableNodes = new List<INode>(FParentNodeEdge.Keys);
                 var hCycleList = new List<int>();
+                //FCycleEdges = new List<Edge>();
                 var hCycleDetected = false;
                 var hCycleCosts = 0.0;
 
@@ -96,6 +106,7 @@ namespace GraphLibrary.Algorithm
                     var hStartNodeInCycleDetection = hAvailableNodes[0];
                     var hCurrentNode = hStartNodeInCycleDetection;
                     hCycleList.Clear();
+                    //FCycleEdges.Clear();
                     hCycleCosts = 0.0;
 
                     // Pfad entlang laufen
@@ -121,6 +132,7 @@ namespace GraphLibrary.Algorithm
                         {
                             // Knoten in den aktuellen Pfad einfügen
                             hCycleList.Add(hCurrentNode.Id);
+                            //FCycleEdges.Add(FParentNodeEdge[hCurrentNode].Edge);
                             hCycleCosts += (FParentNodeEdge[hCurrentNode].Edge.GetWeightValue());
                             // Nächsten Knoten betrachten
                             hCurrentNode = FParentNodeEdge[hCurrentNode].Node;
@@ -134,28 +146,37 @@ namespace GraphLibrary.Algorithm
 
                 // Zyklus gefunden. Die Elemente noch in eine richtige Reihenfolge bringen
                 hCycleList.Reverse();
-                FCycleList = hCycleList;
+                FCycleNodes = hCycleList;
                 CycleCosts = hCycleCosts;
 
                 // Ausgabe: 
                 Console.WriteLine("Graph enthält einen negativen Zyklus");
-                Console.WriteLine(string.Join(",", FCycleList));
+                Console.WriteLine(string.Join(",", FCycleNodes));
                 Console.WriteLine("Zykluskosten: " + CycleCosts);
 
             }
             else
             {
-                // Vom Zielknoten rückwärts bis zum Startknoten laufen
-                var hTmpNode = hTargetNode;
-                var hShortestPathStack = new Stack<int>();
-                var hCosts = 0.0;
-                while (hTmpNode != hStartNode)
+                if (!_IgnoreTarget)
                 {
-                    hCosts += FParentNodeEdge[hTmpNode].Edge.GetWeightValue();
-                    hShortestPathStack.Push(hTmpNode.Id);
-                    hTmpNode = FParentNodeEdge[hTmpNode].Node; // Ermitteln des Parents
+                    var hTargetNode = FNodeDictionary[_TargetNodeId];
+                    // Vom Zielknoten rückwärts bis zum Startknoten laufen
+                    var hTmpNode = hTargetNode;
+                    var hShortestPathStack = new Stack<int>();
+                    var hCosts = 0.0;
+                    while (hTmpNode != hStartNode)
+                    {
+                        hCosts += FParentNodeEdge[hTmpNode].Edge.GetWeightValue();
+                        hShortestPathStack.Push(hTmpNode.Id);
+                        hTmpNode = FParentNodeEdge[hTmpNode].Node; // Ermitteln des Parents
+                    }
+                    hShortestPathStack.Push(hStartNode.Id);
+
+                    // Ausgabe
+                    Console.WriteLine("Kürzeste Route:\t" + string.Join(",", hShortestPathStack));
+                    Console.WriteLine("Kosten:\t" + hCosts);
                 }
-                hShortestPathStack.Push(hStartNode.Id);
+                
 
                 // Kürzeste Wege Baum erstellen
                 // Neues Grafen Objekt erstellen und die Knoten anlegen
@@ -199,9 +220,7 @@ namespace GraphLibrary.Algorithm
                 FShortestPathGraph = hNewGraph;
 
 
-                // Ausgabe
-                Console.WriteLine("Kürzeste Route:\t" + string.Join(",", hShortestPathStack));
-                Console.WriteLine("Kosten:\t" + hCosts);
+
             }
 
             

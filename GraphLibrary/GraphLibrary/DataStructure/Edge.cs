@@ -83,8 +83,7 @@ namespace GraphLibrary.DataStructure
                 }
             }
             throw new Exception("No valid Weight Class");
-
-            throw new Exception("No valid Weight Class");
+            
         }
 
         public IWeight GetWeight()

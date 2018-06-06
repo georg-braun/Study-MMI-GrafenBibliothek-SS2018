@@ -22,7 +22,7 @@ namespace GraphLibrary.DataStructure
 
         void CreateDirectedEdge(INode _StartNode, INode _EndNode, IWeight _Weight);
 
-        void CreateDirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
+        Edge CreateDirectedEdge(int _NodeOneId, int _NodeTwoId, IWeight _Weight);
 
         Edge CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo);
 
@@ -44,8 +44,11 @@ namespace GraphLibrary.DataStructure
 
         Edge GetEdge(int _FromNodeId, int _ToNodeId, bool _Undirected);
 
-        
+        Edge GetEdge(string _EdgeHash);
+
         Dictionary<string, Edge> GenerateEdgeHashDictionary();
+
+        void RemoveNode(INode _Node);
     } 
 
     class Graph : IGraph
@@ -60,6 +63,11 @@ namespace GraphLibrary.DataStructure
         {
             FNodeIndices = new Dictionary<int, INode>();
             FEdgeIndices = new List<Edge>();
+        }
+
+        public Edge GetEdge(string _EdgeHash)
+        {
+            return FEdgeHashDictionary[_EdgeHash];
         }
 
         public Dictionary<string, Edge> GenerateEdgeHashDictionary()
@@ -145,7 +153,7 @@ namespace GraphLibrary.DataStructure
 
         }
 
-        public void CreateDirectedEdge(int _StartNodeId, int _TargetNodeId, IWeight _Weight)
+        public Edge CreateDirectedEdge(int _StartNodeId, int _TargetNodeId, IWeight _Weight)
         {
             var hStartNode = FNodeIndices[_StartNodeId];
             var hTargetNode = FNodeIndices[_TargetNodeId];
@@ -153,6 +161,8 @@ namespace GraphLibrary.DataStructure
             var hNewDirectedEdge = new DirectedEdge(hStartNode, hTargetNode, _Weight);
             FEdgeIndices.Add(hNewDirectedEdge);
             hStartNode.AddEdge(hNewDirectedEdge);
+
+            return hNewDirectedEdge;
         }
 
         public Edge CreateUndirectedEdge(INode _NodeOne, INode _NodeTwo)
@@ -259,6 +269,41 @@ namespace GraphLibrary.DataStructure
             hEndPoints[1].RemoveEdge(_Edge);
             FEdgeIndices.Remove(_Edge);
             UpdateNeighbourInfoInNodes(); // Update der Kanten-Infos
+        }
+
+        /// <summary>
+        /// Entfernt den Knoten und seine Kanten zu anderne Knoten
+        /// </summary>
+        /// <param name="_Node"></param>
+        public void RemoveNode(INode _Node)
+        {
+            // Alle Kanten entfernen die vom zu entfernenden Knoten abgehen
+            foreach (var hNeighborEdges in _Node.NeighbourEdges)
+            {
+                FEdgeIndices.Remove(hNeighborEdges.Edge);
+            }
+            // Alle Kanten entfernen die auf zu entfernenden Knoten zeigen
+            var hEdgesToRemove = new List<Edge>();
+            foreach (var hEdge in FEdgeIndices)
+            {
+                var hEndpoints = hEdge.GetPossibleEnpoints();
+                if (hEndpoints.Contains(_Node))
+                {
+                    hEdgesToRemove.Add(hEdge);
+                }
+            }
+            foreach (var hEdge in hEdgesToRemove)
+            {
+                FEdgeIndices.Remove(hEdge);
+            }
+            
+            // Knoten selber entfernen
+            FNodeIndices.Remove(_Node.Id);
+            UpdateNeighbourInfoInNodes();
+
+            FEdgeHashDictionary.Clear();
+            FEdgeHashDictionary = null;
+            GenerateEdgeHashDictionary();
         }
 
         public Edge GetEdge(int _FromNodeId, int _ToNodeId, bool _Undirected)

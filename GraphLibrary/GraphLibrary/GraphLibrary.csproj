@@ -53,6 +53,7 @@
     <Compile Include="Algorithm\DoppelterBaumAlgorithm.cs" />
     <Compile Include="Algorithm\EdmondsKarpAlgorithm.cs" />
     <Compile Include="Algorithm\FindSubTrees.cs" />
+    <Compile Include="Algorithm\ResidualGraphGenerator.cs" />
     <Compile Include="Algorithm\IGraphTraverseAlgorithm.cs" />
     <Compile Include="Algorithm\IGraphAlgorithm.cs" />
     <Compile Include="Algorithm\KruskalAlgorithm.cs" />

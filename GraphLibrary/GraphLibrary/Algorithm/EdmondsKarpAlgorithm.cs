@@ -15,10 +15,6 @@ namespace GraphLibrary.Algorithm
 
         private Dictionary<string, double> FFlussGraphDictionary;
 
-        private List<string> FHinkantenEdgeHashes;
-
-        private List<string> FRueckKantenEdgeHashes;
-
         public EdmondsKarpAlgorithm(IGraph _UsedGraph)
         {
             FUsedGraph = _UsedGraph;
@@ -41,7 +37,8 @@ namespace GraphLibrary.Algorithm
             }
             
             // Erstelle den Residualgraph
-            var hResidualGraph = GenerateResidualGraph(FUsedGraph);
+            
+            var hResidualGraph = ResidualGraphGenerator.Generate(FUsedGraph, FFlussGraphDictionary);
             
             // Eine Breitensuche auf dem Augmentationsnetzwerk
             var hBfsSearch = new BreadthFirstSearch();
@@ -74,13 +71,13 @@ namespace GraphLibrary.Algorithm
                 // Beim zurücklaufen zum Startknoten wurden alle relevanten Kanten besucht und die Hashes der Kanten gespeichert
                 foreach (var hBfsPathEdgeHash in hBfsPathEdgeHashesStack)
                 {
-                    if (FHinkantenEdgeHashes.Contains(hBfsPathEdgeHash))
+                    if (ResidualGraphGenerator.HinkantenEdgeHashes.Contains(hBfsPathEdgeHash))
                     {
                         // Bei der Breitensuche im Augmentieren Graphen wurde eine Hinkante verwendet. 
                         // Diese Kante kann ich im Flussgraphen Dictionary direkt ansprechen da die Konten im Hash in der richtigen Reihenfolge stehen
                         FFlussGraphDictionary[hBfsPathEdgeHash] += hAugmentationsValue;
                     }
-                    else if (FRueckKantenEdgeHashes.Contains(hBfsPathEdgeHash))
+                    else if (ResidualGraphGenerator.RueckKantenEdgeHashes.Contains(hBfsPathEdgeHash))
                     {
                         // Bei der Breitensuche im Augmentieren Graphen wurde eine Rückkante verwendet.
                         // Diese Rückkante existiert so im originalen Graphen nicht weshalb auch der Hash-Value nicht passt. 
@@ -90,8 +87,8 @@ namespace GraphLibrary.Algorithm
                     }
                 } 
 
-                // Neues Augmentationsnetzwerk
-                hResidualGraph = GenerateResidualGraph(FUsedGraph);
+                // Neuer Residualgraph
+                hResidualGraph = ResidualGraphGenerator.Generate(FUsedGraph, FFlussGraphDictionary);
 
                 // Bfs darauf
                 hBfsSearch = new BreadthFirstSearch();
@@ -119,53 +116,6 @@ namespace GraphLibrary.Algorithm
             return hNodes[1] + "-" + hNodes[0];
         }
 
-        public IGraph GenerateResidualGraph(IGraph _SourceGraph)
-        {
-            IGraph hNewAugmentationsGraph = new Graph();
-            FHinkantenEdgeHashes = new List<string>();
-            FRueckKantenEdgeHashes = new List<string>();
-
-            // Erstelle die Knoten
-            foreach (var hNode in _SourceGraph.GetNodeDictionary().Values)
-            {
-                hNewAugmentationsGraph.CreateNewNode(hNode.Id);
-            }
-
-            // Füge die Kanten ein (Annahme: Es sind gerichtete Kanten)
-            // Nur wenn ein Wert > 0.
-            // Hinkante = Restkapazität
-            // Rückkante = Aktueller Fluss
-            var hSourceGraphEdgeDictionary = _SourceGraph.GenerateEdgeHashDictionary();
-
-            foreach (var hEdgeInSourceGraphDictEntry in hSourceGraphEdgeDictionary)
-            {
-
-                var hValueRestkapa = hEdgeInSourceGraphDictEntry.Value.GetWeightValue<CapacityWeighted>() - FFlussGraphDictionary[hEdgeInSourceGraphDictEntry.Key];
-                var hValueAktuellerFluss = FFlussGraphDictionary[hEdgeInSourceGraphDictEntry.Key];
-
-                DirectedEdge hEdgeInSourceGraph = (DirectedEdge)hEdgeInSourceGraphDictEntry.Value;
-                var hStartNode = hEdgeInSourceGraph.GetEdgeSource(); 
-                var hTargetNode = hEdgeInSourceGraph.GetPossibleEnpoints()[0];
-
-                // Hinkante einfügen?
-                if (hValueRestkapa > 0.0)
-                {
-                    hNewAugmentationsGraph.CreateDirectedEdge(hStartNode.Id, hTargetNode.Id, new CapacityWeighted(hValueRestkapa));
-                    FHinkantenEdgeHashes.Add(hStartNode.Id + "-" + hTargetNode.Id);
-                }
-
-                // Rückkante einfügen?
-                if (hValueAktuellerFluss > 0.0)
-                {
-                    hNewAugmentationsGraph.CreateDirectedEdge(hTargetNode.Id, hStartNode.Id, new CapacityWeighted(hValueAktuellerFluss));
-                    FRueckKantenEdgeHashes.Add(hTargetNode.Id + "-" + hStartNode.Id);
-                }
-            }
-
-            hNewAugmentationsGraph.UpdateNeighbourInfoInNodes();
-            return hNewAugmentationsGraph;
-
-        }
 
         public void PrintEdgesInfo(IGraph _Graph)
         {
