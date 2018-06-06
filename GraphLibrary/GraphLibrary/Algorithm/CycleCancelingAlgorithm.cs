@@ -49,11 +49,27 @@ namespace GraphLibrary.Algorithm
             } 
 
             // Todo: Ggf. noch Knoten aktualisieren?
-            
+            FUsedGraph.UpdateNeighbourInfoInNodes();
+
 
             // Nun soll der Edmonds-Karp Algorithmus ausgeführt werden. Dabei werden die SuperQuelle und SuperSenke verwendet
             var hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(FUsedGraph);
             var hFlow = hEdmondsKarpAlgorithm.Execute(hSuperSource.Id, hSuperTarget.Id);
+
+            // Todo: Noch fehlerhaft. Wird der richtige Fluss ermittelt?
+            // Nutzt die SuperQuelle die Kantenkapazitäten voll aus? 
+            foreach (var hNeighborEdge in hSuperSource.NeighbourEdges)
+            {
+                var hNeighborEdgeHash = hNeighborEdge.Edge.EdgeHashInfo()[0];
+                var hFlowValue = hFlow[hNeighborEdgeHash];
+                var hEdgeCapacity = hNeighborEdge.Edge.GetWeightValue<CapacityWeighted>();
+                if (!hFlowValue.Equals(hEdgeCapacity))
+                {
+                    // Kein gültiger b-Fluss (Graph kann nicht alles übertragen)
+                    Console.WriteLine("Kein Fluss möglich");
+                    return;
+                }
+            } 
         }
 
     }

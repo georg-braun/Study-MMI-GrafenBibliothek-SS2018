@@ -29,20 +29,12 @@ namespace GraphLibrary.DataStructure
 
         public int Id { get; }
 
-
-        private bool FFilledNeighboursInfo = false;
-
         private List<NodeEdge> FNeighbours;
         public List<NodeEdge> NeighbourEdges
         {
             get
             {
-                if (!FFilledNeighboursInfo)
-                {
-                    FindNeighbours();
-                    FFilledNeighboursInfo = true;
-                }
-
+                FindNeighbours();
                 return FNeighbours;
             }
         }

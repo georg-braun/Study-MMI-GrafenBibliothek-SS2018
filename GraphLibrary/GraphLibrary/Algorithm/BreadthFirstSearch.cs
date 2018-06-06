@@ -61,7 +61,7 @@ namespace GraphLibrary.Algorithm
                         if (hNeighbourEdge.Edge.IsWeighted())
                         {
                             var hNewWeight = new T();
-                            hNewWeight.SetValue(hNeighbourEdge.Edge.GetWeightValue());
+                            hNewWeight.SetValue(hNeighbourEdge.Edge.GetWeightValue<T>());
                             hNewEdge = hSubGraph.CreateUndirectedEdge(hCurrentNode.Id, hNewNode.Id, hNewWeight);
                         }
                         else

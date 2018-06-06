@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,16 +77,12 @@ namespace GraphLibrary.DataStructure
         {
             foreach (var hWeight in FWeight)
             {
-                switch (hWeight)
+                if (hWeight is T hMatchedWeight)
                 {
-                    case CapacityWeighted hCapacityWeighted:
-                        return hCapacityWeighted.WeightValue();
-                    case CostWeighted hCostWeighted:
-                        return hCostWeighted.WeightValue();
-                    case Unweighted hUnweighted:
-                        return hUnweighted.WeightValue();
-                } 
+                    return hMatchedWeight.WeightValue();
+                }
             }
+            throw new Exception("No valid Weight Class");
 
             throw new Exception("No valid Weight Class");
         }
@@ -99,17 +96,11 @@ namespace GraphLibrary.DataStructure
         {
             foreach (var hWeight in FWeight)
             {
-                switch (hWeight)
+                if (hWeight is T hVariable)
                 {
-                    case CapacityWeighted hCapacityWeighted:
-                        return hCapacityWeighted;
-                    case CostWeighted hCostWeighted:
-                        return hCostWeighted;
-                    case Unweighted hUnweighted:
-                        return hUnweighted;
+                    return hVariable;
                 }
             }
-
             throw new Exception("No valid Weight Class");
         }
 
@@ -211,6 +202,12 @@ namespace GraphLibrary.DataStructure
             var hResult = new List<string>();
             hResult.Add(FStartNode.Id + "-" + FEndNode.Id);
             return hResult;
+        }
+
+        public override string ToString()
+        {
+            var hString = FStartNode.Id + " to " + FEndNode.Id;
+            return hString;
         }
     }
 }

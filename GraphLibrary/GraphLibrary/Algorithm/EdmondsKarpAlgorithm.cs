@@ -26,6 +26,8 @@ namespace GraphLibrary.Algorithm
 
         public Dictionary<string, double> Execute(int _StartNodeId, int _TargetNodeId)
         {
+            
+
             Console.WriteLine("Starte Edmonds Karp Algorithmus");
             var hStartNode = FUsedGraph.GetNodeDictionary()[_StartNodeId];
             double hGesamtfluss = 0.0;
@@ -36,11 +38,11 @@ namespace GraphLibrary.Algorithm
             foreach (var hEdgeHash in hUsedGraphEdgeDictionary.Keys)
             {
                 FFlussGraphDictionary.Add(hEdgeHash,0.0);
-            } 
-
+            }
+            
             // Erstelle den Residualgraph
             var hResidualGraph = GenerateResidualGraph(FUsedGraph);
-
+            
             // Eine Breitensuche auf dem Augmentationsnetzwerk
             var hBfsSearch = new BreadthFirstSearch();
             var hBfsGraph = hBfsSearch.Execute<CapacityWeighted>(hResidualGraph.GetNodeDictionary()[_StartNodeId]);
@@ -56,9 +58,9 @@ namespace GraphLibrary.Algorithm
                 var hAugmentationsValue = double.PositiveInfinity;
                 while (hCurrentNodeIdInBFSPath != _StartNodeId)
                 {
-                    if (hBfsGraphParentInfo[hCurrentNodeIdInBFSPath].Edge.GetWeightValue() < hAugmentationsValue)
+                    if (hBfsGraphParentInfo[hCurrentNodeIdInBFSPath].Edge.GetWeightValue<CapacityWeighted>() < hAugmentationsValue)
                     {
-                        hAugmentationsValue = hBfsGraphParentInfo[hCurrentNodeIdInBFSPath].Edge.GetWeightValue();
+                        hAugmentationsValue = hBfsGraphParentInfo[hCurrentNodeIdInBFSPath].Edge.GetWeightValue<CapacityWeighted>();
                     }
                     // Merken welche Kanten in der BFS Suche involviert waren. Dies wird als "VonKnotenId-NachKnotenId" String gespeichert. Dies entspricht dem EdgeHash
                     hBfsPathEdgeHashesStack.Push(hBfsGraphParentInfo[hCurrentNodeIdInBFSPath].Node.Id + "-" + hCurrentNodeIdInBFSPath);
@@ -93,7 +95,7 @@ namespace GraphLibrary.Algorithm
 
                 // Bfs darauf
                 hBfsSearch = new BreadthFirstSearch();
-                hBfsGraph = hBfsSearch.Execute(hResidualGraph.GetNodeDictionary()[_StartNodeId]);
+                hBfsGraph = hBfsSearch.Execute<CapacityWeighted>(hResidualGraph.GetNodeDictionary()[_StartNodeId]);
             }
 
             Dictionary<string, double> hResultFlow = new Dictionary<string, double>();
@@ -138,7 +140,7 @@ namespace GraphLibrary.Algorithm
             foreach (var hEdgeInSourceGraphDictEntry in hSourceGraphEdgeDictionary)
             {
 
-                var hValueRestkapa = hEdgeInSourceGraphDictEntry.Value.GetWeightValue() - FFlussGraphDictionary[hEdgeInSourceGraphDictEntry.Key];
+                var hValueRestkapa = hEdgeInSourceGraphDictEntry.Value.GetWeightValue<CapacityWeighted>() - FFlussGraphDictionary[hEdgeInSourceGraphDictEntry.Key];
                 var hValueAktuellerFluss = FFlussGraphDictionary[hEdgeInSourceGraphDictEntry.Key];
 
                 DirectedEdge hEdgeInSourceGraph = (DirectedEdge)hEdgeInSourceGraphDictEntry.Value;
@@ -163,6 +165,15 @@ namespace GraphLibrary.Algorithm
             hNewAugmentationsGraph.UpdateNeighbourInfoInNodes();
             return hNewAugmentationsGraph;
 
+        }
+
+        public void PrintEdgesInfo(IGraph _Graph)
+        {
+            foreach (var _Edge in _Graph.GetEdgeIndices())
+            {
+                Console.WriteLine(_Edge.ToString() + "\t with " + _Edge.GetWeight<CapacityWeighted>().WeightValue());
+                
+            } 
         }
     }
 }
