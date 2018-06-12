@@ -40,7 +40,7 @@ namespace GraphLibrary.Algorithm
             
             var hResidualGraph = ResidualGraphGenerator.Generate(FUsedGraph, FFlussGraphDictionary);
             
-            // Eine Breitensuche auf dem Augmentationsnetzwerk
+            // Eine Breitensuche auf dem Residualgraph
             var hBfsSearch = new BreadthFirstSearch();
             var hBfsGraph = hBfsSearch.Execute<CapacityWeighted>(hResidualGraph.GetNodeDictionary()[_StartNodeId]);
 

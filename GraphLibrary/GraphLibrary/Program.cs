@@ -16,8 +16,8 @@ namespace GraphLibrary
         static void Main(string[] args)
         {
             //P5DijkstraBellman();
-            //P6EdmondsKarp();
-            P7CycleCanceling();
+            P6EdmondsKarp();
+            //P7CycleCanceling();
 
             Console.ReadLine();
         }

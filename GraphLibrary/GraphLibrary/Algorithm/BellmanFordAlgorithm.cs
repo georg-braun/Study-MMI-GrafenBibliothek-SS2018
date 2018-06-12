@@ -33,10 +33,6 @@ namespace GraphLibrary.Algorithm
         private List<int> FCycleNodes;
         public List<int> CycleNodes => FCycleNodes;
 
-        //private List<Edge> FCycleEdges;
-
-       // public List<Edge> CycleEdges => CycleEdges;
-
         public double CycleCosts { get; set; } = 0.0;
 
         public void Execute(int _SourceNodeId)
@@ -97,7 +93,7 @@ namespace GraphLibrary.Algorithm
                 // Ermitteln der negativen Zyklen
                 var hAvailableNodes = new List<INode>(FParentNodeEdge.Keys);
                 var hCycleList = new List<int>();
-                //FCycleEdges = new List<Edge>();
+                var hCycleEdges = new List<string>();
                 var hCycleDetected = false;
                 var hCycleCosts = 0.0;
 
@@ -106,7 +102,7 @@ namespace GraphLibrary.Algorithm
                     var hStartNodeInCycleDetection = hAvailableNodes[0];
                     var hCurrentNode = hStartNodeInCycleDetection;
                     hCycleList.Clear();
-                    //FCycleEdges.Clear();
+                    hCycleEdges.Clear();
                     hCycleCosts = 0.0;
 
                     // Pfad entlang laufen
@@ -132,7 +128,7 @@ namespace GraphLibrary.Algorithm
                         {
                             // Knoten in den aktuellen Pfad einfügen
                             hCycleList.Add(hCurrentNode.Id);
-                            //FCycleEdges.Add(FParentNodeEdge[hCurrentNode].Edge);
+                            hCycleEdges.AddRange(FParentNodeEdge[hCurrentNode].Edge.EdgeHashInfo());
                             hCycleCosts += (FParentNodeEdge[hCurrentNode].Edge.GetWeightValue());
                             // Nächsten Knoten betrachten
                             hCurrentNode = FParentNodeEdge[hCurrentNode].Node;
