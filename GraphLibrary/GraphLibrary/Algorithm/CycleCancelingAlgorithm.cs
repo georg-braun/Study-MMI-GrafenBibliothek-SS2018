@@ -77,6 +77,7 @@ namespace GraphLibrary.Algorithm
             FUsedGraph.RemoveNode(hSuperTarget);
 
             // Den Fluss übernehmen. Dabei aber die Infos zur SuperQuelle und SuperSenke Ignorieren
+            var hTotalFlow = 0.0;
             var hGraphEdgeDictionary = FUsedGraph.GenerateEdgeHashDictionary();
             var hFlussGraphDictionary = new Dictionary<string, double>();
             foreach (var hEdgeHash in hGraphEdgeDictionary.Keys)
@@ -101,7 +102,7 @@ namespace GraphLibrary.Algorithm
 
                 // Residualgraphen erstellen
                 var hResidualGraph = ResidualGraphGenerator.GenerateCostCapacity(FUsedGraph, hFlussGraphDictionary);
-
+                var hEdgeHashDictionary = hResidualGraph.GenerateEdgeHashDictionary();
                 
                 // Ausgehend von jedem Knoten wird versucht ein negativer Zykel zu finden
                 foreach (var hNode in hResidualGraph.GetNodeDictionary())
@@ -115,7 +116,38 @@ namespace GraphLibrary.Algorithm
                         hFoundNegativeCycle = true;
 
                         // ToDo Auf diesem Zyklus die maximale Kapazität ermitteln
+                        var hEdgeHashesOfCycle = hBellmanFordAlgorithm.CycleEdges;
+                        var hMinCapacityInCycle = Double.PositiveInfinity;
+                        foreach (var hEdgeInCycleHash in hEdgeHashesOfCycle)
+                        {
+                            var hEdgeCapcaityValue = hEdgeHashDictionary[hEdgeInCycleHash].GetWeightValue<CapacityWeighted>();
+                            if (hEdgeCapcaityValue < hMinCapacityInCycle)
+                            {
+                                hMinCapacityInCycle = hEdgeCapcaityValue;
+                            }
+                        }
+
+                        hTotalFlow += hMinCapacityInCycle;
+
                         // ToDo Fluss auf dem Originalen Graphen entsprechend anpassen (Orginial Kante, Nicht-Original Kante)
+                        foreach (var hEdgeInCycleHash in hEdgeHashesOfCycle)
+                        {
+                            if (ResidualGraphGenerator.HinkantenEdgeHashes.Contains(hEdgeInCycleHash))
+                            {
+                                // Hinkante
+                                // Diese Kante kann ich im Flussgraphen Dictionary direkt ansprechen da die Konten im Hash in der richtigen Reihenfolge stehen
+                                hFlussGraphDictionary[hEdgeInCycleHash] += hMinCapacityInCycle;
+                            }
+                            else if (ResidualGraphGenerator.RueckKantenEdgeHashes.Contains(hEdgeInCycleHash))
+                            {
+                                // Bei der Breitensuche im Augmentieren Graphen wurde eine Rückkante verwendet.
+                                // Diese Rückkante existiert so im originalen Graphen nicht weshalb auch der Hash-Value nicht passt. 
+                                // Dieser ist lediglich verdreht. Also wird der HashWert vorher noch gespiegelt um die ursprüngliche Kante zu identifizieren
+                                var hHashValueOfOriginalEdge = HelpFunctions.InvertEdgeHash(hEdgeInCycleHash);
+                                hFlussGraphDictionary[hHashValueOfOriginalEdge] -= hMinCapacityInCycle;
+                            }
+                        } 
+
 
                         break; // ToDo Prüfen ob sich das break richtig verhält
                     }
@@ -123,7 +155,17 @@ namespace GraphLibrary.Algorithm
                 
             }
 
-            // Minimale Kosten ermitteln
+            // ToDo Kosten des Flusses ermitteln
+            var hFlowCost = 0.0;
+            foreach (var hEdgeHashInFlow in hFlussGraphDictionary.Keys)
+            {
+                var hEdge = hGraphEdgeDictionary[hEdgeHashInFlow];
+                hFlowCost += hEdge.GetWeightValue<CostWeighted>() * hEdge.GetWeightValue<CapacityWeighted>();
+            }
+
+            Console.WriteLine("Ergebnis:\t" + hFlowCost);
+
+
         }
 
         

@@ -110,7 +110,7 @@ namespace GraphLibrary.Algorithm
             return hResultFlow;
         }
 
-        private string InvertEdgeHash(string _BfsPathEdgeHash)
+        private static string InvertEdgeHash(string _BfsPathEdgeHash)
         {
             var hNodes = _BfsPathEdgeHash.Split('-');
             return hNodes[1] + "-" + hNodes[0];
