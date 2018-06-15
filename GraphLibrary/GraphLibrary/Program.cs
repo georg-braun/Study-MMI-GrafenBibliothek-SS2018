@@ -212,7 +212,7 @@ namespace GraphLibrary
             var hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
             hCycleCancelingAlgorithm.Execute();
 
-            /*
+            
            Console.WriteLine("-------------------------------");
            Console.WriteLine("Neuer Graph");
            hFileName = GraphFileRessources.P7CostMinFluesse2;
@@ -229,7 +229,7 @@ namespace GraphLibrary
 
            hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
            hCycleCancelingAlgorithm.Execute();
-           */
+           
 
 
             Console.WriteLine("-------------------------------");
