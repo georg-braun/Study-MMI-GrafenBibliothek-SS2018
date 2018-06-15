@@ -101,7 +101,17 @@ namespace GraphLibrary.Algorithm
 
                 while (!hCycleDetected)
                 {
-                    var hStartNodeInCycleDetection = hAvailableNodes[0];
+                    // Startknoten auswählen, dessen Parent nicht null ist (=> kann bei >= 2 Zusammenhangskomponenten auftreten
+                    INode hStartNodeInCycleDetection = hAvailableNodes[0];
+                    foreach (var hNode in hAvailableNodes)
+                    {
+                        if (FParentNodeEdge[hNode] != null)
+                        {
+                            hStartNodeInCycleDetection = hNode;
+                            break;
+                        }
+                    } 
+                    
                     var hCurrentNode = hStartNodeInCycleDetection;
                     hCycleList.Clear();
                     CycleEdges.Clear();
