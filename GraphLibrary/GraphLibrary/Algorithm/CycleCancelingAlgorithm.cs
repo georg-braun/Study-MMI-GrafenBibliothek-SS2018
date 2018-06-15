@@ -157,13 +157,13 @@ namespace GraphLibrary.Algorithm
 
             // ToDo Kosten des Flusses ermitteln
             var hFlowCost = 0.0;
-            foreach (var hEdgeHashInFlow in hFlussGraphDictionary.Keys)
+            foreach (var hEdgeInFlow in hFlussGraphDictionary)
             {
-                var hEdge = hGraphEdgeDictionary[hEdgeHashInFlow];
-                hFlowCost += hEdge.GetWeightValue<CostWeighted>() * hEdge.GetWeightValue<CapacityWeighted>();
+                var hEdge = hGraphEdgeDictionary[hEdgeInFlow.Key];
+                hFlowCost += hEdge.GetWeightValue<CostWeighted>() * hEdgeInFlow.Value;
             }
 
-            Console.WriteLine("Ergebnis:\t" + hFlowCost);
+            Console.WriteLine("Kostenminimaler Fluss:\t" + hFlowCost);
 
 
         }

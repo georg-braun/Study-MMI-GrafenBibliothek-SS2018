@@ -186,6 +186,14 @@ namespace GraphLibrary
 
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P5Fluesse2;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentList<CapacityWeighted>(hFileName, EdgeKind.DirectedWeighted);
+            hEdmondsKarpAlgorithm = new EdmondsKarpAlgorithm(hGraph);
+            hEdmondsKarpAlgorithm.Execute(0, 7);
+
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
             hFileName = GraphFileRessources.P5GraphG12;
             hGraph = AdjacentListGraphImporter.ImportAdjacentList<CapacityWeighted>(hFileName, EdgeKind.DirectedWeighted);
 
@@ -195,6 +203,7 @@ namespace GraphLibrary
 
         private static void P7CycleCanceling()
         {
+           
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
             var hFileName = GraphFileRessources.P7CostMinFluesse1;
@@ -202,6 +211,35 @@ namespace GraphLibrary
             
             var hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
             hCycleCancelingAlgorithm.Execute();
+
+            /*
+           Console.WriteLine("-------------------------------");
+           Console.WriteLine("Neuer Graph");
+           hFileName = GraphFileRessources.P7CostMinFluesse2;
+           hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+
+           hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
+           hCycleCancelingAlgorithm.Execute();
+
+
+           Console.WriteLine("-------------------------------");
+           Console.WriteLine("Neuer Graph");
+           hFileName = GraphFileRessources.P7CostMinFluesse3;
+           hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+
+           hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
+           hCycleCancelingAlgorithm.Execute();
+           */
+
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P7CostMinFluesse4;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+
+            hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
+            hCycleCancelingAlgorithm.Execute();
+            
         }
 
     }

@@ -24,7 +24,7 @@ namespace GraphLibrary.Algorithm
         {
             
 
-            Console.WriteLine("Starte Edmonds Karp Algorithmus");
+            //Console.WriteLine("Starte Edmonds Karp Algorithmus");
             var hStartNode = FUsedGraph.GetNodeDictionary()[_StartNodeId];
             double hGesamtfluss = 0.0;
 
@@ -96,16 +96,16 @@ namespace GraphLibrary.Algorithm
             }
 
             Dictionary<string, double> hResultFlow = new Dictionary<string, double>();
-            Console.WriteLine("Flussverlauf:");
+            //Console.WriteLine("Flussverlauf:");
             foreach (var hFlussInfo in FFlussGraphDictionary)
             {
                 if (hFlussInfo.Value > 0.0)
                 {
-                    Console.WriteLine(hFlussInfo.Key + "\t" + hFlussInfo.Value);
+                    //Console.WriteLine(hFlussInfo.Key + "\t" + hFlussInfo.Value);
                     hResultFlow.Add(hFlussInfo.Key, hFlussInfo.Value);
                 }
             } 
-            Console.WriteLine("Gesamtfluss:\t" + hGesamtfluss);
+            //Console.WriteLine("Gesamtfluss:\t" + hGesamtfluss);
 
             return hResultFlow;
         }

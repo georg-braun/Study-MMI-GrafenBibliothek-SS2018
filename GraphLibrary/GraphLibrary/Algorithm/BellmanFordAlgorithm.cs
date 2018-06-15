@@ -44,7 +44,7 @@ namespace GraphLibrary.Algorithm
 
         public void Execute(int _SourceNodeId, int _TargetNodeId, bool _IgnoreTarget = false)
         {
-            Console.WriteLine("Start Bellman Ford");
+            //Console.WriteLine("Start Bellman Ford");
 
             FNodeDictionary = FUsedGraph.GetNodeDictionary();
             var hNodeCount = FNodeDictionary.Count;
@@ -148,9 +148,9 @@ namespace GraphLibrary.Algorithm
                 CycleCosts = hCycleCosts;
 
                 // Ausgabe: 
-                Console.WriteLine("Graph enthält einen negativen Zyklus");
-                Console.WriteLine(string.Join(",", FCycleNodes));
-                Console.WriteLine("Zykluskosten: " + CycleCosts);
+                //Console.WriteLine("Graph enthält einen negativen Zyklus");
+                //Console.WriteLine(string.Join(",", FCycleNodes));
+                //Console.WriteLine("Zykluskosten: " + CycleCosts);
 
             }
             else
@@ -171,8 +171,8 @@ namespace GraphLibrary.Algorithm
                     hShortestPathStack.Push(hStartNode.Id);
 
                     // Ausgabe
-                    Console.WriteLine("Kürzeste Route:\t" + string.Join(",", hShortestPathStack));
-                    Console.WriteLine("Kosten:\t" + hCosts);
+                    //Console.WriteLine("Kürzeste Route:\t" + string.Join(",", hShortestPathStack));
+                    //Console.WriteLine("Kosten:\t" + hCosts);
                 }
                 
 
