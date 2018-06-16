@@ -1,6 +1,7 @@
 # MMI-GrafenBibliothek
 
-Entwicklung einer Grafen Bibliothek im Rahmen des Moduls: Mathematische Methoden der Informatik
+Entwicklung einer C# Grafen Bibliothek im Rahmen des Moduls: Mathematische Methoden der Informatik
+
 
 ## Graph:
 - [x] Ungerichtete Kanten
