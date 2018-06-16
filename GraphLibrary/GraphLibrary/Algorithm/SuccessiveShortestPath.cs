@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,7 +63,28 @@ namespace GraphLibrary.Algorithm
                     // Balance des Ziel-Knotens (der Kante) anpassen
                     hPseudoBalanceDictionary[hTargetNodeId] -= hFlussGraphDictionary[hGraphEdgeHashDictionaryEntry.Key];
                 }
-            } 
+            }
+
+            // Ermitteln der Pseudo-Quellen und Pseudo-Senken
+            var hPseudoQuellen = new HashSet<int>();
+            var hPseudoSenken = new HashSet<int>();
+            foreach (var hNode in hNodeDictionary.Values)
+            {
+                if (!(hNode is BalancedNode)) throw new InvalidDataException("Nur Balanced Nodes");
+                var hBalancedNode = hNode as BalancedNode;
+                var hNodeBalance = hBalancedNode.Balance;
+                var hPseudoBalance = hPseudoBalanceDictionary[hNode.Id];
+
+                if (hNodeBalance > hPseudoBalance)
+                {
+                    hPseudoQuellen.Add(hNode.Id);
+                }
+                else if (hNodeBalance < hPseudoBalance)
+                {
+                    hPseudoSenken.Add(hNode.Id);
+                }
+            }
+
         }
     }
 }
