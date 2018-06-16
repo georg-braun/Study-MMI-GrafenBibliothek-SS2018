@@ -27,6 +27,10 @@ namespace GraphLibrary.Algorithm
         private bool FHasNegativeCylces;
         public bool HasNegativeCycles => FHasNegativeCylces;
 
+        public bool FTargetFound = false;
+
+        public List<string> FShortestPathToTarget;
+
         private IGraph FShortestPathGraph;
         public IGraph ShortestPathGraph => FShortestPathGraph;
 
@@ -165,8 +169,9 @@ namespace GraphLibrary.Algorithm
             }
             else
             {
-                if (!_IgnoreTarget)
+                if (!_IgnoreTarget && (FParentNodeEdge[FNodeDictionary[_TargetNodeId]] != null))
                 {
+                    FShortestPathToTarget = new List<string>();
                     var hTargetNode = FNodeDictionary[_TargetNodeId];
                     // Vom Zielknoten rückwärts bis zum Startknoten laufen
                     var hTmpNode = hTargetNode;
@@ -174,11 +179,15 @@ namespace GraphLibrary.Algorithm
                     var hCosts = 0.0;
                     while (hTmpNode != hStartNode)
                     {
+                        FShortestPathToTarget.Add(FParentNodeEdge[hTmpNode].Node.Id.ToString()+ "-" + hTmpNode.Id.ToString());
                         hCosts += FParentNodeEdge[hTmpNode].Edge.GetWeightValue();
                         hShortestPathStack.Push(hTmpNode.Id);
                         hTmpNode = FParentNodeEdge[hTmpNode].Node; // Ermitteln des Parents
                     }
+
+                    FTargetFound = true;
                     hShortestPathStack.Push(hStartNode.Id);
+                    FShortestPathToTarget.Reverse();
 
                     // Ausgabe
                     //Console.WriteLine("Kürzeste Route:\t" + string.Join(",", hShortestPathStack));

@@ -67,6 +67,8 @@ namespace GraphLibrary.Algorithm
                 if (!hFlowValue.Equals(hEdgeCapacity))
                 {
                     // Kein gültiger b-Fluss (Graph kann nicht alles übertragen)
+                    FUsedGraph.RemoveNode(hSuperSource);
+                    FUsedGraph.RemoveNode(hSuperTarget);
                     Console.WriteLine("Kein Fluss möglich");
                     return;
                 }
@@ -155,7 +157,7 @@ namespace GraphLibrary.Algorithm
                 
             }
 
-            // ToDo Kosten des Flusses ermitteln
+            // Kosten des Flusses ermitteln
             var hFlowCost = 0.0;
             foreach (var hEdgeInFlow in hFlussGraphDictionary)
             {

@@ -212,25 +212,32 @@ namespace GraphLibrary
             var hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
             hCycleCancelingAlgorithm.Execute();
 
-            
-           Console.WriteLine("-------------------------------");
-           Console.WriteLine("Neuer Graph");
-           hFileName = GraphFileRessources.P7CostMinFluesse2;
-           hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+            var hSuccessiveShortestPath = new SuccessiveShortestPath(hGraph);
+            hSuccessiveShortestPath.Execute();
 
-           hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
-           hCycleCancelingAlgorithm.Execute();
+        
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P7CostMinFluesse2;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+
+            hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
+            hCycleCancelingAlgorithm.Execute();
+
+            hSuccessiveShortestPath = new SuccessiveShortestPath(hGraph);
+            hSuccessiveShortestPath.Execute();
 
 
-           Console.WriteLine("-------------------------------");
-           Console.WriteLine("Neuer Graph");
-           hFileName = GraphFileRessources.P7CostMinFluesse3;
-           hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P7CostMinFluesse3;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentListBalancedNodesCostCapacityEdges(hFileName);
+         
+            hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
+            hCycleCancelingAlgorithm.Execute();
 
-           hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
-           hCycleCancelingAlgorithm.Execute();
-           
-
+            hSuccessiveShortestPath = new SuccessiveShortestPath(hGraph);
+            hSuccessiveShortestPath.Execute();
 
             Console.WriteLine("-------------------------------");
             Console.WriteLine("Neuer Graph");
@@ -239,7 +246,11 @@ namespace GraphLibrary
 
             hCycleCancelingAlgorithm = new CycleCancelingAlgorithm(hGraph);
             hCycleCancelingAlgorithm.Execute();
-            
+
+            hSuccessiveShortestPath = new SuccessiveShortestPath(hGraph);
+            hSuccessiveShortestPath.Execute();
+
+
         }
 
     }
