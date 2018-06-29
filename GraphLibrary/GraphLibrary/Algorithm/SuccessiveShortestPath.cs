@@ -99,6 +99,7 @@ namespace GraphLibrary.Algorithm
                 var hFoundPath = false;
                 foreach (var hCurrentPseudoSenkenId in hPseudoSenken)
                 {
+                    // ToDo unnötig. Einmal reicht
                     var hBellmanFordAlgorithm = new BellmanFordAlgorithm(hResidualGraph);
                     hBellmanFordAlgorithm.Execute(hSelectedPseudoQuellenId, hCurrentPseudoSenkenId);
                     if (hBellmanFordAlgorithm.FTargetFound)
@@ -149,6 +150,7 @@ namespace GraphLibrary.Algorithm
                         hPseudoBalanceDictionary[hCurrentPseudoSenkenId] -= hAugmentationValue;
 
                         // ggf. Pseudo-Quelle oder Pseudo-Senke entfernen
+                        // ToDo Nur die betrachten, welche auch in der Pfad-Detektion verwendet wurde
                         hPseudoQuellen.RemoveWhere(
                             _PseudoQuellenId =>
                             {

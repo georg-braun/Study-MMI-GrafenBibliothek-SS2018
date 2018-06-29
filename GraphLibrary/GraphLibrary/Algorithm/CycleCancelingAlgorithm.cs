@@ -151,7 +151,7 @@ namespace GraphLibrary.Algorithm
                         } 
 
 
-                        break; // ToDo Prüfen ob sich das break richtig verhält
+                        break; 
                     }
                 } 
                 
