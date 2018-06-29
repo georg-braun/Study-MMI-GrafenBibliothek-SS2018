@@ -60,5 +60,8 @@ namespace GraphLibrary
         public const string P7CostMinFluesse3 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum6\Kostenminimal3.txt";
         public const string P7CostMinFluesse4 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum6\Kostenminimal4.txt";
 
+        // P8
+        public const string P8MaxMatching = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum8\Matching_100_100.txt";
+        public const string P8MaxMatching2 = @"e:\Google Drive\Studium\Master\MMI\Praktikum\Beispielgraphen\Praktikum8\Matching2_100_100.txt";
     }
 }

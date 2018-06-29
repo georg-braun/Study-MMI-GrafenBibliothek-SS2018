@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -212,5 +213,53 @@ namespace GraphLibrary.Importer
 
             return hGraph;
         }
+
+
+        public static int FNodesGroupALimit;
+        public static IGraph ImportAdjacentListMaxMatching(string _FilePath)
+        {
+            Console.WriteLine("Starte Importieren: " + _FilePath);
+
+
+            String[] hAdjacentListFileContent = { };
+            if (File.Exists(_FilePath))
+            {
+                hAdjacentListFileContent = File.ReadAllLines(_FilePath);
+            }
+
+            // Initiales Anlegen der Knoten.
+            var hGraph = new Graph();
+            var hNodeCount = Convert.ToInt32(hAdjacentListFileContent[0]);
+            
+            for (var hCurrentNodeId = 0; hCurrentNodeId < hNodeCount; hCurrentNodeId++)
+            {
+                hGraph.TryToAddNode(new Node(hCurrentNodeId));
+            }
+
+            var hGraphNodes = hGraph.GetNodeDictionary();
+
+            // Befüllen der Node-Gruppen Info
+            FNodesGroupALimit = Convert.ToInt32(hAdjacentListFileContent[1]);
+
+
+
+            for (int hRowIndex = 2; hRowIndex < hAdjacentListFileContent.Length; hRowIndex++)
+            {
+                var hRow = hAdjacentListFileContent[hRowIndex];
+                var hEdgeInfo = hRow.Split('\t');
+
+                var hNodeAId = Convert.ToInt32(hEdgeInfo[0]);
+                var hNodeBId = Convert.ToInt32(hEdgeInfo[1]);
+
+                var hNodeA = hGraphNodes[hNodeAId];
+                var hNodeB = hGraphNodes[hNodeBId];
+
+                hGraph.CreateDirectedEdge(hNodeA, hNodeB, new CapacityWeighted(1.0));
+            }
+
+            return hGraph;
+        }
+
+
     }
 }

@@ -266,7 +266,11 @@ namespace GraphLibrary.DataStructure
         {
             var hEndPoints = _Edge.GetPossibleEnpoints();
             hEndPoints[0].RemoveEdge(_Edge);
-            hEndPoints[1].RemoveEdge(_Edge);
+            if (hEndPoints.Length > 1)
+            {
+                hEndPoints[1].RemoveEdge(_Edge);
+            }
+            
             FEdgeIndices.Remove(_Edge);
             UpdateNeighbourInfoInNodes(); // Update der Kanten-Infos
         }

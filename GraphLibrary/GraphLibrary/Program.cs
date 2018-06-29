@@ -17,7 +17,8 @@ namespace GraphLibrary
         {
             //P5DijkstraBellman();
             //P6EdmondsKarp();
-            P7CycleCanceling();
+            //P7CycleCanceling();
+            P8MaximaleMatching();
 
             Console.ReadLine();
         }
@@ -250,6 +251,26 @@ namespace GraphLibrary
             hSuccessiveShortestPath = new SuccessiveShortestPath(hGraph);
             hSuccessiveShortestPath.Execute();
 
+
+        }
+
+        private static void P8MaximaleMatching()
+        {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            var hFileName = GraphFileRessources.P8MaxMatching;
+            var hGraph = AdjacentListGraphImporter.ImportAdjacentListMaxMatching(hFileName);
+
+            var hMaxMatchingAlgorithm = new MaxMatchingAlgorithm(hGraph, AdjacentListGraphImporter.FNodesGroupALimit);
+            hMaxMatchingAlgorithm.Execute();
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Neuer Graph");
+            hFileName = GraphFileRessources.P8MaxMatching2;
+            hGraph = AdjacentListGraphImporter.ImportAdjacentListMaxMatching(hFileName);
+
+            hMaxMatchingAlgorithm = new MaxMatchingAlgorithm(hGraph, AdjacentListGraphImporter.FNodesGroupALimit);
+            hMaxMatchingAlgorithm.Execute();
 
         }
 
