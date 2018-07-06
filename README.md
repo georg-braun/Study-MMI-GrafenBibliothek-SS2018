@@ -28,5 +28,5 @@ Entwicklung einer C# Grafen Bibliothek im Rahmen des Moduls: Mathematische Metho
 ### Kostenminimale Flüsse
 - [x] Cycle-Canceling
 - [x] Successive-Shortest-Path
-### Matchins
-- [ ] ..
+### Matchings
+- [x] Maximale Matchings in bipariten Grafen (Lösung mit maximalem Fluss)
